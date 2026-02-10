@@ -9,10 +9,15 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    stock = { w: params[:stock_w], h: params[:stock_h] }
-    kerf = params[:kerf] || 0
+    @stock_w = params[:stock_w]
+    @stock_h = params[:stock_h]
+    @kerf = params[:kerf] || 0
+    @pieces = (params[:pieces] || []).map do |piece|
+      { length: piece[:length], height: piece[:height], quantity: piece[:quantity], allow_rotate: piece[:allow_rotate] }
+    end
 
-    cuts = (params[:pieces] || []).filter_map do |piece|
+    stock = { w: @stock_w, h: @stock_h }
+    cuts = @pieces.filter_map do |piece|
       next if piece[:length].blank? || piece[:height].blank?
 
       {
@@ -23,7 +28,7 @@ class ProjectsController < ApplicationController
       }
     end
 
-    @result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf)
+    @result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: @kerf)
     render :index
   rescue => e
     @error = e.message

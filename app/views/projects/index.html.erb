@@ -1,129 +1,144 @@
-<div class="max-w-3xl mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-6">New Cut List</h1>
+<header class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+  <h1 class="text-xl font-bold">CutList — New Cut List</h1>
+  <div class="flex items-center gap-3">
+    <button type="button" class="text-sm text-gray-600 hover:text-gray-900 font-medium">Options</button>
+  </div>
+</header>
 
-  <% if @error %>
-    <div class="mb-4 p-3 bg-red-100 text-red-700 rounded"><%= @error %></div>
-  <% end %>
+<div class="flex h-[calc(100vh-49px)]" data-controller="resizable-panel">
+  <%# Left panel: Form %>
+  <div class="shrink-0 border-r border-gray-200 overflow-y-auto p-4 space-y-6" style="width: 40%;" data-resizable-panel-target="panel">
+    <% if @error %>
+      <div class="p-3 bg-red-100 text-red-700 rounded text-sm"><%= @error %></div>
+    <% end %>
 
-  <%= form_with url: projects_path, method: :post, class: "space-y-8" do |f| %>
+    <%= form_with url: projects_path, method: :post, class: "space-y-6" do |f| %>
 
-    <%# Pieces to Cut %>
-    <section data-controller="pieces">
-      <h2 class="text-lg font-semibold mb-3">Pieces to Cut</h2>
+      <%# Pieces to Cut %>
+      <section data-controller="pieces">
+        <h2 class="text-sm font-semibold mb-2 text-gray-500 uppercase tracking-wide">Pieces to Cut</h2>
 
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="border-b border-gray-300">
-            <th class="py-2 pr-3">Width</th>
-            <th class="py-2 pr-3">Height</th>
-            <th class="py-2 pr-3">Qty</th>
-            <th class="py-2 pr-3">Rotate?</th>
-            <th class="py-2 w-10"></th>
-          </tr>
-        </thead>
-        <tbody data-pieces-target="body">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-gray-300">
+              <th class="py-1 pr-2">W</th>
+              <th class="py-1 pr-2">H</th>
+              <th class="py-1 pr-2">Qty</th>
+              <th class="py-1 pr-2">Rot</th>
+              <th class="py-1 w-8"></th>
+            </tr>
+          </thead>
+          <tbody data-pieces-target="body">
+            <% pieces = @pieces.presence || [{ length: nil, height: nil, quantity: 1, allow_rotate: "1" }] %>
+            <% pieces.each do |piece| %>
+              <tr class="border-b border-gray-200">
+                <td class="py-1 pr-2">
+                  <input type="number" name="pieces[][length]" min="1" step="any" required
+                         value="<%= piece[:length] %>"
+                         class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </td>
+                <td class="py-1 pr-2">
+                  <input type="number" name="pieces[][height]" min="1" step="any" required
+                         value="<%= piece[:height] %>"
+                         class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </td>
+                <td class="py-1 pr-2">
+                  <input type="number" name="pieces[][quantity]" min="1" value="<%= piece[:quantity] || 1 %>" required
+                         class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </td>
+                <td class="py-1 pr-2 text-center">
+                  <input type="hidden" name="pieces[][allow_rotate]" value="0">
+                  <input type="checkbox" name="pieces[][allow_rotate]" value="1" <%= "checked" if piece[:allow_rotate] != "0" %>
+                         class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                </td>
+                <td class="py-1">
+                  <button type="button" data-action="pieces#remove"
+                          class="text-red-500 hover:text-red-700 text-xs font-medium">
+                    &times;
+                  </button>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <template data-pieces-target="template">
           <tr class="border-b border-gray-200">
-            <td class="py-2 pr-3">
+            <td class="py-1 pr-2">
               <input type="number" name="pieces[][length]" min="1" step="any" required
-                     class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                     class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
-            <td class="py-2 pr-3">
+            <td class="py-1 pr-2">
               <input type="number" name="pieces[][height]" min="1" step="any" required
-                     class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                     class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
-            <td class="py-2 pr-3">
+            <td class="py-1 pr-2">
               <input type="number" name="pieces[][quantity]" min="1" value="1" required
-                     class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                     class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
-            <td class="py-2 pr-3 text-center">
+            <td class="py-1 pr-2 text-center">
               <input type="hidden" name="pieces[][allow_rotate]" value="0">
               <input type="checkbox" name="pieces[][allow_rotate]" value="1" checked
                      class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
             </td>
-            <td class="py-2">
+            <td class="py-1">
               <button type="button" data-action="pieces#remove"
-                      class="text-red-500 hover:text-red-700 text-sm font-medium">
-                Remove
+                      class="text-red-500 hover:text-red-700 text-xs font-medium">
+                &times;
               </button>
             </td>
           </tr>
-        </tbody>
-      </table>
+        </template>
 
-      <template data-pieces-target="template">
-        <tr class="border-b border-gray-200">
-          <td class="py-2 pr-3">
-            <input type="number" name="pieces[][length]" min="1" step="any" required
-                   class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </td>
-          <td class="py-2 pr-3">
-            <input type="number" name="pieces[][height]" min="1" step="any" required
-                   class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </td>
-          <td class="py-2 pr-3">
-            <input type="number" name="pieces[][quantity]" min="1" value="1" required
-                   class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </td>
-          <td class="py-2 pr-3 text-center">
-            <input type="hidden" name="pieces[][allow_rotate]" value="0">
-            <input type="checkbox" name="pieces[][allow_rotate]" value="1" checked
-                   class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-          </td>
-          <td class="py-2">
-            <button type="button" data-action="pieces#remove"
-                    class="text-red-500 hover:text-red-700 text-sm font-medium">
-              Remove
-            </button>
-          </td>
-        </tr>
-      </template>
+        <button type="button" data-action="pieces#add"
+                class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">
+          + Add Piece
+        </button>
+      </section>
 
-      <button type="button" data-action="pieces#add"
-              class="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium">
-        + Add Piece
-      </button>
-    </section>
+      <%# Stock Sheet %>
+      <section>
+        <h2 class="text-sm font-semibold mb-2 text-gray-500 uppercase tracking-wide">Stock Sheet</h2>
 
-    <%# Stock Sheet %>
-    <section>
-      <h2 class="text-lg font-semibold mb-3">Stock Sheet</h2>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="stock_w" class="block text-sm font-medium text-gray-700 mb-1">Width</label>
-          <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
-                 class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="stock_w" class="block text-xs font-medium text-gray-700 mb-1">Width</label>
+            <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
+                   value="<%= @stock_w %>"
+                   class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="stock_h" class="block text-xs font-medium text-gray-700 mb-1">Height</label>
+            <input type="number" id="stock_h" name="stock_h" min="1" step="any" required
+                   value="<%= @stock_h %>"
+                   class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
         </div>
-        <div>
-          <label for="stock_h" class="block text-sm font-medium text-gray-700 mb-1">Height</label>
-          <input type="number" id="stock_h" name="stock_h" min="1" step="any" required
-                 class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <%# Kerf %>
-    <section>
-      <h2 class="text-lg font-semibold mb-3">Blade Kerf</h2>
-      <div class="max-w-xs">
-        <input type="number" name="kerf" min="0" step="any" value="0"
-               class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <p class="text-xs text-gray-500 mt-1">Width of material removed by the blade (0 for none)</p>
-      </div>
-    </section>
+      <%# Kerf %>
+      <section>
+        <h2 class="text-sm font-semibold mb-2 text-gray-500 uppercase tracking-wide">Blade Kerf</h2>
+        <input type="number" name="kerf" min="0" step="any" value="<%= @kerf || 0 %>"
+               class="w-full border border-gray-300 rounded px-1.5 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <p class="text-xs text-gray-500 mt-1">Width removed by the blade</p>
+      </section>
 
-    <div>
       <button type="submit"
-              class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">
+              class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium text-sm">
         Optimize
       </button>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 
-  <% if @result %>
-    <section class="mt-10 border-t border-gray-300 pt-8">
-      <h2 class="text-lg font-semibold mb-4">Result</h2>
+  <%# Drag handle %>
+  <div class="w-1 shrink-0 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors"
+       data-action="mousedown->resizable-panel#startDrag"></div>
 
+  <%# Right panel: Result %>
+  <div class="flex-1 overflow-y-auto p-6"
+       style="background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 20px 20px;">
+    <% if @result %>
       <div data-controller="sheet-visualizer"
            data-sheet-visualizer-result-value="<%= @result.to_json %>">
       </div>
@@ -132,6 +147,10 @@
         <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">Raw JSON</summary>
         <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
       </details>
-    </section>
-  <% end %>
+    <% else %>
+      <div class="flex items-center justify-center h-full text-gray-400">
+        <p class="text-lg">Add pieces and click Optimize to see results</p>
+      </div>
+    <% end %>
+  </div>
 </div>

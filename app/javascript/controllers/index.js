@@ -10,5 +10,8 @@ application.register("hello", HelloController)
 import PiecesController from "./pieces_controller"
 application.register("pieces", PiecesController)
 
+import ResizablePanelController from "./resizable_panel_controller"
+application.register("resizable-panel", ResizablePanelController)
+
 import SheetVisualizerController from "./sheet_visualizer_controller"
 application.register("sheet-visualizer", SheetVisualizerController)
