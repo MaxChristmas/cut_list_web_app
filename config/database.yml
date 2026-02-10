@@ -90,6 +90,7 @@ production:
     database: cut_list_web_app_production
     username: cut_list_web_app
     password: <%= ENV["CUT_LIST_WEB_APP_DATABASE_PASSWORD"] %>
+    host: <%= ENV.fetch("DB_HOST", "localhost") %>
   cache:
     <<: *primary_production
     database: cut_list_web_app_production_cache
