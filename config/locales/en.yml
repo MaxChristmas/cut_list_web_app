@@ -12,6 +12,13 @@ en:
   sidebar:
     new_cut_list: "New Cut List"
     recent_projects: "Recent"
+    sign_in: "Sign In"
+  login:
+    remember_me: "Remember me"
+    sign_up: "Create an account"
+    forgot_password: "Forgot password?"
+    password: "Password"
+    invalid_credentials: "Invalid email or password."
   projects:
     index:
       title: "New Cut List"
@@ -31,6 +38,16 @@ en:
       raw_json: "Raw JSON"
       export_pdf: "Export PDF"
       empty_state: "Add pieces and click Optimize to see results"
+  settings:
+    title: "Account Settings"
+    email: "Email"
+    new_password: "New Password"
+    leave_blank: "Leave blank to keep current"
+    password_confirmation: "Confirm New Password"
+    current_password: "Current Password"
+    current_password_hint: "Required to confirm changes"
+    save: "Save Changes"
+    back: "Back"
   pdf:
     sheets_used: "Sheets used"
     total_area_used: "Total area used"

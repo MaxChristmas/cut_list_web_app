@@ -42,3 +42,5 @@
 # Ignore screenshot PNGs but keep the directory
 /spec/screens/*
 !/spec/screens/.gitkeep
+
+.DS_Store

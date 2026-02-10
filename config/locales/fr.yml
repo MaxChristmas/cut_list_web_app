@@ -12,6 +12,13 @@ fr:
   sidebar:
     new_cut_list: "Nouvelle découpe"
     recent_projects: "Récents"
+    sign_in: "Connexion"
+  login:
+    remember_me: "Se souvenir de moi"
+    sign_up: "Créer un compte"
+    forgot_password: "Mot de passe oublié ?"
+    password: "Mot de passe"
+    invalid_credentials: "Email ou mot de passe invalide."
   projects:
     index:
       title: "Optimisez vos découpes"
@@ -31,6 +38,16 @@ fr:
       raw_json: "JSON brut"
       export_pdf: "Exporter PDF"
       empty_state: "Ajoutez des pièces et cliquez sur Optimiser pour voir les résultats"
+  settings:
+    title: "Paramètres du compte"
+    email: "Email"
+    new_password: "Nouveau mot de passe"
+    leave_blank: "Laisser vide pour ne pas changer"
+    password_confirmation: "Confirmer le nouveau mot de passe"
+    current_password: "Mot de passe actuel"
+    current_password_hint: "Requis pour confirmer les modifications"
+    save: "Enregistrer"
+    back: "Retour"
   pdf:
     sheets_used: "Panneaux utilisés"
     total_area_used: "Surface totale utilisée"

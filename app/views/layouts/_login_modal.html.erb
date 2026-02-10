@@ -1,0 +1,88 @@
+<dialog data-modal-target="dialog"
+        data-action="click->modal#backdropClose"
+        class="backdrop:bg-black/50 bg-transparent p-0 m-auto open:flex items-center justify-center fixed inset-0 w-[40vw] h-fit">
+  <div class="bg-gray-950 border border-gray-700 rounded-xl p-6 w-full shadow-xl">
+    <%# Header with close button %>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex gap-4 border-b border-gray-800 -mb-4 pb-0">
+        <button data-modal-target="tab" data-tab="sign_in" data-action="click->modal#switchTab"
+                class="pb-3 text-sm font-medium border-b-2 border-white text-white transition-colors">
+          <%= t("sidebar.sign_in") %>
+        </button>
+        <button data-modal-target="tab" data-tab="sign_up" data-action="click->modal#switchTab"
+                class="pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 transition-colors">
+          <%= t("login.sign_up") %>
+        </button>
+      </div>
+      <button data-action="click->modal#close"
+              class="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <%# Error message %>
+    <div data-modal-target="error" data-fallback="<%= t('login.invalid_credentials') %>"
+         class="hidden p-3 bg-red-900/50 text-red-300 rounded text-sm mt-4"></div>
+
+    <%# Sign In panel %>
+    <div data-modal-target="panel" data-tab="sign_in" class="pt-4">
+      <%= form_for(User.new, as: :user, url: user_session_path, html: { class: "space-y-4", data: { action: "submit->modal#submitForm", turbo: false } }) do |f| %>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("login.password") %></label>
+          <%= f.password_field :password, autocomplete: "current-password",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <%= f.check_box :remember_me, class: "rounded border-gray-700 bg-gray-900 text-white focus:ring-gray-600" %>
+          <label class="text-sm text-gray-400"><%= t("login.remember_me") %></label>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+          <%= t("sidebar.sign_in") %>
+        </button>
+      <% end %>
+
+      <div class="mt-4 text-center">
+        <%= link_to t("login.forgot_password"), new_user_password_path, class: "text-xs text-gray-500 hover:text-gray-300 transition-colors" %>
+      </div>
+    </div>
+
+    <%# Sign Up panel %>
+    <div data-modal-target="panel" data-tab="sign_up" class="hidden pt-4">
+      <%= form_for(User.new, as: :user, url: user_registration_path, html: { class: "space-y-4", data: { action: "submit->modal#submitForm", turbo: false } }) do |f| %>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
+          <%= f.email_field :email, autocomplete: "email",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("login.password") %></label>
+          <%= f.password_field :password, autocomplete: "new-password",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.password_confirmation") %></label>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+          <%= t("login.sign_up") %>
+        </button>
+      <% end %>
+    </div>
+  </div>
+</dialog>
