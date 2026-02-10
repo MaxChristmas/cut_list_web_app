@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :projects, param: :token
+  resources :projects, param: :token do
+    member do
+      get :export_pdf
+    end
+  end
 
   devise_for :users
 

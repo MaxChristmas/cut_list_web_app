@@ -1,4 +1,7 @@
 fr:
+  time:
+    formats:
+      short: "%d/%m/%Y %H:%M"
   app_name: "Cut List"
   locale_selector:
     en: "Anglais"
@@ -26,4 +29,19 @@ fr:
       kerf_hint: "Largeur enlevée par la lame"
       optimize: "Optimiser"
       raw_json: "JSON brut"
+      export_pdf: "Exporter PDF"
       empty_state: "Ajoutez des pièces et cliquez sur Optimiser pour voir les résultats"
+  pdf:
+    sheets_used: "Panneaux utilisés"
+    total_area_used: "Surface totale utilisée"
+    total_waste_area: "Surface totale de chutes"
+    total_pieces: "Nombre de pièces"
+    blade_kerf: "Trait de scie"
+    pieces: "Panneaux"
+    stock_sheet: "Panneau de base"
+    sheet: "Panneau %{number}"
+    area_used: "Surface utilisée"
+    waste_area: "Surface de chute"
+    unique_sizes: "Tailles uniques"
+    piece: "Panneau"
+    qty: "Qté"

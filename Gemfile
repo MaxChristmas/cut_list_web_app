@@ -69,3 +69,5 @@ group :test do
   gem "selenium-webdriver"
 end
 gem 'devise'
+gem "prawn"
+gem "prawn-table"

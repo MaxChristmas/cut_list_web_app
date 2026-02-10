@@ -1,4 +1,7 @@
 ja:
+  time:
+    formats:
+      short: "%Y/%m/%d %H:%M"
   app_name: "Cut List"
   locale_selector:
     en: "Anglais"
@@ -26,4 +29,19 @@ ja:
       kerf_hint: "刃によって除去される幅"
       optimize: "最適化"
       raw_json: "JSON（生データ）"
+      export_pdf: "PDFエクスポート"
       empty_state: "パネルを追加し、「最適化」をクリックして結果を表示します"
+  pdf:
+    sheets_used: "使用シート数"
+    total_area_used: "使用面積合計"
+    total_waste_area: "端材面積合計"
+    total_pieces: "ピース合計"
+    blade_kerf: "刃の切りしろ"
+    pieces: "ピース"
+    stock_sheet: "ベースパネル"
+    sheet: "シート %{number}"
+    area_used: "使用面積"
+    waste_area: "端材面積"
+    unique_sizes: "サイズ種類"
+    piece: "ピース"
+    qty: "数量"

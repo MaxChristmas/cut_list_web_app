@@ -2,6 +2,21 @@ class ProjectsController < ApplicationController
   def index
   end
 
+  def export_pdf
+    @project = Project.find_by!(token: params[:token])
+    optimization = @project.optimizations.order(created_at: :desc).first
+    result = optimization&.result
+
+    if result.blank?
+      redirect_to project_path(@project.token), alert: "No optimization results to export."
+      return
+    end
+
+    pdf = CutListPdfService.new(result, @project).generate
+    send_data pdf.render, filename: "cut-list-#{@project.token}.pdf",
+              type: "application/pdf", disposition: "attachment"
+  end
+
   def show
     @project = Project.find_by!(token: params[:token])
     @optimization = @project.optimizations.order(created_at: :desc).first

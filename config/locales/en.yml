@@ -1,4 +1,7 @@
 en:
+  time:
+    formats:
+      short: "%m/%d/%Y %H:%M"
   app_name: "CutList"
   locale_selector:
     en: "English"
@@ -26,4 +29,19 @@ en:
       kerf_hint: "Width removed by the blade"
       optimize: "Optimize"
       raw_json: "Raw JSON"
+      export_pdf: "Export PDF"
       empty_state: "Add pieces and click Optimize to see results"
+  pdf:
+    sheets_used: "Sheets used"
+    total_area_used: "Total area used"
+    total_waste_area: "Total waste area"
+    total_pieces: "Total pieces"
+    blade_kerf: "Blade kerf"
+    pieces: "Pieces"
+    stock_sheet: "Stock sheet"
+    sheet: "Sheet %{number}"
+    area_used: "Area used"
+    waste_area: "Waste area"
+    unique_sizes: "Unique sizes"
+    piece: "Piece"
+    qty: "Qty"
