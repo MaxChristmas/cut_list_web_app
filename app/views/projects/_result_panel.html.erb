@@ -1,0 +1,14 @@
+<% if @result %>
+  <div data-controller="sheet-visualizer"
+       data-sheet-visualizer-result-value="<%= @result.to_json %>">
+  </div>
+
+  <details class="mt-6">
+    <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700"><%= t("projects.index.raw_json") %></summary>
+    <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
+  </details>
+<% else %>
+  <div class="flex items-center justify-center h-full text-gray-400">
+    <p class="text-lg bg-stone-100 p-4 border-0 rounded-xl"><%= t("projects.index.empty_state") %></p>
+  </div>
+<% end %>

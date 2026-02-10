@@ -1,2 +1,18 @@
-<h1>Projects#show</h1>
-<p>Find me in app/views/projects/show.html.erb</p>
+<%= render "header", title: t("projects.index.title") %>
+
+<div class="flex h-[calc(100vh-49px)]" data-controller="resizable-panel">
+  <%# Left panel: Form %>
+  <div class="shrink-0 border-r border-gray-200 overflow-y-auto p-4 space-y-6" style="width: 40%;" data-resizable-panel-target="panel">
+    <%= render "form", form_url: project_path(@project.token), form_method: :patch %>
+  </div>
+
+  <%# Drag handle %>
+  <div class="w-1 shrink-0 bg-gray-200 hover:bg-blue-400 cursor-col-resize transition-colors"
+       data-action="mousedown->resizable-panel#startDrag"></div>
+
+  <%# Right panel: Result %>
+  <div class="flex-1 overflow-y-auto p-6"
+       style="background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 20px 20px;">
+    <%= render "result_panel" %>
+  </div>
+</div>

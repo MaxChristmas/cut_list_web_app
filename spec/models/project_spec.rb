@@ -15,10 +15,9 @@ RSpec.describe Project, type: :model do
       expect(association.macro).to eq(:belongs_to)
     end
 
-    it "requires a user" do
-      project = Project.new(name: "Test", user: nil)
-      expect(project).not_to be_valid
-      expect(project.errors[:user]).to be_present
+    it "does not require a user" do
+      project = Project.create!(name: "Test", user: nil)
+      expect(project).to be_valid
     end
 
     it "can be created with a user" do
