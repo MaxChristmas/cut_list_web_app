@@ -19,6 +19,8 @@ ja:
     forgot_password: "パスワードを忘れた方"
     password: "パスワード"
     invalid_credentials: "メールアドレスまたはパスワードが正しくありません。"
+    sign_in_with_google: "Googleで続ける"
+    or: "または"
   projects:
     index:
       title: "カットリストを最適化"
@@ -48,6 +50,7 @@ ja:
     current_password_hint: "変更を確認するために必要です"
     save: "保存"
     back: "戻る"
+    sign_out: "ログアウト"
   pdf:
     sheets_used: "使用シート数"
     total_area_used: "使用面積合計"

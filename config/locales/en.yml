@@ -19,6 +19,8 @@ en:
     forgot_password: "Forgot password?"
     password: "Password"
     invalid_credentials: "Invalid email or password."
+    sign_in_with_google: "Continue with Google"
+    or: "or"
   projects:
     index:
       title: "New Cut List"
@@ -48,6 +50,7 @@ en:
     current_password_hint: "Required to confirm changes"
     save: "Save Changes"
     back: "Back"
+    sign_out: "Sign Out"
   pdf:
     sheets_used: "Sheets used"
     total_area_used: "Total area used"

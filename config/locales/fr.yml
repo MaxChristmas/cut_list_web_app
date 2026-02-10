@@ -19,6 +19,8 @@ fr:
     forgot_password: "Mot de passe oublié ?"
     password: "Mot de passe"
     invalid_credentials: "Email ou mot de passe invalide."
+    sign_in_with_google: "Continuer avec Google"
+    or: "ou"
   projects:
     index:
       title: "Optimisez vos découpes"
@@ -48,6 +50,7 @@ fr:
     current_password_hint: "Requis pour confirmer les modifications"
     save: "Enregistrer"
     back: "Retour"
+    sign_out: "Déconnexion"
   pdf:
     sheets_used: "Panneaux utilisés"
     total_area_used: "Surface totale utilisée"

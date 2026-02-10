@@ -65,5 +65,7 @@ group :development do
   gem "web-console"
 end
 gem 'devise'
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 gem "prawn"
 gem "prawn-table"

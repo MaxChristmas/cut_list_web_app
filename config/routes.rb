@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: { registrations: "users/registrations" }
+  devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks" }
 
   patch "locale", to: "application#set_locale", as: :locale
 
