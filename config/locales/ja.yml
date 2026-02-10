@@ -1,0 +1,25 @@
+ja:
+  app_name: "Cut List"
+  locale_selector:
+    en: "Anglais"
+    fr: "Français"
+    ja: "日本語"
+  header:
+    options: "オプション"
+  projects:
+    index:
+      title: "カットリストを最適化"
+      pieces_to_cut: "カットするパネル"
+      width_short: "長さ"
+      height_short: "幅"
+      quantity_short: "数量"
+      rotation_short: "回転許可"
+      add_piece: "+ パネルを追加"
+      stock_sheet: "ベースパネル"
+      width: "長さ"
+      height: "幅"
+      blade_kerf: "刃の切りしろ"
+      kerf_hint: "刃によって除去される幅"
+      optimize: "最適化"
+      raw_json: "JSON（生データ）"
+      empty_state: "パネルを追加し、「最適化」をクリックして結果を表示します"

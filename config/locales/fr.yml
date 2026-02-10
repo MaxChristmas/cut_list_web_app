@@ -1,0 +1,25 @@
+fr:
+  app_name: "Cut List"
+  locale_selector:
+    en: "Anglais"
+    fr: "Français"
+    ja: "Japonais"
+  header:
+    options: "Options"
+  projects:
+    index:
+      title: "Optimisez vos découpes"
+      pieces_to_cut: "Panneaux à découper"
+      width_short: "Longueur"
+      height_short: "Largeur"
+      quantity_short: "Qté"
+      rotation_short: "Rotation autorisée"
+      add_piece: "+ Ajouter un panneau"
+      stock_sheet: "Panneau de base"
+      width: "Longueur"
+      height: "Largeur"
+      blade_kerf: "Trait de scie"
+      kerf_hint: "Largeur enlevée par la lame"
+      optimize: "Optimiser"
+      raw_json: "JSON brut"
+      empty_state: "Ajoutez des pièces et cliquez sur Optimiser pour voir les résultats"
