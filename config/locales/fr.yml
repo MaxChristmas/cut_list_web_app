@@ -13,6 +13,9 @@ fr:
     new_cut_list: "Nouvelle découpe"
     recent_projects: "Récents"
     sign_in: "Connexion"
+    upgrade: "Passer au supérieur"
+    projects_usage: "Projets"
+    optimizations_usage: "Optimisations aujourd'hui"
   login:
     remember_me: "Se souvenir de moi"
     sign_up: "Créer un compte"
@@ -40,6 +43,12 @@ fr:
       raw_json: "JSON brut"
       export_pdf: "Exporter PDF"
       empty_state: "Ajoutez des pièces et cliquez sur Optimiser pour voir les résultats"
+    archive: "Archiver"
+    unarchive: "Désarchiver"
+    archived: "Projet archivé."
+    unarchived: "Projet désarchivé."
+    archive_confirm: "Archiver ce projet ? Vous pourrez le désarchiver plus tard."
+    unarchive_limit_reached: "Impossible de désarchiver : limite de projets actifs atteinte. Archivez un autre projet ou passez au plan supérieur."
   settings:
     title: "Paramètres du compte"
     email: "Email"
@@ -51,6 +60,29 @@ fr:
     save: "Enregistrer"
     back: "Retour"
     sign_out: "Déconnexion"
+  plans:
+    title: "Choisissez votre plan"
+    subtitle: "Sélectionnez le plan qui vous convient"
+    current_plan: "Plan actuel"
+    select_plan: "Choisir ce plan"
+    updated: "Plan mis à jour : %{plan}"
+    invalid: "Plan sélectionné invalide"
+    active_projects: "Projets actifs"
+    daily_optimizations: "Optimisations par jour"
+    pdf_export: "Export PDF"
+    unlimited: "Illimité"
+    free:
+      name: "Gratuit"
+      description: "Commencez avec les fonctionnalités de base"
+    worker:
+      name: "Worker"
+      description: "Pour les professionnels et petites équipes"
+    enterprise:
+      name: "Entreprise"
+      description: "Puissance illimitée pour les grandes opérations"
+  limits:
+    max_projects_reached: "Vous avez atteint la limite de projets actifs. Archivez un projet ou passez au plan supérieur."
+    daily_optimizations_reached: "Vous avez atteint la limite quotidienne d'optimisations. Revenez demain ou passez au plan supérieur."
   pdf:
     sheets_used: "Panneaux utilisés"
     total_area_used: "Surface totale utilisée"

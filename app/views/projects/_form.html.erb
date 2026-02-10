@@ -2,6 +2,20 @@
   <div class="p-3 bg-red-900/50 text-red-300 rounded text-sm"><%= @error %></div>
 <% end %>
 
+<% if flash[:alert].present? %>
+  <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
+    <%= flash[:alert] %>
+    <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
+  </div>
+<% end %>
+
+<% unless can_run_optimization? %>
+  <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
+    <%= t("limits.daily_optimizations_reached") %>
+    <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
+  </div>
+<% end %>
+
 <%= form_with url: form_url, method: form_method, class: "space-y-10" do |f| %>
 
   <%# Pieces to Cut %>

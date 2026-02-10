@@ -1,9 +1,13 @@
 class User < ApplicationRecord
+  include Plannable
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
+
+  has_many :projects, dependent: :nullify
 
   def self.from_omniauth(auth)
     user = find_by(provider: auth.provider, uid: auth.uid)

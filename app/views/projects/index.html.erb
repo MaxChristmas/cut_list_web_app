@@ -1,6 +1,12 @@
 <div class="flex h-full" data-controller="resizable-panel">
   <%# Left panel: Form %>
   <div class="shrink-0 bg-gray-950 text-gray-300 border-r border-gray-800 overflow-y-auto p-4 space-y-6" style="width: 40%;" data-resizable-panel-target="panel">
+    <% unless can_create_project? %>
+      <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
+        <%= t("limits.max_projects_reached") %>
+        <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
+      </div>
+    <% end %>
     <%= render "form", form_url: projects_path, form_method: :post %>
   </div>
 

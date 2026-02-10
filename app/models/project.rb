@@ -6,6 +6,21 @@ class Project < ApplicationRecord
 
   validates :token, uniqueness: true
 
+  scope :active, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
+  def archived?
+    archived_at.present?
+  end
+
+  def archive!
+    update!(archived_at: Time.current)
+  end
+
+  def unarchive!
+    update!(archived_at: nil)
+  end
+
   private
 
   def generate_token

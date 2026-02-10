@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_10_200000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_10_220001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_200000) do
 
   create_table "projects", force: :cascade do |t|
     t.boolean "allow_rotation"
+    t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.string "name"
     t.integer "sheet_height"
@@ -34,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_200000) do
     t.string "token", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["archived_at"], name: "index_projects_on_archived_at"
     t.index ["token"], name: "index_projects_on_token", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -42,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_200000) do
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "plan", default: "free", null: false
     t.string "provider"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
@@ -49,6 +52,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_200000) do
     t.string "uid"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["plan"], name: "index_users_on_plan"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 

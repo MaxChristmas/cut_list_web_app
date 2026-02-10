@@ -13,6 +13,9 @@ ja:
     new_cut_list: "新しいカットリスト"
     recent_projects: "最近"
     sign_in: "ログイン"
+    upgrade: "アップグレード"
+    projects_usage: "プロジェクト"
+    optimizations_usage: "本日の最適化"
   login:
     remember_me: "ログイン状態を保持"
     sign_up: "アカウント作成"
@@ -40,6 +43,12 @@ ja:
       raw_json: "JSON（生データ）"
       export_pdf: "PDFエクスポート"
       empty_state: "パネルを追加し、「最適化」をクリックして結果を表示します"
+    archive: "アーカイブ"
+    unarchive: "アーカイブ解除"
+    archived: "プロジェクトをアーカイブしました。"
+    unarchived: "プロジェクトのアーカイブを解除しました。"
+    archive_confirm: "このプロジェクトをアーカイブしますか？後で解除できます。"
+    unarchive_limit_reached: "アーカイブ解除できません：アクティブプロジェクトの上限に達しています。別のプロジェクトをアーカイブするか、プランをアップグレードしてください。"
   settings:
     title: "アカウント設定"
     email: "メールアドレス"
@@ -51,6 +60,29 @@ ja:
     save: "保存"
     back: "戻る"
     sign_out: "ログアウト"
+  plans:
+    title: "プランを選択"
+    subtitle: "あなたに合ったプランをお選びください"
+    current_plan: "現在のプラン"
+    select_plan: "このプランを選択"
+    updated: "プランを%{plan}に更新しました"
+    invalid: "無効なプランが選択されました"
+    active_projects: "アクティブプロジェクト数"
+    daily_optimizations: "1日の最適化回数"
+    pdf_export: "PDFエクスポート"
+    unlimited: "無制限"
+    free:
+      name: "無料"
+      description: "基本機能で始めましょう"
+    worker:
+      name: "ワーカー"
+      description: "プロフェッショナルと小規模チーム向け"
+    enterprise:
+      name: "エンタープライズ"
+      description: "大規模運用のための無制限パワー"
+  limits:
+    max_projects_reached: "アクティブプロジェクトの上限に達しました。プロジェクトをアーカイブするか、プランをアップグレードしてください。"
+    daily_optimizations_reached: "本日の最適化回数の上限に達しました。明日再度お試しいただくか、プランをアップグレードしてください。"
   pdf:
     sheets_used: "使用シート数"
     total_area_used: "使用面積合計"

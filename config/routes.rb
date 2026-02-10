@@ -2,8 +2,13 @@ Rails.application.routes.draw do
   resources :projects, param: :token do
     member do
       get :export_pdf
+      patch :archive
+      patch :unarchive
     end
   end
+
+  resources :plans, only: [:index]
+  patch "plans/select", to: "plans#update", as: :select_plan
 
   devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks" }
 
@@ -13,4 +18,3 @@ Rails.application.routes.draw do
 
   root "projects#index"
 end
-

@@ -13,6 +13,9 @@ en:
     new_cut_list: "New Cut List"
     recent_projects: "Recent"
     sign_in: "Sign In"
+    upgrade: "Upgrade"
+    projects_usage: "Projects"
+    optimizations_usage: "Optimizations today"
   login:
     remember_me: "Remember me"
     sign_up: "Create an account"
@@ -40,6 +43,12 @@ en:
       raw_json: "Raw JSON"
       export_pdf: "Export PDF"
       empty_state: "Add pieces and click Optimize to see results"
+    archive: "Archive"
+    unarchive: "Unarchive"
+    archived: "Project archived."
+    unarchived: "Project unarchived."
+    archive_confirm: "Archive this project? You can unarchive it later."
+    unarchive_limit_reached: "Cannot unarchive: active project limit reached. Archive another project or upgrade."
   settings:
     title: "Account Settings"
     email: "Email"
@@ -51,6 +60,29 @@ en:
     save: "Save Changes"
     back: "Back"
     sign_out: "Sign Out"
+  plans:
+    title: "Choose Your Plan"
+    subtitle: "Select the plan that fits your needs"
+    current_plan: "Current Plan"
+    select_plan: "Select Plan"
+    updated: "Plan updated to %{plan}"
+    invalid: "Invalid plan selected"
+    active_projects: "Active projects"
+    daily_optimizations: "Optimizations per day"
+    pdf_export: "PDF export"
+    unlimited: "Unlimited"
+    free:
+      name: "Free"
+      description: "Get started with basic features"
+    worker:
+      name: "Worker"
+      description: "For professionals and small teams"
+    enterprise:
+      name: "Enterprise"
+      description: "Unlimited power for large operations"
+  limits:
+    max_projects_reached: "You've reached your active project limit. Archive a project or upgrade your plan."
+    daily_optimizations_reached: "You've reached your daily optimization limit. Come back tomorrow or upgrade your plan."
   pdf:
     sheets_used: "Sheets used"
     total_area_used: "Total area used"
