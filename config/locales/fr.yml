@@ -6,6 +6,9 @@ fr:
     ja: "Japonais"
   header:
     options: "Options"
+  sidebar:
+    new_cut_list: "Nouvelle découpe"
+    recent_projects: "Récents"
   projects:
     index:
       title: "Optimisez vos découpes"

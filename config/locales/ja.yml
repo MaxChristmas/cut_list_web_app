@@ -6,6 +6,9 @@ ja:
     ja: "日本語"
   header:
     options: "オプション"
+  sidebar:
+    new_cut_list: "新しいカットリスト"
+    recent_projects: "最近"
   projects:
     index:
       title: "カットリストを最適化"

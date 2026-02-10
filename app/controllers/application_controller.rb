@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   around_action :switch_locale
+  before_action :load_recent_projects
 
   def set_locale
     locale = params[:locale].to_s.strip.to_sym
@@ -17,5 +18,9 @@ class ApplicationController < ActionController::Base
   def switch_locale(&action)
     locale = session[:locale] || I18n.default_locale
     I18n.with_locale(locale, &action)
+  end
+
+  def load_recent_projects
+    @recent_projects = Project.order(created_at: :desc).limit(20)
   end
 end

@@ -6,6 +6,9 @@ en:
     ja: "日本語"
   header:
     options: "Options"
+  sidebar:
+    new_cut_list: "New Cut List"
+    recent_projects: "Recent"
   projects:
     index:
       title: "New Cut List"

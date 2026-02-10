@@ -15,3 +15,6 @@ application.register("resizable-panel", ResizablePanelController)
 
 import SheetVisualizerController from "./sheet_visualizer_controller"
 application.register("sheet-visualizer", SheetVisualizerController)
+
+import SidebarController from "./sidebar_controller"
+application.register("sidebar", SidebarController)

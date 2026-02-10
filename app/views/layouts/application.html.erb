@@ -24,6 +24,8 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= render "layouts/sidebar" do %>
+      <%= yield %>
+    <% end %>
   </body>
 </html>
