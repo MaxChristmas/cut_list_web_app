@@ -17,6 +17,7 @@ en:
       height_short: "width"
       quantity_short: "Qty"
       rotation_short: "Rot"
+      import_csv: "Import CSV"
       add_piece: "+ Add Piece"
       stock_sheet: "Stock Sheet"
       width: "Length"

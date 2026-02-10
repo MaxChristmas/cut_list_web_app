@@ -17,14 +17,13 @@ class ProjectsController < ApplicationController
     stock_w = params[:stock_w]
     stock_h = params[:stock_h]
     kerf = params[:kerf] || 0
-    pieces = (params[:pieces] || []).map do |piece|
+    pieces = (params[:pieces] || []).filter_map do |piece|
+      next if piece[:length].blank? || piece[:height].blank?
       { length: piece[:length], height: piece[:height], quantity: piece[:quantity], allow_rotate: piece[:allow_rotate] }
     end
 
     stock = { w: stock_w, h: stock_h }
-    cuts = pieces.filter_map do |piece|
-      next if piece[:length].blank? || piece[:height].blank?
-
+    cuts = pieces.map do |piece|
       {
         w: piece[:length],
         h: piece[:height],
@@ -61,14 +60,13 @@ class ProjectsController < ApplicationController
     stock_w = params[:stock_w]
     stock_h = params[:stock_h]
     kerf = params[:kerf] || 0
-    pieces = (params[:pieces] || []).map do |piece|
+    pieces = (params[:pieces] || []).filter_map do |piece|
+      next if piece[:length].blank? || piece[:height].blank?
       { length: piece[:length], height: piece[:height], quantity: piece[:quantity], allow_rotate: piece[:allow_rotate] }
     end
 
     stock = { w: stock_w, h: stock_h }
-    cuts = pieces.filter_map do |piece|
-      next if piece[:length].blank? || piece[:height].blank?
-
+    cuts = pieces.map do |piece|
       {
         w: piece[:length],
         h: piece[:height],

@@ -17,6 +17,7 @@ fr:
       height_short: "Largeur"
       quantity_short: "Qté"
       rotation_short: "Rotation autorisée"
+      import_csv: "Importer CSV"
       add_piece: "+ Ajouter un panneau"
       stock_sheet: "Panneau de base"
       width: "Longueur"

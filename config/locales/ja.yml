@@ -17,6 +17,7 @@ ja:
       height_short: "幅"
       quantity_short: "数量"
       rotation_short: "回転許可"
+      import_csv: "CSVインポート"
       add_piece: "+ パネルを追加"
       stock_sheet: "ベースパネル"
       width: "長さ"
