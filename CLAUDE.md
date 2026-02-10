@@ -8,7 +8,7 @@ Cut List Web App — a Rails 8.1 application for optimizing material cutting lay
 
 ## Tech Stack
 
-- Ruby 3.3.0, Rails 8.1, PostgreSQL
+- Ruby 3.3.6, Rails 8.1, PostgreSQL
 - Node 25.3.0 with Yarn (for JS/CSS bundling)
 - Hotwire (Turbo + Stimulus), Propshaft asset pipeline
 - jsbundling-rails + cssbundling-rails
