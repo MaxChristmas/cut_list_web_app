@@ -7,7 +7,10 @@ image: silitix/cut-list-web-app
 # Deploy to these servers.
 servers:
   web:
-    - 51.75.29.25
+    hosts:
+      - 51.75.29.25
+    options:
+      network: shared
 
 # Enable SSL auto certification via Let's Encrypt and route by hostname.
 proxy:
@@ -32,6 +35,8 @@ env:
 
     # Database host — matches the accessory container name on the Kamal Docker network.
     DB_HOST: cut-list-web-app-db
+
+    OPTIMIZER_URL: http://cut-optimizer:3001/optimize
 
 # SSH user (not root).
 ssh:
