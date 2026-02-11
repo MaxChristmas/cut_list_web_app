@@ -97,3 +97,12 @@ ja:
     unique_sizes: "サイズ種類"
     piece: "ピース"
     qty: "数量"
+  report_issue:
+    button: "問題を報告"
+    title: "問題を報告する"
+    description: "発生した問題を説明してください。できるだけ早く対応いたします。"
+    placeholder: "何が起きましたか？"
+    submit: "報告を送信"
+    thanks_title: "ありがとうございます！"
+    thanks_message: "報告が送信されました。まもなく確認いたします。"
+    close: "閉じる"

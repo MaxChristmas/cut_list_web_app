@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_10_220001) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_10_230000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_220001) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
+  create_table "report_issues", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_report_issues_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -58,4 +66,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_220001) do
 
   add_foreign_key "optimizations", "projects"
   add_foreign_key "projects", "users"
+  add_foreign_key "report_issues", "users"
 end

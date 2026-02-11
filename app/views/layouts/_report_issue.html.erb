@@ -1,0 +1,57 @@
+<div data-controller="report-issue" data-report-issue-url-value="<%= report_issues_path %>">
+  <%# Fixed button - bottom right %>
+  <button data-action="click->report-issue#open"
+          class="fixed bottom-5 right-5 z-40 flex items-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full shadow-lg border border-gray-700 transition-colors text-sm font-medium">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
+    </svg>
+    <%= t("report_issue.button") %>
+  </button>
+
+  <%# Modal %>
+  <dialog data-report-issue-target="dialog"
+          data-action="click->report-issue#backdropClose"
+          class="backdrop:bg-black/50 bg-transparent p-0 m-auto rounded-xl">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl w-[28rem] max-w-[90vw] text-gray-200">
+      <%# Header %>
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+        <h2 class="text-lg font-semibold text-white"><%= t("report_issue.title") %></h2>
+        <button data-action="click->report-issue#close"
+                class="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <%# Form %>
+      <div data-report-issue-target="form" class="p-5 space-y-4">
+        <p class="text-sm text-gray-400"><%= t("report_issue.description") %></p>
+        <textarea data-report-issue-target="textarea"
+                  rows="5"
+                  placeholder="<%= t("report_issue.placeholder") %>"
+                  class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+        <div class="flex justify-end">
+          <button data-action="click->report-issue#submit"
+                  data-report-issue-target="submitBtn"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <%= t("report_issue.submit") %>
+          </button>
+        </div>
+      </div>
+
+      <%# Thanks message %>
+      <div data-report-issue-target="thanks" class="hidden p-5 text-center space-y-3">
+        <svg class="w-12 h-12 mx-auto text-green-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        <p class="text-white font-medium"><%= t("report_issue.thanks_title") %></p>
+        <p class="text-sm text-gray-400"><%= t("report_issue.thanks_message") %></p>
+        <button data-action="click->report-issue#close"
+                class="mt-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded-lg transition-colors">
+          <%= t("report_issue.close") %>
+        </button>
+      </div>
+    </div>
+  </dialog>
+</div>

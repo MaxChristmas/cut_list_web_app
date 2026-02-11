@@ -19,5 +19,8 @@ application.register("resizable-panel", ResizablePanelController)
 import SheetVisualizerController from "./sheet_visualizer_controller"
 application.register("sheet-visualizer", SheetVisualizerController)
 
+import ReportIssueController from "./report_issue_controller"
+application.register("report-issue", ReportIssueController)
+
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)

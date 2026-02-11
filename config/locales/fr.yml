@@ -97,3 +97,12 @@ fr:
     unique_sizes: "Tailles uniques"
     piece: "Panneau"
     qty: "Qté"
+  report_issue:
+    button: "Signaler un problème"
+    title: "Signaler un problème"
+    description: "Décrivez le problème rencontré. Nous l'examinerons dès que possible."
+    placeholder: "Que s'est-il passé ?"
+    submit: "Envoyer le rapport"
+    thanks_title: "Merci !"
+    thanks_message: "Votre rapport a été envoyé. Nous l'examinerons prochainement."
+    close: "Fermer"

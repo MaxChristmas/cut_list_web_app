@@ -97,3 +97,12 @@ en:
     unique_sizes: "Unique sizes"
     piece: "Piece"
     qty: "Qty"
+  report_issue:
+    button: "Report Issue"
+    title: "Report an Issue"
+    description: "Describe the problem you encountered. We'll look into it as soon as possible."
+    placeholder: "What went wrong?"
+    submit: "Submit Report"
+    thanks_title: "Thank you!"
+    thanks_message: "Your report has been submitted. We'll review it shortly."
+    close: "Close"
