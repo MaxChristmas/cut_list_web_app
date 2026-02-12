@@ -21,8 +21,6 @@ export default class extends Controller {
     const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
     const maxWidth = 700
     const scale = maxWidth / stock.w
-    const svgH = stock.h * scale
-
     const colorMap = this.buildColorMap(data.sheets)
 
     const container = this.element
@@ -35,15 +33,37 @@ export default class extends Controller {
       heading.textContent = `Sheet ${i + 1} — Waste: ${wastePercent}%`
       container.appendChild(heading)
 
+      const labelMargin = stock.w * 0.06
+      const svgW = stock.w + labelMargin * 2
+      const svgHTotal = stock.h + labelMargin * 2
+      const actualWidth = maxWidth + maxWidth * 0.12
+      const actualHeight = svgHTotal * scale
+
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      svg.setAttribute("width", maxWidth)
-      svg.setAttribute("height", svgH)
-      svg.setAttribute("viewBox", `0 0 ${stock.w} ${stock.h}`)
-      svg.setAttribute("class", "border border-gray-300 rounded bg-white")
+      svg.setAttribute("width", actualWidth)
+      svg.setAttribute("height", actualHeight)
+      svg.setAttribute("viewBox", `${-labelMargin} ${-labelMargin} ${svgW} ${svgHTotal}`)
+      svg.setAttribute("class", "rounded")
 
       // Stock background
-      const bg = this.svgRect(0, 0, stock.w, stock.h, "#f7fafc", "#cbd5e0", 2)
+      const bg = this.svgRect(0, 0, stock.w, stock.h, "#dce6f0", "#cbd5e0", 2)
       svg.appendChild(bg)
+
+      // Dimension labels
+      const dimFontSize = stock.w * 0.04
+
+      // Width at top
+      const topLabel = this.svgText(stock.w / 2, -labelMargin * 0.4, `${stock.w}`, dimFontSize)
+      svg.appendChild(topLabel)
+
+      // Width at bottom
+      const bottomLabel = this.svgText(stock.w / 2, stock.h + labelMargin * 0.6, `${stock.w}`, dimFontSize)
+      svg.appendChild(bottomLabel)
+
+      // Length on left (vertical)
+      const leftLabel = this.svgText(-labelMargin * 0.4, stock.h / 2, `${stock.h}`, dimFontSize)
+      leftLabel.setAttribute("transform", `rotate(-90, ${-labelMargin * 0.4}, ${stock.h / 2})`)
+      svg.appendChild(leftLabel)
 
       sheet.placements.forEach((p) => {
         const rw = p.rect.w ?? p.rect.length
@@ -58,23 +78,22 @@ export default class extends Controller {
         rect.setAttribute("opacity", "0.8")
         svg.appendChild(rect)
 
-        // Dimension label
-        const label = document.createElementNS("http://www.w3.org/2000/svg", "text")
-        label.setAttribute("x", p.x + pw / 2)
-        label.setAttribute("y", p.y + ph / 2)
-        label.setAttribute("text-anchor", "middle")
-        label.setAttribute("dominant-baseline", "central")
-        label.setAttribute("class", "select-none pointer-events-none")
+        // Dimension labels on edges (like stock dimensions)
+        const pFontSize = Math.min(pw, ph) * 0.12
+        const inset = pFontSize * 0.8
 
-        const fontSize = this.fitFontSize(pw, ph, rw, rh, p.rotated)
-        label.setAttribute("font-size", fontSize)
-        label.setAttribute("fill", "#1a202c")
-        label.setAttribute("font-weight", "600")
+        // Width at top (horizontal)
+        const topW = this.svgText(p.x + pw / 2, p.y + inset, `${pw}`, pFontSize)
+        topW.setAttribute("class", "select-none pointer-events-none")
+        topW.setAttribute("fill", "#1a202c")
+        svg.appendChild(topW)
 
-        let text = `${rw}×${rh}`
-        if (p.rotated) text += " R"
-        label.textContent = text
-        svg.appendChild(label)
+        // Length on left (vertical)
+        const leftH = this.svgText(p.x + inset, p.y + ph / 2, `${ph}`, pFontSize)
+        leftH.setAttribute("class", "select-none pointer-events-none")
+        leftH.setAttribute("fill", "#1a202c")
+        leftH.setAttribute("transform", `rotate(-90, ${p.x + inset}, ${p.y + ph / 2})`)
+        svg.appendChild(leftH)
       })
 
       container.appendChild(svg)
@@ -114,6 +133,19 @@ export default class extends Controller {
     const maxByWidth = pw / charW
     const maxByHeight = ph / 1.2
     return Math.max(10, Math.min(maxByWidth, maxByHeight, minDim * 0.25))
+  }
+
+  svgText(x, y, content, fontSize) {
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text")
+    text.setAttribute("x", x)
+    text.setAttribute("y", y)
+    text.setAttribute("text-anchor", "middle")
+    text.setAttribute("dominant-baseline", "central")
+    text.setAttribute("font-size", fontSize)
+    text.setAttribute("font-weight", "700")
+    text.setAttribute("fill", "#1a202c")
+    text.textContent = content
+    return text
   }
 
   svgRect(x, y, w, h, fill, stroke, strokeWidth) {

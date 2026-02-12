@@ -123,7 +123,7 @@ class CutListPdfService
     used_pct = ((used_area / stock_area) * 100).round(0)
     waste_pct = ((waste_area / stock_area) * 100).round(0)
     placements = sheet["placements"] || []
-    unique_pieces = placements.map { |p| normalize_key(p["rect"]["w"], p["rect"]["h"]) }.uniq.size
+    unique_pieces = placements.map { |p| w, h = piece_dims(p["rect"]); normalize_key(w, h) }.uniq.size
 
     pdf.fill_color HEADER_COLOR
     pdf.font_size(11) do
@@ -145,7 +145,7 @@ class CutListPdfService
   def draw_piece_table(pdf, sheet)
     placements = sheet["placements"] || []
     counts = Hash.new(0)
-    placements.each { |p| counts[normalize_key(p["rect"]["w"], p["rect"]["h"])] += 1 }
+    placements.each { |p| w, h = piece_dims(p["rect"]); counts[normalize_key(w, h)] += 1 }
 
     return if counts.empty?
 
@@ -193,12 +193,13 @@ class CutListPdfService
 
     # Pieces
     (sheet["placements"] || []).each do |p|
+      rw, rh = piece_dims(p["rect"])
       px = p["x"].to_f * scale
       py = p["y"].to_f * scale
-      pw = p["rect"]["w"].to_f * scale
-      ph = p["rect"]["h"].to_f * scale
+      pw = rw * scale
+      ph = rh * scale
 
-      key = normalize_key(p["rect"]["w"], p["rect"]["h"])
+      key = normalize_key(rw, rh)
       color = @color_map[key] || "a0aec0"
 
       rect_x = origin_x + px
@@ -210,22 +211,37 @@ class CutListPdfService
       pdf.line_width 0.3
       pdf.stroke_rectangle [rect_x, rect_y], pw, ph
 
-      # Dimension label inside piece
-      label = "#{p["rect"]["w"]}×#{p["rect"]["h"]}"
-      label += " R" if p["rotated"]
-      font_size = fit_font_size(pw, ph, label)
+      # Dimension labels on edges (like stock dimensions)
+      dim_font = [pw, ph].min * 0.12
+      pdf.fill_color TEXT_COLOR
 
-      if font_size >= 4
-        pdf.fill_color TEXT_COLOR
-        pdf.text_box label,
+      # Width at top (horizontal)
+      if dim_font >= 4 && pw > 8 && ph > dim_font + 4
+        pdf.text_box "#{rw.to_i}",
           at: [rect_x + 1, rect_y - 1],
           width: pw - 2,
-          height: ph - 2,
+          height: dim_font + 2,
           align: :center,
           valign: :center,
-          size: font_size,
+          size: dim_font,
           overflow: :shrink_to_fit,
           min_font_size: 3
+      end
+
+      # Height on left (vertical)
+      if dim_font >= 4 && ph > 8 && pw > dim_font + 4
+        mid_y = rect_y - ph / 2
+        pdf.rotate(90, origin: [rect_x + dim_font * 0.8, mid_y]) do
+          pdf.text_box "#{rh.to_i}",
+            at: [rect_x + dim_font * 0.8 - dim_font, mid_y + dim_font / 2],
+            width: ph - 2,
+            height: dim_font + 2,
+            align: :center,
+            valign: :center,
+            size: dim_font,
+            overflow: :shrink_to_fit,
+            min_font_size: 3
+        end
       end
     end
 
@@ -272,13 +288,19 @@ class CutListPdfService
 
   def stock
     @stock ||= {
-      l: @result.dig("stock", "w").to_f,
-      w: @result.dig("stock", "h").to_f
+      l: (@result.dig("stock", "w") || @result.dig("stock", "length")).to_f,
+      w: (@result.dig("stock", "h") || @result.dig("stock", "width")).to_f
     }
   end
 
   def sheets
     @result["sheets"] || []
+  end
+
+  def piece_dims(rect)
+    w = (rect["w"] || rect["length"]).to_f
+    h = (rect["h"] || rect["width"]).to_f
+    [w, h]
   end
 
   def normalize_key(l, w)
@@ -289,7 +311,8 @@ class CutListPdfService
     keys = Set.new
     sheets.each do |s|
       (s["placements"] || []).each do |p|
-        keys.add(normalize_key(p["rect"]["w"], p["rect"]["h"]))
+        w, h = piece_dims(p["rect"])
+        keys.add(normalize_key(w, h))
       end
     end
     map = {}
@@ -301,7 +324,8 @@ class CutListPdfService
     counts = Hash.new(0)
     sheets.each do |s|
       (s["placements"] || []).each do |p|
-        counts[normalize_key(p["rect"]["w"], p["rect"]["h"])] += 1
+        w, h = piece_dims(p["rect"])
+        counts[normalize_key(w, h)] += 1
       end
     end
     counts
