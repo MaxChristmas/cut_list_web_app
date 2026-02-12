@@ -51,7 +51,7 @@ class CutListPdfService
 
     # Left: global stats
     pdf.bounding_box([0, top], width: left_w) do
-      stock_area = stock[:w] * stock[:h]
+      stock_area = stock[:l] * stock[:w]
       total_area = stock_area * sheets.size
       total_used = sheets.sum { |s| stock_area - s["waste_area"].to_f }
       total_waste = sheets.sum { |s| s["waste_area"].to_f }
@@ -74,7 +74,7 @@ class CutListPdfService
       pieces_text = @piece_summary.map { |k, q| "#{k} x#{q}" }.join("  ·  ")
       draw_info_table(pdf, [
         [t("pieces"), pieces_text],
-        [t("stock_sheet"), "#{stock[:w].to_i}×#{stock[:h].to_i} x#{sheets.size}"]
+        [t("stock_sheet"), "#{stock[:l].to_i}×#{stock[:w].to_i} x#{sheets.size}"]
       ])
     end
 
@@ -117,7 +117,7 @@ class CutListPdfService
   end
 
   def draw_sheet_info(pdf, sheet, index)
-    stock_area = stock[:w] * stock[:h]
+    stock_area = stock[:l] * stock[:w]
     used_area = stock_area - sheet["waste_area"].to_f
     waste_area = sheet["waste_area"].to_f
     used_pct = ((used_area / stock_area) * 100).round(0)
@@ -133,7 +133,7 @@ class CutListPdfService
     pdf.move_down 4
 
     rows = [
-      [t("stock_sheet"), "#{stock[:w].to_i}×#{stock[:h].to_i}"],
+      [t("stock_sheet"), "#{stock[:l].to_i}×#{stock[:w].to_i}"],
       [t("area_used"), "#{used_area.round(0)} #{used_pct}%"],
       [t("waste_area"), "#{waste_area.round(0)} #{waste_pct}%"],
       [t("pieces"), placements.size.to_s],
@@ -172,16 +172,16 @@ class CutListPdfService
   # ── Sheet visual layout ────────────────────────────────────────
 
   def draw_sheet_layout(pdf, sheet, available_w)
-    scale = available_w / stock[:w].to_f
-    layout_h = stock[:h] * scale
+    scale = available_w / stock[:l].to_f
+    layout_h = stock[:w] * scale
 
     max_h = pdf.cursor - 20
     if layout_h > max_h && max_h > 0
-      scale = max_h / stock[:h].to_f
-      layout_h = stock[:h] * scale
+      scale = max_h / stock[:w].to_f
+      layout_h = stock[:w] * scale
     end
 
-    layout_w = stock[:w] * scale
+    layout_w = stock[:l] * scale
     origin_x = 0
     origin_y = pdf.cursor
 
@@ -231,18 +231,18 @@ class CutListPdfService
 
     # Dimension labels outside the sheet
     pdf.fill_color MUTED_COLOR
-    # Width label (bottom center)
-    pdf.text_box "#{stock[:w].to_i}",
+    # Length label (bottom center)
+    pdf.text_box "#{stock[:l].to_i}",
       at: [origin_x, origin_y - layout_h - 3],
       width: layout_w,
       height: 10,
       align: :center,
       size: 7
 
-    # Height label (right side, rotated)
+    # Width label (right side, rotated)
     mid_y = origin_y - layout_h / 2
     pdf.rotate(90, origin: [origin_x + layout_w + 10, mid_y]) do
-      pdf.text_box "#{stock[:h].to_i}",
+      pdf.text_box "#{stock[:w].to_i}",
         at: [origin_x + layout_w + 10 - 20, mid_y + 5],
         width: 40,
         height: 10,
@@ -272,8 +272,8 @@ class CutListPdfService
 
   def stock
     @stock ||= {
-      w: @result.dig("stock", "w").to_f,
-      h: @result.dig("stock", "h").to_f
+      l: @result.dig("stock", "w").to_f,
+      w: @result.dig("stock", "h").to_f
     }
   end
 
@@ -281,8 +281,8 @@ class CutListPdfService
     @result["sheets"] || []
   end
 
-  def normalize_key(w, h)
-    "#{[w, h].min}×#{[w, h].max}"
+  def normalize_key(l, w)
+    "#{[l, w].min}×#{[l, w].max}"
   end
 
   def build_color_map

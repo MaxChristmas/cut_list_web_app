@@ -42,11 +42,11 @@ RSpec.describe RustCuttingService do
       described_class.optimize(stock: stock, cuts: cuts, kerf: 2.5)
 
       payload = JSON.parse(@captured_request.body)
-      expect(payload["stock"]).to eq("w" => 1000, "h" => 500)
+      expect(payload["stock"]).to eq("length" => 1000, "width" => 500)
       expect(payload["kerf"]).to eq(2.5)
       expect(payload["cuts"].length).to eq(2)
       expect(payload["cuts"][0]).to eq(
-        "rect" => { "w" => 200, "h" => 100 },
+        "rect" => { "length" => 200, "width" => 100 },
         "qty" => 3,
         "allow_rotate" => true
       )

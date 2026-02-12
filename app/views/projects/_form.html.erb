@@ -30,15 +30,15 @@
     <table class="w-full text-left border-collapse text-sm">
       <thead>
         <tr class="border-b border-gray-700">
+          <th class="py-1 pr-2 font-light"><%= t("projects.index.length_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.width_short") %></th>
-          <th class="py-1 pr-2 font-light"><%= t("projects.index.height_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.quantity_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.rotation_short") %></th>
           <th class="py-1 w-8 font-light"></th>
         </tr>
       </thead>
       <tbody data-pieces-target="body">
-        <% pieces = @pieces.presence || [{ length: nil, height: nil, quantity: 1, allow_rotate: "1" }] %>
+        <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1, allow_rotate: "1" }] %>
         <% pieces.each do |piece| %>
           <tr class="border-b border-gray-800">
             <td class="py-1 pr-2">
@@ -47,8 +47,8 @@
                      class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
             <td class="py-1 pr-2">
-              <input type="number" name="pieces[][height]" min="1" step="any" required
-                     value="<%= piece[:height] || piece["height"] %>"
+              <input type="number" name="pieces[][width]" min="1" step="any" required
+                     value="<%= piece[:width] || piece["width"] %>"
                      class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
             <td class="py-1 pr-2">
@@ -79,7 +79,7 @@
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </td>
         <td class="py-1 pr-2">
-          <input type="number" name="pieces[][height]" min="1" step="any" required
+          <input type="number" name="pieces[][width]" min="1" step="any" required
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </td>
         <td class="py-1 pr-2">
@@ -112,15 +112,15 @@
 
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
-        <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
-               value="<%= @stock_w %>"
+        <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
+        <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
+               value="<%= @stock_l %>"
                class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
       <div>
-        <label for="stock_h" class="block text-xs font-light mb-1"><%= t("projects.index.height") %></label>
-        <input type="number" id="stock_h" name="stock_h" min="1" step="any" required
-               value="<%= @stock_h %>"
+        <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
+        <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
+               value="<%= @stock_w %>"
                class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
     </div>

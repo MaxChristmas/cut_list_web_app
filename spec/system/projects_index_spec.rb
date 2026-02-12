@@ -14,13 +14,13 @@ RSpec.describe "Projects index – optimization layout", type: :system do
     # Fill in a piece
     within("table") do
       fill_in "pieces[][length]", with: "790"
-      fill_in "pieces[][height]", with: "244"
+      fill_in "pieces[][width]", with: "244"
       fill_in "pieces[][quantity]", with: "2"
     end
 
     # Fill in stock sheet dimensions
-    fill_in "stock_w", with: "2500"
-    fill_in "stock_h", with: "625"
+    fill_in "stock_l", with: "2500"
+    fill_in "stock_w", with: "625"
 
     click_button "Optimize"
 

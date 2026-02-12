@@ -5,10 +5,10 @@ class RustCuttingService
 
   def self.optimize(stock:, cuts:, kerf: 0)
     payload = {
-      stock: { w: stock[:w].to_i, h: stock[:h].to_i },
+      stock: { length: stock[:l].to_i, width: stock[:w].to_i },
       cuts: cuts.map { |c|
         {
-          rect: { w: c[:w].to_i, h: c[:h].to_i },
+          rect: { length: c[:l].to_i, width: c[:w].to_i },
           qty: c[:qty].to_i,
           allow_rotate: c[:allow_rotate] || false
         }

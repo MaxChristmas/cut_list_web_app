@@ -21,8 +21,8 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
     @optimization = @project.optimizations.order(created_at: :desc).first
 
+    @stock_l = @project.sheet_length
     @stock_w = @project.sheet_width
-    @stock_h = @project.sheet_height
     @kerf = @optimization&.result&.dig("kerf") || 0
     @result = @optimization&.result
     @pieces = @optimization&.result&.dig("pieces") || []
@@ -39,19 +39,19 @@ class ProjectsController < ApplicationController
       return
     end
 
+    stock_l = params[:stock_l]
     stock_w = params[:stock_w]
-    stock_h = params[:stock_h]
     kerf = params[:kerf] || 0
     pieces = parse_pieces
 
-    stock = { w: stock_w, h: stock_h }
+    stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces)
 
     result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf)
 
     @project = Project.create!(
+      sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      sheet_height: stock_h.to_i,
       user: current_user
     )
 
@@ -70,8 +70,8 @@ class ProjectsController < ApplicationController
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
+    @stock_l = stock_l
     @stock_w = stock_w
-    @stock_h = stock_h
     @kerf = kerf
     @pieces = pieces || []
     render :index, status: :unprocessable_entity
@@ -85,19 +85,19 @@ class ProjectsController < ApplicationController
       return
     end
 
+    stock_l = params[:stock_l]
     stock_w = params[:stock_w]
-    stock_h = params[:stock_h]
     kerf = params[:kerf] || 0
     pieces = parse_pieces
 
-    stock = { w: stock_w, h: stock_h }
+    stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces)
 
     result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf)
 
     @project.update!(
-      sheet_width: stock_w.to_i,
-      sheet_height: stock_h.to_i
+      sheet_length: stock_l.to_i,
+      sheet_width: stock_w.to_i
     )
 
     @project.optimizations.create!(
@@ -110,8 +110,8 @@ class ProjectsController < ApplicationController
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
+    @stock_l = stock_l
     @stock_w = stock_w
-    @stock_h = stock_h
     @kerf = kerf
     @pieces = pieces || []
     @result = @project&.optimizations&.order(created_at: :desc)&.first&.result
@@ -140,16 +140,16 @@ class ProjectsController < ApplicationController
 
   def parse_pieces
     (params[:pieces] || []).filter_map do |piece|
-      next if piece[:length].blank? || piece[:height].blank?
-      { length: piece[:length], height: piece[:height], quantity: piece[:quantity], allow_rotate: piece[:allow_rotate] }
+      next if piece[:length].blank? || piece[:width].blank?
+      { length: piece[:length], width: piece[:width], quantity: piece[:quantity], allow_rotate: piece[:allow_rotate] }
     end
   end
 
   def build_cuts(pieces)
     pieces.map do |piece|
       {
-        w: piece[:length],
-        h: piece[:height],
+        l: piece[:length],
+        w: piece[:width],
         qty: piece[:quantity],
         allow_rotate: piece[:allow_rotate] == "1"
       }

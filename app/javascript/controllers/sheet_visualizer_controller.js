@@ -17,7 +17,8 @@ export default class extends Controller {
     const data = this.resultValue
     if (!data || !data.sheets) return
 
-    const stock = data.stock
+    // Optimizer convention: length = x-axis, width = y-axis
+    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
     const maxWidth = 700
     const scale = maxWidth / stock.w
     const svgH = stock.h * scale
@@ -45,12 +46,13 @@ export default class extends Controller {
       svg.appendChild(bg)
 
       sheet.placements.forEach((p) => {
-        const key = this.normalizeKey(p.rect.w, p.rect.h, p.rotated)
+        const rw = p.rect.w ?? p.rect.length
+        const rh = p.rect.h ?? p.rect.width
+        const key = this.normalizeKey(rw, rh, p.rotated)
         const color = colorMap[key] || "#a0aec0"
 
-        // rect.w and rect.h are already the placed dimensions
-        const pw = p.rect.w
-        const ph = p.rect.h
+        const pw = rw
+        const ph = rh
 
         const rect = this.svgRect(p.x, p.y, pw, ph, color, "#2d3748", 1)
         rect.setAttribute("opacity", "0.8")
@@ -64,12 +66,12 @@ export default class extends Controller {
         label.setAttribute("dominant-baseline", "central")
         label.setAttribute("class", "select-none pointer-events-none")
 
-        const fontSize = this.fitFontSize(pw, ph, p.rect.w, p.rect.h, p.rotated)
+        const fontSize = this.fitFontSize(pw, ph, rw, rh, p.rotated)
         label.setAttribute("font-size", fontSize)
         label.setAttribute("fill", "#1a202c")
         label.setAttribute("font-weight", "600")
 
-        let text = `${p.rect.w}×${p.rect.h}`
+        let text = `${rw}×${rh}`
         if (p.rotated) text += " R"
         label.textContent = text
         svg.appendChild(label)
@@ -93,7 +95,7 @@ export default class extends Controller {
     const keys = new Set()
     sheets.forEach((s) => {
       s.placements.forEach((p) => {
-        keys.add(this.normalizeKey(p.rect.w, p.rect.h))
+        keys.add(this.normalizeKey(p.rect.w ?? p.rect.length, p.rect.h ?? p.rect.width))
       })
     })
     const map = {}
