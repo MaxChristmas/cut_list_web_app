@@ -40,12 +40,11 @@
           <th class="py-1 pr-2 font-light"><%= t("projects.index.length_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.width_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.quantity_short") %></th>
-          <th class="py-1 pr-2 font-light"><%= t("projects.index.rotation_short") %></th>
           <th class="py-1 w-8 font-light"></th>
         </tr>
       </thead>
       <tbody data-pieces-target="body">
-        <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1, allow_rotate: "1" }] %>
+        <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1 }] %>
         <% pieces.each do |piece| %>
           <tr class="border-b border-gray-800">
             <td class="py-1 pr-2">
@@ -61,12 +60,6 @@
             <td class="py-1 pr-2">
               <input type="number" name="pieces[][quantity]" min="1" value="<%= piece[:quantity] || piece["quantity"] || 1 %>" required
                      class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </td>
-            <td class="py-1 pr-2 text-center">
-              <input type="hidden" name="pieces[][allow_rotate]" value="0">
-              <% rotate_val = piece[:allow_rotate] || piece["allow_rotate"] %>
-              <input type="checkbox" name="pieces[][allow_rotate]" value="1" <%= "checked" if rotate_val != "0" && rotate_val != false %>
-                     class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
             </td>
             <td class="py-1">
               <button type="button" data-action="pieces#remove"
@@ -92,11 +85,6 @@
         <td class="py-1 pr-2">
           <input type="number" name="pieces[][quantity]" min="1" value="1" required
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </td>
-        <td class="py-1 pr-2 text-center">
-          <input type="hidden" name="pieces[][allow_rotate]" value="0">
-          <input type="checkbox" name="pieces[][allow_rotate]" value="1" checked
-                 class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
         </td>
         <td class="py-1">
           <button type="button" data-action="pieces#remove"
@@ -131,6 +119,32 @@
                class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
     </div>
+  </section>
+
+  <%# Cut Direction %>
+  <section>
+    <h2 class="text-sm font-semibold mb-2 uppercase tracking-wide"><%= t("projects.index.cut_direction") %></h2>
+    <select name="cut_direction"
+            class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <% %w[auto along_length along_width].each do |dir| %>
+        <option value="<%= dir %>" <%= "selected" if (@cut_direction || "auto") == dir %>>
+          <%= t("projects.index.cut_directions.#{dir}") %>
+        </option>
+      <% end %>
+    </select>
+    <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.cut_direction_hint") %></p>
+  </section>
+
+  <%# Allow Rotation %>
+  <section>
+    <div class="flex items-center gap-2">
+      <input type="hidden" name="allow_rotation" value="0">
+      <input type="checkbox" name="allow_rotation" value="1" id="allow_rotation"
+             <%= "checked" if @allow_rotation.nil? || @allow_rotation == true || @allow_rotation == "1" %>
+             class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
+      <label for="allow_rotation" class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.allow_rotation") %></label>
+    </div>
+    <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.allow_rotation_hint") %></p>
   </section>
 
   <%# Kerf %>

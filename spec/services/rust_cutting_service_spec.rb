@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe RustCuttingService do
-  let(:stock) { { w: 1000, h: 500 } }
+  let(:stock) { { l: 1000, w: 500 } }
   let(:cuts) do
     [
-      { w: 200, h: 100, qty: 3, allow_rotate: true },
-      { w: 150, h: 75, qty: 2 }
+      { l: 200, w: 100, qty: 3 },
+      { l: 150, w: 75, qty: 2 }
     ]
   end
   let(:success_body) { { "sheets" => [{ "cuts" => [] }] }.to_json }
@@ -47,17 +47,25 @@ RSpec.describe RustCuttingService do
       expect(payload["cuts"].length).to eq(2)
       expect(payload["cuts"][0]).to eq(
         "rect" => { "length" => 200, "width" => 100 },
-        "qty" => 3,
-        "allow_rotate" => true
+        "qty" => 3
       )
     end
 
-    it "defaults allow_rotate to false" do
+    it "sends allow_rotate at the top level, defaulting to true" do
       stub_optimizer
       described_class.optimize(stock: stock, cuts: cuts)
 
       payload = JSON.parse(@captured_request.body)
-      expect(payload["cuts"][1]["allow_rotate"]).to eq(false)
+      expect(payload["allow_rotate"]).to eq(true)
+      expect(payload["cuts"][0]).not_to have_key("allow_rotate")
+    end
+
+    it "sends allow_rotate false when specified" do
+      stub_optimizer
+      described_class.optimize(stock: stock, cuts: cuts, allow_rotate: false)
+
+      payload = JSON.parse(@captured_request.body)
+      expect(payload["allow_rotate"]).to eq(false)
     end
 
     it "defaults kerf to 0.0" do
