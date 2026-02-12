@@ -27,6 +27,7 @@ ja:
   projects:
     index:
       title: "カットリストを最適化"
+      project_name: "プロジェクト名（任意）"
       pieces_to_cut: "カットするパネル"
       length_short: "長さ"
       width_short: "幅"

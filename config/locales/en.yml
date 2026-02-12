@@ -27,6 +27,7 @@ en:
   projects:
     index:
       title: "New Cut List"
+      project_name: "Project name (optional)"
       pieces_to_cut: "Pieces to Cut"
       length_short: "Length"
       width_short: "Width"

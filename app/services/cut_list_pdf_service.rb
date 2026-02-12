@@ -107,8 +107,9 @@ class CutListPdfService
       left_bottom = pdf.cursor
 
       # ── Right column: visual layout ──
+      available_h = top - 40
       pdf.bounding_box([right_x, top], width: right_w) do
-        draw_sheet_layout(pdf, sheet, right_w)
+        draw_sheet_layout(pdf, sheet, right_w, available_h)
       end
 
       right_bottom = pdf.cursor
@@ -149,39 +150,62 @@ class CutListPdfService
 
     return if counts.empty?
 
-    pdf.fill_color TEXT_COLOR
-    pdf.font_size(LABEL_FONT) do
-      header = [
-        make_cell(t("piece"), :bold),
-        make_cell(t("qty"), :bold)
-      ]
-      data = counts.map { |k, q| [k, q.to_s] }
+    sq = LABEL_FONT
+    table_w = pdf.bounds.width * 0.85
+    row_h = sq + 6
 
-      pdf.table([header] + data, width: pdf.bounds.width * 0.85) do |tbl|
-        tbl.cells.padding = [2, 4, 2, 4]
-        tbl.cells.borders = []
-        tbl.cells.size = LABEL_FONT
-        tbl.row(0).borders = [:bottom]
-        tbl.row(0).border_width = 0.5
-        tbl.row(0).border_color = "cccccc"
-        tbl.columns(1).align = :right
+    pdf.font_size(LABEL_FONT) do
+      # Header
+      pdf.fill_color TEXT_COLOR
+      pdf.text_box t("piece"), at: [sq + 6, pdf.cursor], width: table_w - 40, style: :bold, size: LABEL_FONT
+      pdf.text_box t("qty"), at: [table_w - 30, pdf.cursor], width: 30, align: :right, style: :bold, size: LABEL_FONT
+      pdf.move_down row_h
+      pdf.stroke_color "cccccc"
+      pdf.line_width 0.5
+      pdf.stroke_horizontal_line 0, table_w
+      pdf.move_down 3
+
+      # Data rows
+      counts.each do |k, q|
+        color = @color_map[k] || "a0aec0"
+        y = pdf.cursor
+
+        # Color swatch
+        pdf.fill_color color
+        pdf.fill_rectangle [0, y], sq, sq
+        pdf.stroke_color PIECE_BORDER
+        pdf.line_width 0.3
+        pdf.stroke_rectangle [0, y], sq, sq
+
+        # Piece name and qty
+        pdf.fill_color TEXT_COLOR
+        pdf.text_box k, at: [sq + 6, y], width: table_w - sq - 36, size: LABEL_FONT
+        pdf.text_box q.to_s, at: [table_w - 30, y], width: 30, align: :right, size: LABEL_FONT
+        pdf.move_down row_h
       end
     end
+    pdf.fill_color TEXT_COLOR
   end
 
   # ── Sheet visual layout ────────────────────────────────────────
 
-  def draw_sheet_layout(pdf, sheet, available_w)
-    scale = available_w / stock[:l].to_f
-    layout_h = stock[:w] * scale
+  def draw_sheet_layout(pdf, sheet, available_w, available_h)
+    portrait = stock[:l] > stock[:w]
 
-    max_h = pdf.cursor - 20
-    if layout_h > max_h && max_h > 0
-      scale = max_h / stock[:w].to_f
-      layout_h = stock[:w] * scale
+    if portrait
+      draw_stock_w = stock[:w]
+      draw_stock_h = stock[:l]
+    else
+      draw_stock_w = stock[:l]
+      draw_stock_h = stock[:w]
     end
 
-    layout_w = stock[:l] * scale
+    scale_w = available_w / draw_stock_w.to_f
+    scale_h = available_h > 0 ? available_h / draw_stock_h.to_f : scale_w
+    scale = [scale_w, scale_h].min
+
+    layout_w = draw_stock_w * scale
+    layout_h = draw_stock_h * scale
     origin_x = 0
     origin_y = pdf.cursor
 
@@ -194,10 +218,18 @@ class CutListPdfService
     # Pieces
     (sheet["placements"] || []).each do |p|
       rw, rh = piece_dims(p["rect"])
-      px = p["x"].to_f * scale
-      py = p["y"].to_f * scale
-      pw = rw * scale
-      ph = rh * scale
+
+      if portrait
+        px = p["y"].to_f * scale
+        py = p["x"].to_f * scale
+        pw = rh * scale
+        ph = rw * scale
+      else
+        px = p["x"].to_f * scale
+        py = p["y"].to_f * scale
+        pw = rw * scale
+        ph = rh * scale
+      end
 
       key = normalize_key(rw, rh)
       color = @color_map[key] || "a0aec0"
@@ -211,54 +243,52 @@ class CutListPdfService
       pdf.line_width 0.3
       pdf.stroke_rectangle [rect_x, rect_y], pw, ph
 
-      # Dimension labels on edges (like stock dimensions)
-      dim_font = [pw, ph].min * 0.12
+      # Centered dimension label
+      label = "#{rw.to_i}×#{rh.to_i}"
+      dim_font = [pw * 0.22, ph * 0.35, 8].min
       pdf.fill_color TEXT_COLOR
 
-      # Width at top (horizontal)
-      if dim_font >= 4 && pw > 8 && ph > dim_font + 4
-        pdf.text_box "#{rw.to_i}",
-          at: [rect_x + 1, rect_y - 1],
+      if pw >= ph
+        pdf.text_box label,
+          at: [rect_x + 1, rect_y - (ph - dim_font) / 2],
           width: pw - 2,
           height: dim_font + 2,
           align: :center,
           valign: :center,
           size: dim_font,
           overflow: :shrink_to_fit,
-          min_font_size: 3
-      end
-
-      # Height on left (vertical)
-      if dim_font >= 4 && ph > 8 && pw > dim_font + 4
+          min_font_size: 2
+      else
+        mid_x = rect_x + pw / 2
         mid_y = rect_y - ph / 2
-        pdf.rotate(90, origin: [rect_x + dim_font * 0.8, mid_y]) do
-          pdf.text_box "#{rh.to_i}",
-            at: [rect_x + dim_font * 0.8 - dim_font, mid_y + dim_font / 2],
+        pdf.rotate(90, origin: [mid_x, mid_y]) do
+          pdf.text_box label,
+            at: [mid_x - (ph - 2) / 2, mid_y + (dim_font + 2) / 2],
             width: ph - 2,
             height: dim_font + 2,
             align: :center,
             valign: :center,
             size: dim_font,
             overflow: :shrink_to_fit,
-            min_font_size: 3
+            min_font_size: 2
         end
       end
     end
 
     # Dimension labels outside the sheet
     pdf.fill_color MUTED_COLOR
-    # Length label (bottom center)
-    pdf.text_box "#{stock[:l].to_i}",
+    # Bottom label (horizontal dimension)
+    pdf.text_box "#{draw_stock_w.to_i}",
       at: [origin_x, origin_y - layout_h - 3],
       width: layout_w,
       height: 10,
       align: :center,
       size: 7
 
-    # Width label (right side, rotated)
+    # Right side label (vertical dimension, rotated)
     mid_y = origin_y - layout_h / 2
     pdf.rotate(90, origin: [origin_x + layout_w + 10, mid_y]) do
-      pdf.text_box "#{stock[:w].to_i}",
+      pdf.text_box "#{draw_stock_h.to_i}",
         at: [origin_x + layout_w + 10 - 20, mid_y + 5],
         width: 40,
         height: 10,
@@ -266,7 +296,6 @@ class CutListPdfService
         size: 7
     end
 
-    pdf.fill_color TEXT_COLOR
     pdf.move_cursor_to(origin_y - layout_h - 14)
   end
 
@@ -304,7 +333,7 @@ class CutListPdfService
   end
 
   def normalize_key(l, w)
-    "#{[l, w].min}×#{[l, w].max}"
+    "#{[l, w].max}×#{[l, w].min}"
   end
 
   def build_color_map

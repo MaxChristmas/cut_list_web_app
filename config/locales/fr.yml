@@ -27,6 +27,7 @@ fr:
   projects:
     index:
       title: "Optimisez vos découpes"
+      project_name: "Nom du projet (optionnel)"
       pieces_to_cut: "Panneaux à découper"
       length_short: "Longueur"
       width_short: "Largeur"

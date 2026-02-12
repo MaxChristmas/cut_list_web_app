@@ -13,7 +13,12 @@ class ProjectsController < ApplicationController
     end
 
     pdf = CutListPdfService.new(result, @project).generate
-    send_data pdf.render, filename: "cut-list-#{@project.token}.pdf",
+    filename = if @project.name.present?
+      "#{@project.name.parameterize}.pdf"
+    else
+      "cut-list-#{@project.token}.pdf"
+    end
+    send_data pdf.render, filename: filename,
               type: "application/pdf", disposition: "attachment"
   end
 
@@ -21,6 +26,7 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
     @optimization = @project.optimizations.order(created_at: :desc).first
 
+    @name = @project.name
     @stock_l = @project.sheet_length
     @stock_w = @project.sheet_width
     @kerf = @optimization&.result&.dig("kerf") || 0
@@ -50,6 +56,7 @@ class ProjectsController < ApplicationController
     result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf)
 
     @project = Project.create!(
+      name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
       user: current_user
@@ -70,6 +77,7 @@ class ProjectsController < ApplicationController
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
+    @name = params[:name]
     @stock_l = stock_l
     @stock_w = stock_w
     @kerf = kerf
@@ -96,6 +104,7 @@ class ProjectsController < ApplicationController
     result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf)
 
     @project.update!(
+      name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i
     )
@@ -110,6 +119,7 @@ class ProjectsController < ApplicationController
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
+    @name = params[:name]
     @stock_l = stock_l
     @stock_w = stock_w
     @kerf = kerf
