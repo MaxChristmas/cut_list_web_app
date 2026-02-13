@@ -32,6 +32,8 @@ en:
       length_short: "Length"
       width_short: "Width"
       quantity_short: "Qantity"
+      label_short: "Label"
+      show_labels: "Show labels"
       import_csv: "Import CSV"
       add_piece: "+ Add Piece"
       stock_sheet: "Original Sheet"

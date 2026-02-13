@@ -5,8 +5,6 @@ class Project < ApplicationRecord
   before_create :generate_token
 
   validates :token, uniqueness: true
-  validates :cut_direction, inclusion: { in: %w[auto along_length along_width] }
-
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
 

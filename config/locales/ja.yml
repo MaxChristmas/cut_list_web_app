@@ -32,6 +32,8 @@ ja:
       length_short: "長さ"
       width_short: "幅"
       quantity_short: "数量"
+      label_short: "ラベル"
+      show_labels: "ラベルを表示"
       import_csv: "CSVインポート"
       add_piece: "+ パネルを追加"
       stock_sheet: "ベースパネル"

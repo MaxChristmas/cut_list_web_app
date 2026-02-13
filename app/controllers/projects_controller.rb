@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
     @stock_l = @project.sheet_length
     @stock_w = @project.sheet_width
     @kerf = @optimization&.result&.dig("kerf") || 0
-    @cut_direction = @project.cut_direction || "auto"
+    @cut_direction = @optimization&.cut_direction || "auto"
     @allow_rotation = @project.allow_rotation.nil? ? true : @project.allow_rotation
     @result = @optimization&.result
     @pieces = @optimization&.result&.dig("pieces") || []
@@ -63,14 +63,14 @@ class ProjectsController < ApplicationController
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      cut_direction: cut_direction,
       allow_rotation: allow_rotation,
       user: current_user
     )
 
     @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
-      status: "completed"
+      status: "completed",
+      cut_direction: cut_direction
     )
 
     if user_signed_in?
@@ -117,13 +117,13 @@ class ProjectsController < ApplicationController
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      cut_direction: cut_direction,
       allow_rotation: allow_rotation
     )
 
     @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
-      status: "completed"
+      status: "completed",
+      cut_direction: cut_direction
     )
 
     GuestLimits.record_optimization!(session) unless user_signed_in?
@@ -165,7 +165,9 @@ class ProjectsController < ApplicationController
   def parse_pieces
     (params[:pieces] || []).filter_map do |piece|
       next if piece[:length].blank? || piece[:width].blank?
-      { length: piece[:length], width: piece[:width], quantity: piece[:quantity] }
+      h = { length: piece[:length], width: piece[:width], quantity: piece[:quantity] }
+      h[:label] = piece[:label].strip if piece[:label].present?
+      h
     end
   end
 

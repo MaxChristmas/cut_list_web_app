@@ -1,15 +1,65 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["body", "template", "csvInput"]
+  static targets = ["body", "template", "csvInput", "labelsToggle", "labelCol"]
+  static values = { labelsVisible: Boolean }
+
+  connect() {
+    if (this.labelsVisibleValue) {
+      this.showLabelColumns()
+    }
+    this.element.closest("form")?.addEventListener("submit", this.autoFillLabels.bind(this))
+  }
 
   add() {
     const content = this.templateTarget.content.cloneNode(true)
+    if (this.labelsVisibleValue) {
+      content.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
+    }
     this.bodyTarget.appendChild(content)
   }
 
   remove(event) {
     event.currentTarget.closest("tr").remove()
+  }
+
+  toggleLabels() {
+    this.labelsVisibleValue = this.labelsToggleTarget.checked
+    if (this.labelsVisibleValue) {
+      this.showLabelColumns()
+    } else {
+      this.hideLabelColumns()
+    }
+  }
+
+  showLabelColumns() {
+    this.labelColTargets.forEach(el => el.removeAttribute("hidden"))
+  }
+
+  hideLabelColumns() {
+    this.labelColTargets.forEach(el => {
+      el.setAttribute("hidden", "")
+      const input = el.querySelector("input")
+      if (input) input.value = ""
+    })
+  }
+
+  autoFillLabels() {
+    if (!this.labelsVisibleValue) return
+
+    const labelInputs = this.bodyTarget.querySelectorAll("input[name='pieces[][label]']")
+    const allEmpty = Array.from(labelInputs).every(input => !input.value.trim())
+    if (!allEmpty) return
+
+    const used = new Set()
+    labelInputs.forEach(input => {
+      let code
+      do {
+        code = Array.from({ length: 3 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join("")
+      } while (used.has(code))
+      used.add(code)
+      input.value = code
+    })
   }
 
   openCsvDialog() {
@@ -34,13 +84,24 @@ export default class extends Controller {
         const length = parseFloat(cols[0])
         const width = parseFloat(cols[1])
         const quantity = parseFloat(cols[2]) || 1
+        const label = cols[3] || ""
         if (isNaN(length) || isNaN(width)) continue
 
         const row = this.templateTarget.content.cloneNode(true)
-        const inputs = row.querySelectorAll("input[type='number']")
-        inputs[0].value = length  // length
-        inputs[1].value = width   // width
-        inputs[2].value = quantity // quantity
+        const numberInputs = row.querySelectorAll("input[type='number']")
+        numberInputs[0].value = length
+        numberInputs[1].value = width
+        numberInputs[2].value = quantity
+
+        if (label && this.labelsVisibleValue) {
+          const labelInput = row.querySelector("input[type='text']")
+          if (labelInput) labelInput.value = label
+        }
+
+        if (this.labelsVisibleValue) {
+          row.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
+        }
+
         this.bodyTarget.appendChild(row)
       }
 

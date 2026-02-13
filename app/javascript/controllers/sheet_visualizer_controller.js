@@ -22,6 +22,7 @@ export default class extends Controller {
     const maxWidth = 700
     const scale = maxWidth / stock.w
     const colorMap = this.buildColorMap(data.sheets)
+    const labelMap = this.buildLabelMap(data.pieces || [])
 
     const container = this.element
     container.innerHTML = ""
@@ -74,12 +75,12 @@ export default class extends Controller {
         const pw = rw
         const ph = rh
 
-        const rect = this.svgRect(p.x, p.y, pw, ph, color, "#2d3748", 1)
+        const rect = this.svgRect(p.x, p.y, pw, ph, color, "#0f1117", 1.5)
         rect.setAttribute("opacity", "0.8")
         svg.appendChild(rect)
 
         // Dimension labels on edges (like stock dimensions)
-        const pFontSize = Math.min(pw, ph) * 0.12
+        const pFontSize = Math.min(Math.min(pw, ph) * 0.12, 70)
         const inset = pFontSize * 0.8
 
         // Width at top (horizontal)
@@ -94,6 +95,17 @@ export default class extends Controller {
         leftH.setAttribute("fill", "#1a202c")
         leftH.setAttribute("transform", `rotate(-90, ${p.x + inset}, ${p.y + ph / 2})`)
         svg.appendChild(leftH)
+
+        // Label centered in piece
+        const label = labelMap[key]
+        if (label) {
+          const labelFontSize = pFontSize
+          const labelEl = this.svgText(p.x + pw / 2, p.y + ph / 2, label, labelFontSize)
+          labelEl.setAttribute("class", "select-none pointer-events-none")
+          labelEl.setAttribute("fill", "#4a5568")
+          labelEl.setAttribute("font-weight", "400")
+          svg.appendChild(labelEl)
+        }
       })
 
       container.appendChild(svg)
@@ -108,6 +120,18 @@ export default class extends Controller {
 
   normalizeKey(w, h, _rotated) {
     return `${Math.min(w, h)}×${Math.max(w, h)}`
+  }
+
+  buildLabelMap(pieces) {
+    const map = {}
+    pieces.forEach((p) => {
+      if (!p.label) return
+      const l = parseFloat(p.length) || parseFloat(p.l) || 0
+      const w = parseFloat(p.width) || parseFloat(p.w) || 0
+      const key = this.normalizeKey(l, w)
+      if (!map[key]) map[key] = p.label
+    })
+    return map
   }
 
   buildColorMap(sheets) {
@@ -142,6 +166,7 @@ export default class extends Controller {
     text.setAttribute("text-anchor", "middle")
     text.setAttribute("dominant-baseline", "central")
     text.setAttribute("font-size", fontSize)
+    text.setAttribute("font-family", "Arial, Helvetica, sans-serif")
     text.setAttribute("font-weight", "700")
     text.setAttribute("fill", "#1a202c")
     text.textContent = content

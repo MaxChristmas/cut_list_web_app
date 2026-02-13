@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_12_184914) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_13_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "optimizations", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "cut_direction", default: "auto", null: false
     t.decimal "efficiency"
     t.bigint "project_id", null: false
     t.jsonb "result"
@@ -29,7 +30,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_184914) do
     t.boolean "allow_rotation"
     t.datetime "archived_at"
     t.datetime "created_at", null: false
-    t.string "cut_direction", default: "auto", null: false
     t.string "name"
     t.integer "sheet_length"
     t.integer "sheet_width"

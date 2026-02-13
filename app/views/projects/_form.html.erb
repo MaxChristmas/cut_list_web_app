@@ -24,14 +24,23 @@
            maxlength="100">
   </section>
 
-  <section data-controller="pieces">
+  <% has_labels = @pieces.present? && @pieces.any? { |p| (p[:label] || p["label"]).present? } %>
+  <section data-controller="pieces" data-pieces-labels-visible-value="<%= has_labels %>">
     <div class="flex items-center justify-between mb-2">
       <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
-      <input type="file" accept=".csv,.tsv,.txt" class="hidden" data-pieces-target="csvInput" data-action="change->pieces#importCsv">
-      <button type="button" data-action="pieces#openCsvDialog"
-              class="text-sm text-white hover:text-blue-300 font-medium">
-        <%= t("projects.index.import_csv") %>
-      </button>
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" data-pieces-target="labelsToggle" data-action="pieces#toggleLabels"
+                 <%= "checked" if has_labels %>
+                 class="h-3.5 w-3.5 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
+          <span class="text-xs text-gray-400"><%= t("projects.index.show_labels") %></span>
+        </label>
+        <input type="file" accept=".csv,.tsv,.txt" class="hidden" data-pieces-target="csvInput" data-action="change->pieces#importCsv">
+        <button type="button" data-action="pieces#openCsvDialog"
+                class="text-sm text-white hover:text-blue-300 font-medium">
+          <%= t("projects.index.import_csv") %>
+        </button>
+      </div>
     </div>
 
     <table class="w-full text-left border-collapse text-sm">
@@ -40,6 +49,7 @@
           <th class="py-1 pr-2 font-light"><%= t("projects.index.length_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.width_short") %></th>
           <th class="py-1 pr-2 font-light"><%= t("projects.index.quantity_short") %></th>
+          <th class="py-1 pr-2 font-light" data-pieces-target="labelCol" <%= 'hidden' unless has_labels %>><%= t("projects.index.label_short") %></th>
           <th class="py-1 w-8 font-light"></th>
         </tr>
       </thead>
@@ -59,6 +69,11 @@
             </td>
             <td class="py-1 pr-2">
               <input type="number" name="pieces[][quantity]" min="1" value="<%= piece[:quantity] || piece["quantity"] || 1 %>" required
+                     class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </td>
+            <td class="py-1 pr-2" data-pieces-target="labelCol" <%= 'hidden' unless has_labels %>>
+              <input type="text" name="pieces[][label]" maxlength="20"
+                     value="<%= piece[:label] || piece["label"] %>"
                      class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </td>
             <td class="py-1">
@@ -84,6 +99,10 @@
         </td>
         <td class="py-1 pr-2">
           <input type="number" name="pieces[][quantity]" min="1" value="1" required
+                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </td>
+        <td class="py-1 pr-2" data-pieces-target="labelCol" hidden>
+          <input type="text" name="pieces[][label]" maxlength="20"
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </td>
         <td class="py-1">

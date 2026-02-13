@@ -22,6 +22,7 @@ class CutListPdfService
     Prawn::Document.new(page_size: "A4", margin: [30, 30, 40, 30]) do |pdf|
       @color_map = build_color_map
       @piece_summary = build_piece_summary
+      @label_map = build_label_map
 
       draw_global_header(pdf)
       draw_sheets(pdf)
@@ -179,7 +180,9 @@ class CutListPdfService
 
         # Piece name and qty
         pdf.fill_color TEXT_COLOR
-        pdf.text_box k, at: [sq + 6, y], width: table_w - sq - 36, size: LABEL_FONT
+        piece_label = @label_map[k]
+        piece_text = piece_label ? "#{k} — #{piece_label}" : k
+        pdf.text_box piece_text, at: [sq + 6, y], width: table_w - sq - 36, size: LABEL_FONT
         pdf.text_box q.to_s, at: [table_w - 30, y], width: 30, align: :right, size: LABEL_FONT
         pdf.move_down row_h
       end
@@ -243,35 +246,50 @@ class CutListPdfService
       pdf.line_width 0.3
       pdf.stroke_rectangle [rect_x, rect_y], pw, ph
 
-      # Centered dimension label
-      label = "#{rw.to_i}×#{rh.to_i}"
-      dim_font = [pw * 0.22, ph * 0.35, 8].min
+      # Dimension labels on corresponding sides
+      h_dim = portrait ? rh : rw  # horizontal real dimension
+      v_dim = portrait ? rw : rh  # vertical real dimension
+      dim_font = [[pw * 0.18, ph * 0.28, 7].min, 2].max
       pdf.fill_color TEXT_COLOR
 
-      if pw >= ph
-        pdf.text_box label,
-          at: [rect_x + 1, rect_y - (ph - dim_font) / 2],
-          width: pw - 2,
+      # Bottom label (horizontal dimension)
+      pdf.text_box fmt(h_dim),
+        at: [rect_x + 1, rect_y - ph + dim_font + 1],
+        width: pw - 2,
+        height: dim_font + 2,
+        align: :center,
+        size: dim_font,
+        overflow: :shrink_to_fit,
+        min_font_size: 2
+
+      # Right side label (vertical dimension, rotated)
+      mid_x = rect_x + pw - dim_font / 2 - 1
+      mid_y = rect_y - ph / 2
+      pdf.rotate(90, origin: [mid_x, mid_y]) do
+        pdf.text_box fmt(v_dim),
+          at: [mid_x - (ph - 2) / 2, mid_y + (dim_font + 2) / 2],
+          width: ph - 2,
           height: dim_font + 2,
           align: :center,
-          valign: :center,
           size: dim_font,
           overflow: :shrink_to_fit,
           min_font_size: 2
-      else
-        mid_x = rect_x + pw / 2
-        mid_y = rect_y - ph / 2
-        pdf.rotate(90, origin: [mid_x, mid_y]) do
-          pdf.text_box label,
-            at: [mid_x - (ph - 2) / 2, mid_y + (dim_font + 2) / 2],
-            width: ph - 2,
-            height: dim_font + 2,
-            align: :center,
-            valign: :center,
-            size: dim_font,
-            overflow: :shrink_to_fit,
-            min_font_size: 2
-        end
+      end
+
+      # Piece label centered
+      label = @label_map[key]
+      if label
+        label_font = [[pw * 0.22, ph * 0.22, 8].min, 3].max
+        pdf.fill_color TEXT_COLOR
+        pdf.text_box label,
+          at: [rect_x + 1, rect_y - ph / 2 + label_font / 2 + 1],
+          width: pw - 2,
+          height: label_font + 2,
+          align: :center,
+          size: label_font,
+          overflow: :shrink_to_fit,
+          min_font_size: 2,
+          style: :bold
       end
     end
 
@@ -333,7 +351,11 @@ class CutListPdfService
   end
 
   def normalize_key(l, w)
-    "#{[l, w].max}×#{[l, w].min}"
+    "#{fmt([l, w].max)}×#{fmt([l, w].min)}"
+  end
+
+  def fmt(n)
+    n == n.to_i ? n.to_i.to_s : n.to_s
   end
 
   def build_color_map
@@ -346,6 +368,18 @@ class CutListPdfService
     end
     map = {}
     keys.each_with_index { |k, i| map[k] = COLORS[i % COLORS.length] }
+    map
+  end
+
+  def build_label_map
+    map = {}
+    (@result["pieces"] || []).each do |p|
+      next unless p["label"].present?
+      l = (p["length"] || p["l"]).to_f
+      w = (p["width"] || p["w"]).to_f
+      key = normalize_key(l, w)
+      map[key] ||= p["label"]
+    end
     map
   end
 
