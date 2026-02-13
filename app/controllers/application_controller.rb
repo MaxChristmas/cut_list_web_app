@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
     locale = params[:locale].to_s.strip.to_sym
     if I18n.available_locales.include?(locale)
       session[:locale] = locale
+      current_user.update(locale: locale) if user_signed_in?
     end
     redirect_back fallback_location: root_path
   end
@@ -19,8 +20,25 @@ class ApplicationController < ActionController::Base
   private
 
   def switch_locale(&action)
-    locale = session[:locale] || I18n.default_locale
+    locale = if user_signed_in? && current_user.locale.present?
+               current_user.locale.to_sym
+             elsif session[:locale].present?
+               session[:locale].to_sym
+             else
+               locale_from_browser || I18n.default_locale
+             end
     I18n.with_locale(locale, &action)
+  end
+
+  def locale_from_browser
+    header = request.env["HTTP_ACCEPT_LANGUAGE"]
+    return nil if header.blank?
+
+    header.scan(/([a-z]{2})(?:-[a-zA-Z]{2})?/).flatten.each do |lang|
+      locale = lang.to_sym
+      return locale if I18n.available_locales.include?(locale)
+    end
+    nil
   end
 
   def load_recent_projects

@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   has_many :projects, dependent: :nullify
 
+  validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true
+
   def self.from_omniauth(auth)
     user = find_by(provider: auth.provider, uid: auth.uid)
     return user if user
