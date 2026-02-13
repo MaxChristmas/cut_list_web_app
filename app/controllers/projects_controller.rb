@@ -22,6 +22,27 @@ class ProjectsController < ApplicationController
               type: "application/pdf", disposition: "attachment"
   end
 
+  def export_labels
+    @project = Project.find_by!(token: params[:token])
+    optimization = @project.optimizations.order(created_at: :desc).first
+    result = optimization&.result
+
+    if result.blank?
+      redirect_to project_path(@project.token), alert: "No optimization results to export."
+      return
+    end
+
+    label_format = params[:label_format] || "24"
+    pdf = LabelPdfService.new(result, @project, label_format).generate
+    filename = if @project.name.present?
+      "#{@project.name.parameterize}-labels.pdf"
+    else
+      "labels-#{@project.token}.pdf"
+    end
+    send_data pdf.render, filename: filename,
+              type: "application/pdf", disposition: "attachment"
+  end
+
   def show
     @project = Project.find_by!(token: params[:token])
     @optimization = @project.optimizations.order(created_at: :desc).first

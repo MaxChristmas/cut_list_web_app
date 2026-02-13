@@ -107,6 +107,11 @@ ja:
     unique_sizes: "サイズ種類"
     piece: "ピース"
     qty: "数量"
+  labels:
+    export_labels: "ラベル"
+    modal_title: "ラベルサイズを選択"
+    modal_description: "お使いの粘着ラベルシートに合ったフォーマットを選択してください。"
+    format_name: "%{count}枚 / ページ"
   report_issue:
     button: "問題を報告"
     title: "問題を報告する"

@@ -107,6 +107,11 @@ fr:
     unique_sizes: "Tailles uniques"
     piece: "Panneau"
     qty: "Qté"
+  labels:
+    export_labels: "Étiquettes"
+    modal_title: "Choisir la taille des étiquettes"
+    modal_description: "Sélectionnez un format correspondant à vos feuilles d'étiquettes adhésives."
+    format_name: "%{count} étiquettes / page"
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

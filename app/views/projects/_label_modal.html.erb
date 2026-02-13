@@ -1,0 +1,49 @@
+<dialog data-label-modal-target="dialog"
+        data-action="click->label-modal#backdropClose"
+        class="backdrop:bg-black/50 bg-transparent p-0 m-auto open:flex items-center justify-center">
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 w-[480px] max-h-[90vh] overflow-y-auto shadow-xl">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-lg font-semibold text-gray-900"><%= t("labels.modal_title") %></h2>
+      <button data-action="click->label-modal#close"
+              class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-4"><%= t("labels.modal_description") %></p>
+
+    <div class="grid grid-cols-2 gap-3">
+      <% label_formats = [
+        { key: "65", cols: 5, rows: 13, w: "38.1", h: "21.2" },
+        { key: "40", cols: 4, rows: 10, w: "52.5", h: "29.7" },
+        { key: "24", cols: 3, rows: 8,  w: "64",   h: "33.9" },
+        { key: "14", cols: 2, rows: 7,  w: "99.1", h: "38.1" },
+        { key: "10", cols: 2, rows: 5,  w: "99.1", h: "57" },
+        { key: "8",  cols: 2, rows: 4,  w: "99.1", h: "67.7" },
+      ] %>
+
+      <% label_formats.each do |fmt| %>
+        <%= link_to export_labels_project_path(@project.token, label_format: fmt[:key]),
+              class: "group flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors" do %>
+
+          <%# Mini grid preview %>
+          <div class="w-10 h-14 border border-gray-300 rounded-sm flex-shrink-0 p-0.5 bg-gray-50">
+            <div class="w-full h-full grid" style="grid-template-columns: repeat(<%= fmt[:cols] %>, 1fr); grid-template-rows: repeat(<%= fmt[:rows] %>, 1fr); gap: 0.5px;">
+              <% (fmt[:cols] * fmt[:rows]).times do %>
+                <div class="bg-blue-300 rounded-[0.5px]"></div>
+              <% end %>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-medium text-gray-900 group-hover:text-blue-700">
+              <%= t("labels.format_name", count: fmt[:key]) %>
+            </div>
+            <div class="text-xs text-gray-500">
+              <%= fmt[:w] %> × <%= fmt[:h] %> mm
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</dialog>

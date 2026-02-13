@@ -107,6 +107,11 @@ en:
     unique_sizes: "Unique sizes"
     piece: "Piece"
     qty: "Qty"
+  labels:
+    export_labels: "Labels"
+    modal_title: "Choose label size"
+    modal_description: "Select a label format matching your adhesive label sheets."
+    format_name: "%{count} labels / page"
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"
