@@ -79,6 +79,9 @@ export default class extends Controller {
       const firstCols = lines[0].split(/[,;\t]/).map(c => c.trim())
       if (firstCols.some(c => isNaN(c) && c !== "")) start = 1
 
+      // Clear existing pieces before importing
+      this.bodyTarget.innerHTML = ""
+
       for (let i = start; i < lines.length; i++) {
         const cols = lines[i].split(/[,;\t]/).map(c => c.trim())
         const length = parseFloat(cols[0])
