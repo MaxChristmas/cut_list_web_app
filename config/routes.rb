@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :plans, only: [:index]
   patch "plans/select", to: "plans#update", as: :select_plan
 
-  devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions" }
 
   resources :report_issues, only: [:create]
 

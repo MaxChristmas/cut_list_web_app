@@ -83,6 +83,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def claim_guest_projects(user)
+    tokens = session.delete(:guest_project_tokens)
+    return if tokens.blank?
+
+    Project.where(token: tokens, user_id: nil).update_all(user_id: user.id)
+    session.delete(:guest_optimizations)
+  end
+
   def usage_optimizations
     config = Plannable::PLANS[current_plan_name]
     if user_signed_in?

@@ -1,4 +1,10 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  def create
+    super do |user|
+      claim_guest_projects(user) if user.persisted?
+    end
+  end
+
   protected
 
   def after_update_path_for(resource)
