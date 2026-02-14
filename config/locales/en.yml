@@ -83,6 +83,16 @@ en:
     monthly_optimizations_per_project: "Optimizations per project / month"
     pdf_export: "PDF export"
     unlimited: "Unlimited"
+    features:
+      pdf_export: "PDF export"
+      label_pieces: "Label pieces"
+      cut_direction: "Cut direction (length / width)"
+      blade_kerf: "Blade kerf"
+      import_csv: "Import CSV"
+      print_labels: "Print labels"
+      margin: "Margin on base panel"
+      archive: "Archive projects"
+      move_pieces: "Move pieces"
     free:
       name: "Free"
       description: "Get started with basic features"

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :load_recent_projects
 
   helper_method :can_create_project?, :can_run_optimization?, :current_plan_name,
-                :usage_projects, :usage_optimizations
+                :usage_projects, :usage_optimizations, :has_feature?
 
   def set_locale
     locale = params[:locale].to_s.strip.to_sym
@@ -89,6 +89,14 @@ class ApplicationController < ActionController::Base
 
     Project.where(token: tokens, user_id: nil).update_all(user_id: user.id)
     session.delete(:guest_optimizations)
+  end
+
+  def has_feature?(feature)
+    if user_signed_in?
+      current_user.has_feature?(feature)
+    else
+      GuestLimits.has_feature?(feature)
+    end
   end
 
   def usage_optimizations(project = nil)

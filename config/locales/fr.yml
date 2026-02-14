@@ -83,6 +83,16 @@ fr:
     monthly_optimizations_per_project: "Optimisations par projet / mois"
     pdf_export: "Export PDF"
     unlimited: "Illimité"
+    features:
+      pdf_export: "Export PDF"
+      label_pieces: "Étiqueter les pièces"
+      cut_direction: "Sens de coupe (longueur / largeur)"
+      blade_kerf: "Trait de scie"
+      import_csv: "Import CSV"
+      print_labels: "Impression d'étiquettes"
+      margin: "Marge sur panneau de base"
+      archive: "Archiver les projets"
+      move_pieces: "Déplacer les pièces"
     free:
       name: "Gratuit"
       description: "Commencez avec les fonctionnalités de base"

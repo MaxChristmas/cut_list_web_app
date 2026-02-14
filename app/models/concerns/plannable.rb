@@ -1,18 +1,26 @@
 module Plannable
   extend ActiveSupport::Concern
 
+  FEATURES = %i[
+    pdf_export label_pieces cut_direction blade_kerf
+    import_csv print_labels margin archive move_pieces
+  ].freeze
+
   PLANS = {
     "free" => {
       max_active_projects: 2,
-      max_monthly_optimizations_per_project: 10
+      max_monthly_optimizations_per_project: 10,
+      features: %i[pdf_export label_pieces cut_direction]
     },
     "worker" => {
       max_active_projects: 10,
-      max_monthly_optimizations_per_project: Float::INFINITY
+      max_monthly_optimizations_per_project: Float::INFINITY,
+      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels]
     },
     "enterprise" => {
       max_active_projects: Float::INFINITY,
-      max_monthly_optimizations_per_project: Float::INFINITY
+      max_monthly_optimizations_per_project: Float::INFINITY,
+      features: FEATURES
     }
   }.freeze
 
@@ -49,6 +57,10 @@ module Plannable
   def can_run_optimization?(project = nil)
     return true if project.nil? # new project, no optimizations yet
     monthly_optimizations_count_for(project) < max_monthly_optimizations_per_project
+  end
+
+  def has_feature?(feature)
+    plan_config[:features].include?(feature.to_sym)
   end
 
   def free_plan?

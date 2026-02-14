@@ -1,6 +1,10 @@
 module GuestLimits
   PLAN_CONFIG = Plannable::PLANS["free"]
 
+  def self.has_feature?(feature)
+    PLAN_CONFIG[:features].include?(feature.to_sym)
+  end
+
   def self.can_create_project?(session)
     guest_tokens(session).size < PLAN_CONFIG[:max_active_projects]
   end

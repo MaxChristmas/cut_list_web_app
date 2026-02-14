@@ -83,6 +83,16 @@ ja:
     monthly_optimizations_per_project: "プロジェクトごとの月間最適化回数"
     pdf_export: "PDFエクスポート"
     unlimited: "無制限"
+    features:
+      pdf_export: "PDFエクスポート"
+      label_pieces: "ピースにラベル付け"
+      cut_direction: "カット方向（長さ／幅）"
+      blade_kerf: "刃の切りしろ"
+      import_csv: "CSVインポート"
+      print_labels: "ラベル印刷"
+      margin: "ベースパネルのマージン"
+      archive: "プロジェクトのアーカイブ"
+      move_pieces: "ピースの移動"
     free:
       name: "無料"
       description: "基本機能で始めましょう"
