@@ -2,10 +2,6 @@ require "net/http"
 
 class RustCuttingService
   OPTIMIZER_URL = ENV.fetch("OPTIMIZER_URL", "http://localhost:3001/optimize")
-  DIRECTION_MAP = {
-    "along_length" => "along_width",
-    "along_width" => "along_length"
-  }.freeze
 
   def self.optimize(stock:, cuts:, kerf: 0, cut_direction: "auto", allow_rotate: true)
     payload = {
@@ -17,7 +13,7 @@ class RustCuttingService
         }
       },
       kerf: kerf.to_f,
-      cut_direction: DIRECTION_MAP[cut_direction] || cut_direction,
+      cut_direction: cut_direction,
       allow_rotate: allow_rotate
     }
 
