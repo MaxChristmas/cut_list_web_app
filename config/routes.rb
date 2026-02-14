@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       get :export_labels
       patch :archive
       patch :unarchive
+      patch :save_layout
+      patch :reset_layout
     end
   end
 

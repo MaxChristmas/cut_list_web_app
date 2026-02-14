@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   def export_pdf
     @project = Project.find_by!(token: params[:token])
     optimization = @project.optimizations.order(created_at: :desc).first
-    result = optimization&.result
+    result = optimization&.edited_result || optimization&.result
 
     if result.blank?
       redirect_to project_path(@project.token), alert: "No optimization results to export."
@@ -64,8 +64,10 @@ class ProjectsController < ApplicationController
     @kerf = @optimization&.result&.dig("kerf") || 0
     @cut_direction = @optimization&.cut_direction || "auto"
     @allow_rotation = @project.allow_rotation.nil? ? true : @project.allow_rotation
-    @result = @optimization&.result
-    @pieces = @optimization&.result&.dig("pieces") || []
+    @original_result = @optimization&.result
+    @edited_result = @optimization&.edited_result
+    @result = @edited_result || @original_result
+    @pieces = @original_result&.dig("pieces") || []
   end
 
   def create
@@ -167,6 +169,31 @@ class ProjectsController < ApplicationController
     @pieces = pieces || []
     @result = @project&.optimizations&.order(created_at: :desc)&.first&.result
     render :show, status: :unprocessable_entity
+  end
+
+  def save_layout
+    @project = Project.find_by!(token: params[:token])
+    optimization = @project.optimizations.order(created_at: :desc).first
+
+    if optimization
+      edited_result = JSON.parse(request.body.read)
+      optimization.update!(edited_result: edited_result)
+      head :ok
+    else
+      head :not_found
+    end
+  end
+
+  def reset_layout
+    @project = Project.find_by!(token: params[:token])
+    optimization = @project.optimizations.order(created_at: :desc).first
+
+    if optimization
+      optimization.update!(edited_result: nil)
+      redirect_to project_path(@project.token)
+    else
+      head :not_found
+    end
   end
 
   def archive

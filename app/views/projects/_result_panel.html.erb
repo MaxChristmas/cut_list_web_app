@@ -24,7 +24,14 @@
   </div>
 
   <div data-controller="sheet-visualizer"
-       data-sheet-visualizer-result-value="<%= @result.to_json %>">
+       data-sheet-visualizer-result-value="<%= (@original_result || @result).to_json %>"
+       data-sheet-visualizer-edited-result-value="<%= (@edited_result || {}).to_json %>"
+       data-sheet-visualizer-save-url-value="<%= save_layout_project_path(@project.token) %>"
+       data-sheet-visualizer-reset-url-value="<%= reset_layout_project_path(@project.token) %>"
+       data-sheet-visualizer-edit-label-value="<%= t('projects.index.edit_layout') %>"
+       data-sheet-visualizer-editing-label-value="<%= t('projects.index.editing_layout') %>"
+       data-sheet-visualizer-save-label-value="<%= t('projects.index.save_layout') %>"
+       data-sheet-visualizer-reset-label-value="<%= t('projects.index.reset_layout') %>">
   </div>
 
   <details class="mt-6">
