@@ -24,17 +24,28 @@ class ProjectsController < ApplicationController
 
   def export_labels
     @project = Project.find_by!(token: params[:token])
-    optimization = @project.optimizations.order(created_at: :desc).first
-    result = optimization&.result
 
-    if result.blank?
+    # Collect all project tokens (current + extras)
+    tokens = [params[:token]]
+    tokens.concat(Array(params[:tokens])) if params[:tokens].present?
+    tokens.uniq!
+
+    projects = Project.where(token: tokens)
+    entries = projects.filter_map do |project|
+      optimization = project.optimizations.order(created_at: :desc).first
+      result = optimization&.result
+      next if result.blank?
+      { result: result, project_name: project.name.presence || "#{project.sheet_length}×#{project.sheet_width}" }
+    end
+
+    if entries.empty?
       redirect_to project_path(@project.token), alert: "No optimization results to export."
       return
     end
 
     label_format = params[:label_format] || "24"
-    pdf = LabelPdfService.new(result, @project, label_format).generate
-    filename = if @project.name.present?
+    pdf = LabelPdfService.new(entries, label_format).generate
+    filename = if projects.size == 1 && @project.name.present?
       "#{@project.name.parameterize}-labels.pdf"
     else
       "labels-#{@project.token}.pdf"

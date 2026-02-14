@@ -112,6 +112,10 @@ fr:
     modal_title: "Choisir la taille des étiquettes"
     modal_description: "Sélectionnez un format correspondant à vos feuilles d'étiquettes adhésives."
     format_name: "%{count} étiquettes / page"
+    combine_projects: "Combiner avec d'autres projets"
+    current: "actuel"
+    dimension: "L : %{length}  ×  l : %{width}"
+    total: "Total : %{count}"
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

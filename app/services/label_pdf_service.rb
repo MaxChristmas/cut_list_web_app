@@ -12,10 +12,11 @@ class LabelPdfService
   MUTED_COLOR = "718096"
   BORDER_COLOR = "d0d0d0"
 
-  def initialize(result, project, label_format)
-    @result = result
-    @project = project
+  # entries: array of { result: Hash, project_name: String }
+  def initialize(entries, label_format)
+    @entries = entries
     @format = FORMATS[label_format] || FORMATS["24"]
+    @multi = entries.size > 1
   end
 
   def generate
@@ -115,32 +116,39 @@ class LabelPdfService
 
   def build_lines(label)
     lines = []
+    lines << label[:project_name] if @multi && label[:project_name].present?
     lines << label[:label] if label[:label].present?
-    lines << "L: #{label[:length]}  ×  W: #{label[:width]}"
+    lines << I18n.t("labels.dimension", length: label[:length], width: label[:width])
     lines << "#{label[:index]} / #{label[:total]}"
-    lines << "Total : #{label[:total]}"
+    lines << I18n.t("labels.total", count: label[:total])
     lines
   end
 
   # Build one label per individual piece (qty 4 = 4 labels)
   def build_labels
-    pieces = @result["pieces"] || []
     labels = []
 
-    pieces.each do |p|
-      l = (p["length"] || p["l"]).to_f
-      w = (p["width"] || p["w"]).to_f
-      qty = (p["quantity"] || p["qty"] || 1).to_i
-      piece_label = p["label"].presence
+    @entries.each do |entry|
+      result = entry[:result]
+      project_name = entry[:project_name]
+      pieces = result["pieces"] || []
 
-      qty.times do |i|
-        labels << {
-          length: format_dim(l),
-          width: format_dim(w),
-          label: piece_label,
-          index: i + 1,
-          total: qty
-        }
+      pieces.each do |p|
+        l = (p["length"] || p["l"]).to_f
+        w = (p["width"] || p["w"]).to_f
+        qty = (p["quantity"] || p["qty"] || 1).to_i
+        piece_label = p["label"].presence
+
+        qty.times do |i|
+          labels << {
+            length: format_dim(l),
+            width: format_dim(w),
+            label: piece_label,
+            index: i + 1,
+            total: qty,
+            project_name: project_name
+          }
+        end
       end
     end
 

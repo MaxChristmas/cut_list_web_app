@@ -112,6 +112,10 @@ en:
     modal_title: "Choose label size"
     modal_description: "Select a label format matching your adhesive label sheets."
     format_name: "%{count} labels / page"
+    combine_projects: "Combine with other projects"
+    current: "current"
+    dimension: "L: %{length}  ×  W: %{width}"
+    total: "Total: %{count}"
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"
