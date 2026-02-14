@@ -49,9 +49,9 @@
               </svg>
               <span>
                 <strong class="text-white">
-                  <%= config[:max_daily_optimizations] == Float::INFINITY ? t("plans.unlimited") : config[:max_daily_optimizations] %>
+                  <%= config[:max_monthly_optimizations_per_project] == Float::INFINITY ? t("plans.unlimited") : config[:max_monthly_optimizations_per_project] %>
                 </strong>
-                <%= t("plans.daily_optimizations") %>
+                <%= t("plans.monthly_optimizations_per_project") %>
               </span>
             </li>
             <li class="flex items-center gap-3 text-sm">

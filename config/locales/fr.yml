@@ -16,6 +16,8 @@ fr:
     upgrade: "Passer au supérieur"
     projects_usage: "Projets"
     optimizations_usage: "Optimisations aujourd'hui"
+    optimizations_per_project: "%{count} optimisations / projet / mois"
+    unlimited_optimizations: "Optimisations illimitées"
   login:
     remember_me: "Se souvenir de moi"
     sign_up: "Créer un compte"
@@ -78,7 +80,7 @@ fr:
     updated: "Plan mis à jour : %{plan}"
     invalid: "Plan sélectionné invalide"
     active_projects: "Projets actifs"
-    daily_optimizations: "Optimisations par jour"
+    monthly_optimizations_per_project: "Optimisations par projet / mois"
     pdf_export: "Export PDF"
     unlimited: "Illimité"
     free:
@@ -92,7 +94,7 @@ fr:
       description: "Puissance illimitée pour les grandes opérations"
   limits:
     max_projects_reached: "Vous avez atteint la limite de projets actifs. Archivez un projet ou passez au plan supérieur."
-    daily_optimizations_reached: "Vous avez atteint la limite quotidienne d'optimisations. Revenez demain ou passez au plan supérieur."
+    monthly_optimizations_reached: "Vous avez atteint la limite mensuelle d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."
   pdf:
     sheets_used: "Panneaux utilisés"
     total_area_used: "Surface totale utilisée"

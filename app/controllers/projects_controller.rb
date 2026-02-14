@@ -74,11 +74,6 @@ class ProjectsController < ApplicationController
       return
     end
 
-    unless can_run_optimization?
-      redirect_to root_path, alert: t("limits.daily_optimizations_reached")
-      return
-    end
-
     stock_l = params[:stock_l]
     stock_w = params[:stock_w]
     kerf = params[:kerf] || 0
@@ -109,7 +104,7 @@ class ProjectsController < ApplicationController
       # Project already associated via current_user
     else
       GuestLimits.track_project!(session, @project.token)
-      GuestLimits.record_optimization!(session)
+      GuestLimits.record_optimization!(session, @project.token)
     end
 
     redirect_to project_path(@project.token)
@@ -128,8 +123,8 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find_by!(token: params[:token])
 
-    unless can_run_optimization?
-      redirect_to project_path(@project.token), alert: t("limits.daily_optimizations_reached")
+    unless can_run_optimization?(@project)
+      redirect_to project_path(@project.token), alert: t("limits.monthly_optimizations_reached")
       return
     end
 
@@ -158,7 +153,7 @@ class ProjectsController < ApplicationController
       cut_direction: cut_direction
     )
 
-    GuestLimits.record_optimization!(session) unless user_signed_in?
+    GuestLimits.record_optimization!(session, @project.token) unless user_signed_in?
 
     redirect_to project_path(@project.token)
   rescue => e

@@ -58,11 +58,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def can_run_optimization?
+  def can_run_optimization?(project = nil)
     if user_signed_in?
-      current_user.can_run_optimization?
+      current_user.can_run_optimization?(project)
     else
-      GuestLimits.can_run_optimization?(session)
+      GuestLimits.can_run_optimization?(session, project&.token)
     end
   end
 
@@ -91,12 +91,15 @@ class ApplicationController < ActionController::Base
     session.delete(:guest_optimizations)
   end
 
-  def usage_optimizations
+  def usage_optimizations(project = nil)
     config = Plannable::PLANS[current_plan_name]
-    if user_signed_in?
-      { used: current_user.daily_optimizations_count, max: config[:max_daily_optimizations] }
+    max = config[:max_monthly_optimizations_per_project]
+    if project.nil?
+      { used: 0, max: max }
+    elsif user_signed_in?
+      { used: current_user.monthly_optimizations_count_for(project), max: max }
     else
-      { used: GuestLimits.daily_count(session), max: config[:max_daily_optimizations] }
+      { used: GuestLimits.monthly_count_for(session, project.token), max: max }
     end
   end
 end

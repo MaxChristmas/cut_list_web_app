@@ -16,6 +16,8 @@ en:
     upgrade: "Upgrade"
     projects_usage: "Projects"
     optimizations_usage: "Optimizations today"
+    optimizations_per_project: "%{count} optimizations / project / month"
+    unlimited_optimizations: "Unlimited optimizations"
   login:
     remember_me: "Remember me"
     sign_up: "Create an account"
@@ -78,7 +80,7 @@ en:
     updated: "Plan updated to %{plan}"
     invalid: "Invalid plan selected"
     active_projects: "Active projects"
-    daily_optimizations: "Optimizations per day"
+    monthly_optimizations_per_project: "Optimizations per project / month"
     pdf_export: "PDF export"
     unlimited: "Unlimited"
     free:
@@ -92,7 +94,7 @@ en:
       description: "Unlimited power for large operations"
   limits:
     max_projects_reached: "You've reached your active project limit. Archive a project or upgrade your plan."
-    daily_optimizations_reached: "You've reached your daily optimization limit. Come back tomorrow or upgrade your plan."
+    monthly_optimizations_reached: "You've reached the monthly optimization limit for this project. Upgrade your plan for more."
   pdf:
     sheets_used: "Sheets used"
     total_area_used: "Total area used"

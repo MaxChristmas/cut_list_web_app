@@ -9,9 +9,9 @@
   </div>
 <% end %>
 
-<% unless can_run_optimization? %>
+<% unless can_run_optimization?(@project) %>
   <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
-    <%= t("limits.daily_optimizations_reached") %>
+    <%= t("limits.monthly_optimizations_reached") %>
     <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
   </div>
 <% end %>

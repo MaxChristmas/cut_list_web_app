@@ -5,21 +5,22 @@ module GuestLimits
     guest_tokens(session).size < PLAN_CONFIG[:max_active_projects]
   end
 
-  def self.can_run_optimization?(session)
-    daily_count(session) < PLAN_CONFIG[:max_daily_optimizations]
+  def self.can_run_optimization?(session, project_token = nil)
+    return true if project_token.nil? # new project, no optimizations yet
+    monthly_count_for(session, project_token) < PLAN_CONFIG[:max_monthly_optimizations_per_project]
   end
 
-  def self.record_optimization!(session)
+  def self.record_optimization!(session, project_token)
     session[:guest_optimizations] ||= []
-    session[:guest_optimizations] << Time.current.to_i
+    session[:guest_optimizations] << { token: project_token, at: Time.current.to_i }
   end
 
-  def self.daily_count(session)
-    cutoff = Time.current.beginning_of_day.to_i
+  def self.monthly_count_for(session, project_token)
+    cutoff = Time.current.beginning_of_month.to_i
     optimizations = session[:guest_optimizations] || []
-    recent = optimizations.select { |t| t >= cutoff }
+    recent = optimizations.select { |o| o["at"] >= cutoff || o[:at].to_i >= cutoff }
     session[:guest_optimizations] = recent
-    recent.size
+    recent.count { |o| (o["token"] || o[:token]) == project_token }
   end
 
   def self.guest_tokens(session)

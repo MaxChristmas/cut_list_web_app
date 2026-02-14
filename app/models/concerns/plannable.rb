@@ -4,15 +4,15 @@ module Plannable
   PLANS = {
     "free" => {
       max_active_projects: 2,
-      max_daily_optimizations: 5
+      max_monthly_optimizations_per_project: 10
     },
     "worker" => {
       max_active_projects: 10,
-      max_daily_optimizations: 100
+      max_monthly_optimizations_per_project: Float::INFINITY
     },
     "enterprise" => {
       max_active_projects: Float::INFINITY,
-      max_daily_optimizations: Float::INFINITY
+      max_monthly_optimizations_per_project: Float::INFINITY
     }
   }.freeze
 
@@ -28,8 +28,8 @@ module Plannable
     plan_config[:max_active_projects]
   end
 
-  def max_daily_optimizations
-    plan_config[:max_daily_optimizations]
+  def max_monthly_optimizations_per_project
+    plan_config[:max_monthly_optimizations_per_project]
   end
 
   def active_projects_count
@@ -40,14 +40,15 @@ module Plannable
     active_projects_count < max_active_projects
   end
 
-  def daily_optimizations_count
-    projects.joins(:optimizations)
-            .where(optimizations: { created_at: Time.current.beginning_of_day.. })
-            .count
+  def monthly_optimizations_count_for(project)
+    project.optimizations
+           .where(created_at: Time.current.beginning_of_month..)
+           .count
   end
 
-  def can_run_optimization?
-    daily_optimizations_count < max_daily_optimizations
+  def can_run_optimization?(project = nil)
+    return true if project.nil? # new project, no optimizations yet
+    monthly_optimizations_count_for(project) < max_monthly_optimizations_per_project
   end
 
   def free_plan?

@@ -16,6 +16,8 @@ ja:
     upgrade: "アップグレード"
     projects_usage: "プロジェクト"
     optimizations_usage: "本日の最適化"
+    optimizations_per_project: "プロジェクトごとに月%{count}回の最適化"
+    unlimited_optimizations: "無制限の最適化"
   login:
     remember_me: "ログイン状態を保持"
     sign_up: "アカウント作成"
@@ -78,7 +80,7 @@ ja:
     updated: "プランを%{plan}に更新しました"
     invalid: "無効なプランが選択されました"
     active_projects: "アクティブプロジェクト数"
-    daily_optimizations: "1日の最適化回数"
+    monthly_optimizations_per_project: "プロジェクトごとの月間最適化回数"
     pdf_export: "PDFエクスポート"
     unlimited: "無制限"
     free:
@@ -92,7 +94,7 @@ ja:
       description: "大規模運用のための無制限パワー"
   limits:
     max_projects_reached: "アクティブプロジェクトの上限に達しました。プロジェクトをアーカイブするか、プランをアップグレードしてください。"
-    daily_optimizations_reached: "本日の最適化回数の上限に達しました。明日再度お試しいただくか、プランをアップグレードしてください。"
+    monthly_optimizations_reached: "このプロジェクトの月間最適化回数の上限に達しました。プランをアップグレードしてください。"
   pdf:
     sheets_used: "使用シート数"
     total_area_used: "使用面積合計"
