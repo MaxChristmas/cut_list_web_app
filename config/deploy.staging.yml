@@ -1,0 +1,7 @@
+# Staging overrides
+proxy:
+  host: staging.cutlist.noventi.fr
+
+env:
+  clear:
+    RAILS_ENV: staging

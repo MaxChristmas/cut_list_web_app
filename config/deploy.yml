@@ -29,6 +29,12 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - CUT_LIST_WEB_APP_DATABASE_PASSWORD
+    - STRIPE_SECRET_KEY
+    - STRIPE_WEBHOOK_SECRET
+    - STRIPE_WORKER_MONTHLY_PRICE_ID
+    - STRIPE_WORKER_YEARLY_PRICE_ID
+    - STRIPE_ENTERPRISE_MONTHLY_PRICE_ID
+    - STRIPE_ENTERPRISE_YEARLY_PRICE_ID
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     SOLID_QUEUE_IN_PUMA: true
