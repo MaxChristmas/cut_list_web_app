@@ -27,3 +27,6 @@ application.register("report-issue", ReportIssueController)
 
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
+
+import BillingToggleController from "./billing_toggle_controller"
+application.register("billing-toggle", BillingToggleController)

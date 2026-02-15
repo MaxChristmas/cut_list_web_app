@@ -69,3 +69,5 @@ gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "prawn"
 gem "prawn-table"
+gem "stripe"
+gem "dotenv-rails", groups: [:development, :test]

@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   end
 
   resources :plans, only: [:index]
-  patch "plans/select", to: "plans#update", as: :select_plan
+  post "plans/checkout", to: "plans#checkout", as: :plan_checkout
+  get "plans/success", to: "plans#success", as: :plan_success
+  post "plans/portal", to: "plans#portal", as: :plan_portal
+
+  post "stripe/webhooks", to: "stripe_webhooks#create"
 
   devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions" }
 

@@ -12,86 +12,143 @@
       <p class="text-gray-400 mt-2"><%= t("plans.subtitle") %></p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <% %w[free worker enterprise].each do |plan_key| %>
-        <% config = Plannable::PLANS[plan_key] %>
-        <% is_current = plan_key == @current_plan %>
-        <% is_enterprise = plan_key == "enterprise" %>
+    <div data-controller="billing-toggle">
+      <%# Billing cycle toggle %>
+      <div class="flex justify-center mb-8">
+        <div class="inline-flex rounded-lg border border-gray-700 p-1 bg-gray-900">
+          <button data-action="click->billing-toggle#selectMonthly"
+                  data-billing-toggle-target="monthlyBtn"
+                  class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white">
+            <%= t("plans.monthly") %>
+          </button>
+          <button data-action="click->billing-toggle#selectYearly"
+                  data-billing-toggle-target="yearlyBtn"
+                  class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-transparent text-gray-400">
+            <%= t("plans.yearly") %>
+            <span class="ml-1 text-xs text-green-400"><%= t("plans.yearly_save") %></span>
+          </button>
+        </div>
+      </div>
 
-        <div class="rounded-xl border <%= is_enterprise ? 'border-blue-500' : 'border-gray-700' %> bg-gray-900 p-6 flex flex-col <%= is_current ? 'ring-2 ring-blue-500' : '' %>">
-          <%# Plan header %>
-          <div class="mb-6">
-            <div class="flex items-center gap-2 mb-1">
-              <h2 class="text-lg font-bold text-white"><%= t("plans.#{plan_key}.name") %></h2>
-              <% if is_current %>
-                <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium"><%= t("plans.current_plan") %></span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <% %w[free worker enterprise].each do |plan_key| %>
+          <% config = Plannable::PLANS[plan_key] %>
+          <% is_current = plan_key == @current_plan %>
+          <% is_enterprise = plan_key == "enterprise" %>
+          <% has_prices = config[:prices].present? %>
+
+          <div class="rounded-xl border <%= is_enterprise ? 'border-blue-500' : 'border-gray-700' %> bg-gray-900 p-6 flex flex-col <%= is_current ? 'ring-2 ring-blue-500' : '' %>">
+            <%# Plan header %>
+            <div class="mb-6">
+              <div class="flex items-center gap-2 mb-1">
+                <h2 class="text-lg font-bold text-white"><%= t("plans.#{plan_key}.name") %></h2>
+                <% if is_current %>
+                  <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium"><%= t("plans.current_plan") %></span>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-400"><%= t("plans.#{plan_key}.description") %></p>
+            </div>
+
+            <%# Pricing %>
+            <div class="mb-6">
+              <% if has_prices %>
+                <div data-billing-toggle-target="monthlyPrice">
+                  <span class="text-3xl font-bold text-white"><%= config[:prices][:monthly][:amount] / 100 %>&euro;</span>
+                  <span class="text-gray-400 text-sm">/ <%= t("plans.month") %></span>
+                </div>
+                <div data-billing-toggle-target="yearlyPrice" class="hidden">
+                  <span class="text-3xl font-bold text-white"><%= config[:prices][:yearly][:amount] / 1200 %>&euro;</span>
+                  <span class="text-gray-400 text-sm">/ <%= t("plans.month") %></span>
+                  <div class="text-xs text-gray-500 mt-1">
+                    <%= t("plans.billed_yearly", amount: config[:prices][:yearly][:amount] / 100) %>
+                  </div>
+                </div>
+              <% else %>
+                <span class="text-3xl font-bold text-white"><%= t("plans.free_price") %></span>
               <% end %>
             </div>
-            <p class="text-sm text-gray-400"><%= t("plans.#{plan_key}.description") %></p>
-          </div>
 
-          <%# Features list %>
-          <ul class="space-y-3 flex-1 mb-6">
-            <li class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-              </svg>
-              <span>
-                <strong class="text-white">
-                  <%= config[:max_active_projects] == Float::INFINITY ? t("plans.unlimited") : config[:max_active_projects] %>
-                </strong>
-                <%= t("plans.active_projects") %>
-              </span>
-            </li>
-            <li class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-              </svg>
-              <span>
-                <strong class="text-white">
-                  <%= config[:max_monthly_optimizations_per_project] == Float::INFINITY ? t("plans.unlimited") : config[:max_monthly_optimizations_per_project] %>
-                </strong>
-                <%= t("plans.monthly_optimizations_per_project") %>
-              </span>
-            </li>
-            <% Plannable::FEATURES.each do |feature| %>
+            <%# Features list %>
+            <ul class="space-y-3 flex-1 mb-6">
               <li class="flex items-center gap-3 text-sm">
-                <% if config[:features].include?(feature) %>
-                  <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                  </svg>
-                  <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
-                <% else %>
-                  <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                  <span class="text-gray-600"><%= t("plans.features.#{feature}") %></span>
-                <% end %>
+                <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                </svg>
+                <span>
+                  <strong class="text-white">
+                    <%= config[:max_active_projects] == Float::INFINITY ? t("plans.unlimited") : config[:max_active_projects] %>
+                  </strong>
+                  <%= t("plans.active_projects") %>
+                </span>
               </li>
-            <% end %>
-          </ul>
+              <li class="flex items-center gap-3 text-sm">
+                <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                </svg>
+                <span>
+                  <strong class="text-white">
+                    <%= config[:max_monthly_optimizations_per_project] == Float::INFINITY ? t("plans.unlimited") : config[:max_monthly_optimizations_per_project] %>
+                  </strong>
+                  <%= t("plans.monthly_optimizations_per_project") %>
+                </span>
+              </li>
+              <% Plannable::FEATURES.each do |feature| %>
+                <li class="flex items-center gap-3 text-sm">
+                  <% if config[:features].include?(feature) %>
+                    <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                    </svg>
+                    <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
+                  <% else %>
+                    <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <span class="text-gray-600"><%= t("plans.features.#{feature}") %></span>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
 
-          <%# Action button %>
-          <% if is_current %>
-            <div class="w-full py-2 rounded text-center text-sm font-medium bg-gray-800 text-gray-400 cursor-default">
-              <%= t("plans.current_plan") %>
-            </div>
-          <% elsif user_signed_in? %>
-            <%= button_to t("plans.select_plan"),
-                  select_plan_path(plan: plan_key),
-                  method: :patch,
-                  class: "w-full py-2 rounded text-center text-sm font-medium #{is_enterprise ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-white hover:bg-gray-200 text-gray-950'} transition-colors" %>
-          <% else %>
-            <div data-controller="modal">
-              <button data-action="click->modal#open"
-                      class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
-                <%= t("plans.select_plan") %>
-              </button>
-              <%= render "layouts/login_modal" %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
+            <%# Action button %>
+            <% if is_current && user_signed_in? && current_user.stripe_subscription_id.present? %>
+              <%# Current paid plan: show manage button %>
+              <%= button_to t("plans.manage_subscription"),
+                    plan_portal_path,
+                    method: :post,
+                    class: "w-full py-2 rounded text-center text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white transition-colors" %>
+            <% elsif is_current %>
+              <div class="w-full py-2 rounded text-center text-sm font-medium bg-gray-800 text-gray-400 cursor-default">
+                <%= t("plans.current_plan") %>
+              </div>
+            <% elsif user_signed_in? && has_prices %>
+              <%# Paid plan: checkout via Stripe %>
+              <%= form_with url: plan_checkout_path, method: :post, class: "w-full" do |f| %>
+                <%= f.hidden_field :plan, value: plan_key %>
+                <%= f.hidden_field :billing_cycle, value: "monthly", data: { billing_toggle_target: "billingCycleInput" } %>
+                <%= f.submit t("plans.subscribe"),
+                      class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer #{is_enterprise ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-white hover:bg-gray-200 text-gray-950'} transition-colors" %>
+              <% end %>
+            <% elsif user_signed_in? && !has_prices %>
+              <%# Free plan (downgrade) %>
+              <%= form_with url: plan_checkout_path, method: :post, class: "w-full" do |f| %>
+                <%= f.hidden_field :plan, value: plan_key %>
+                <%= f.hidden_field :billing_cycle, value: "monthly" %>
+                <%= f.submit t("plans.select_plan"),
+                      class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors" %>
+              <% end %>
+            <% else %>
+              <%# Not signed in %>
+              <div data-controller="modal">
+                <button data-action="click->modal#open"
+                        class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
+                  <%= t("plans.select_plan") %>
+                </button>
+                <%= render "layouts/login_modal" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
 
     <div class="mt-8 text-center">
