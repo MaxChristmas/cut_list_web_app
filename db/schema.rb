@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_125620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,8 +54,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_120000) do
   create_table "report_issues", force: :cascade do |t|
     t.text "body", null: false
     t.datetime "created_at", null: false
+    t.string "page_url"
+    t.datetime "replied_at"
+    t.bigint "replied_by_id"
+    t.text "reply_body"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.index ["replied_by_id"], name: "index_report_issues_on_replied_by_id"
     t.index ["user_id"], name: "index_report_issues_on_user_id"
   end
 
@@ -81,5 +86,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_120000) do
 
   add_foreign_key "optimizations", "projects"
   add_foreign_key "projects", "users"
+  add_foreign_key "report_issues", "admin_users", column: "replied_by_id"
   add_foreign_key "report_issues", "users"
 end

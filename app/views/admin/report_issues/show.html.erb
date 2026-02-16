@@ -26,9 +26,37 @@
       <dt class="text-sm font-medium text-gray-500">Created</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @report_issue.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
     </div>
+    <% if @report_issue.page_url.present? %>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Page URL</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= link_to @report_issue.page_url, @report_issue.page_url, class: "text-blue-600 hover:text-blue-800 break-all" %></dd>
+      </div>
+    <% end %>
     <div>
       <dt class="text-sm font-medium text-gray-500">Body</dt>
       <dd class="mt-1 text-sm text-gray-900 whitespace-pre-wrap"><%= @report_issue.body %></dd>
     </div>
   </dl>
 </div>
+
+<% if @report_issue.replied? %>
+  <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Reply</h3>
+    <div class="text-sm text-gray-500 mb-2">
+      By <%= @report_issue.replied_by&.email || "Unknown" %> on <%= @report_issue.replied_at.strftime("%b %d, %Y at %H:%M") %>
+    </div>
+    <div class="text-sm text-gray-900 whitespace-pre-wrap"><%= @report_issue.reply_body %></div>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Reply to user</h3>
+    <%= form_with url: reply_admin_report_issue_path(@report_issue), method: :post, class: "space-y-4" do |f| %>
+      <% language = { "fr" => "French", "en" => "English", "ja" => "Japanese" }[@report_issue.user.locale] || "English" %>
+      <textarea name="report_issue[reply_body]" rows="5" placeholder="Write your reply in <%= language %>..." required
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+      <div class="flex justify-end">
+        <%= f.submit "Send reply", class: "px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

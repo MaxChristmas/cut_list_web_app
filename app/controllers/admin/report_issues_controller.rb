@@ -1,6 +1,6 @@
 module Admin
   class ReportIssuesController < BaseController
-    before_action :set_report_issue, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_report_issue, only: [ :show, :edit, :update, :destroy, :reply ]
 
     def index
       @report_issues = paginate(ReportIssue.includes(:user).order(created_at: :desc))
@@ -18,6 +18,20 @@ module Admin
       else
         render :edit, status: :unprocessable_entity
       end
+    end
+
+    def reply
+      reply_body = params.require(:report_issue).permit(:reply_body)[:reply_body]
+
+      if reply_body.blank?
+        redirect_to admin_report_issue_path(@report_issue), alert: "Reply body can't be blank."
+        return
+      end
+
+      @report_issue.update!(reply_body: reply_body, replied_at: Time.current, replied_by: current_admin_user)
+      ReportIssueMailer.reply(@report_issue).deliver_later
+
+      redirect_to admin_report_issue_path(@report_issue), notice: "Reply sent successfully."
     end
 
     def destroy

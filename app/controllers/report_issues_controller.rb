@@ -1,7 +1,10 @@
 class ReportIssuesController < ApplicationController
+  before_action :authenticate_user!
+
   def create
-    report = ReportIssue.new(body: params.require(:report_issue).permit(:body)[:body])
-    report.user = current_user if user_signed_in?
+    permitted = params.require(:report_issue).permit(:body, :page_url)
+    report = ReportIssue.new(body: permitted[:body], page_url: permitted[:page_url])
+    report.user = current_user
     report.save!
 
     head :created

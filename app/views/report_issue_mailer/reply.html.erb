@@ -1,0 +1,14 @@
+<p>Hello,</p>
+
+<p>An admin has replied to your report #<%= @report_issue.id %>:</p>
+
+<blockquote style="border-left: 3px solid #ccc; padding-left: 12px; margin: 16px 0; color: #333;">
+  <%= simple_format(@report_issue.reply_body) %>
+</blockquote>
+
+<hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
+
+<p style="color: #666; font-size: 14px;">
+  <strong>Your original report:</strong><br>
+  <%= simple_format(@report_issue.body) %>
+</p>

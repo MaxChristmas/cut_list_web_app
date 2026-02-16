@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     resources :projects, only: [ :index, :show ] do
       resources :optimizations, only: [ :index, :show ]
     end
-    resources :report_issues, except: [ :new, :create ]
+    resources :report_issues, except: [ :new, :create ] do
+      post :reply, on: :member
+    end
   end
 
   resources :projects, param: :token do

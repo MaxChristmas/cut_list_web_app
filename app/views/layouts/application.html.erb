@@ -27,6 +27,6 @@
     <%= render "layouts/sidebar" do %>
       <%= yield %>
     <% end %>
-    <%= render "layouts/report_issue" %>
+    <%= render "layouts/report_issue" if user_signed_in? %>
   </body>
 </html>

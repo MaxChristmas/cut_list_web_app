@@ -7,6 +7,7 @@
         <tr>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Body</th>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Page URL</th>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
           <th class="px-5 py-3"></th>
         </tr>
@@ -22,6 +23,7 @@
               <% end %>
             </td>
             <td class="px-5 py-3 text-sm text-gray-900"><%= truncate(report.body, length: 80) %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= truncate(report.page_url, length: 40) %></td>
             <td class="px-5 py-3 text-sm text-gray-500"><%= report.created_at.strftime("%b %d, %Y") %></td>
             <td class="px-5 py-3 text-right flex gap-3 justify-end">
               <%= link_to "View", admin_report_issue_path(report), class: "text-sm text-blue-600 hover:text-blue-800" %>
