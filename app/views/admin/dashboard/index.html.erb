@@ -1,0 +1,57 @@
+<h2 class="text-2xl font-semibold text-gray-900 mb-6">Dashboard</h2>
+
+<!-- Stats cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Total Users</div>
+    <div class="mt-1 text-2xl font-semibold text-gray-900"><%= @total_users %></div>
+    <div class="mt-1 text-xs text-gray-400"><%= @new_users_30d %> new in last 30 days</div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Total Projects</div>
+    <div class="mt-1 text-2xl font-semibold text-gray-900"><%= @total_projects %></div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Total Optimizations</div>
+    <div class="mt-1 text-2xl font-semibold text-gray-900"><%= @total_optimizations %></div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Users by Plan</div>
+    <div class="mt-2 space-y-1">
+      <% @users_by_plan.each do |plan, count| %>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600 capitalize"><%= plan %></span>
+          <span class="font-medium text-gray-900"><%= count %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Recent reports -->
+<div class="bg-white rounded-lg border border-gray-200">
+  <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+    <h3 class="text-base font-medium text-gray-900">Recent Reports</h3>
+    <%= link_to "View all", admin_report_issues_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
+  </div>
+  <% if @recent_reports.any? %>
+    <div class="divide-y divide-gray-100">
+      <% @recent_reports.each do |report| %>
+        <div class="px-5 py-3 flex justify-between items-start">
+          <div>
+            <p class="text-sm text-gray-900"><%= truncate(report.body, length: 100) %></p>
+            <p class="text-xs text-gray-500 mt-1">
+              by <%= report.user&.email || "Guest" %> &middot; <%= time_ago_in_words(report.created_at) %> ago
+            </p>
+          </div>
+          <%= link_to "View", admin_report_issue_path(report), class: "text-sm text-blue-600 hover:text-blue-800 ml-4 shrink-0" %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="px-5 py-8 text-center text-sm text-gray-500">No reports yet.</div>
+  <% end %>
+</div>

@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, path: "admin", controllers: {
+    sessions: "admin/sessions"
+  }
+
+  namespace :admin do
+    root "dashboard#index"
+    resources :users
+    resources :projects, only: [ :index, :show ]
+    resources :optimizations, only: [ :index, :show ]
+    resources :report_issues, except: [ :new, :create ]
+  end
+
   resources :projects, param: :token do
     member do
       get :export_pdf

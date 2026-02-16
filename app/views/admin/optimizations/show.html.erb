@@ -1,0 +1,43 @@
+<div class="mb-6">
+  <%= link_to "&larr; Back to Optimizations".html_safe, admin_optimizations_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
+</div>
+
+<h2 class="text-2xl font-semibold text-gray-900 mb-6">Optimization #<%= @optimization.id %></h2>
+
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <dl class="grid grid-cols-2 gap-4">
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Project</dt>
+      <dd class="mt-1 text-sm">
+        <%= link_to @optimization.project.name.presence || "Untitled", admin_project_path(@optimization.project), class: "text-blue-600 hover:text-blue-800" %>
+      </dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Status</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.status %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Efficiency</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.efficiency ? number_to_percentage(@optimization.efficiency, precision: 1) : "—" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Sheets Count</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.sheets_count || "—" %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Cut Direction</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.cut_direction %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Created</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
+    </div>
+  </dl>
+</div>
+
+<% if @optimization.result.present? %>
+  <h3 class="text-lg font-medium text-gray-900 mb-3">Result (JSON)</h3>
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <pre class="text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap"><%= JSON.pretty_generate(@optimization.result) %></pre>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-semibold text-gray-900">Users</h2>
+  <%= link_to "New User", new_admin_user_path, class: "bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-blue-700" %>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Projects</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @users.each do |user| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-5 py-3 text-sm text-gray-900"><%= user.email %></td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+              <%= user.plan == 'free' ? 'bg-gray-100 text-gray-700' : user.plan == 'worker' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700' %>">
+              <%= user.plan %>
+            </span>
+          </td>
+          <td class="px-5 py-3 text-sm text-gray-500"><%= user.projects.size %></td>
+          <td class="px-5 py-3 text-sm text-gray-500"><%= user.created_at.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "View", admin_user_path(user), class: "text-sm text-blue-600 hover:text-blue-800" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= admin_pagination %>
