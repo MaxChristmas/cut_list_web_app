@@ -1,6 +1,9 @@
 module AdminHelper
   def admin_nav_link(label, path, controller_name)
-    active = params[:controller] == "admin/#{controller_name}" || (controller_name == "dashboard" && params[:controller] == "admin/dashboard")
+    current = params[:controller]
+    active = current == "admin/#{controller_name}" ||
+             (controller_name == "dashboard" && current == "admin/dashboard") ||
+             (controller_name == "projects" && current == "admin/optimizations")
     classes = if active
       "flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-900"
     else

@@ -39,7 +39,10 @@
   </dl>
 </div>
 
-<h3 class="text-lg font-medium text-gray-900 mb-3">Optimizations (<%= @optimizations.size %>)</h3>
+<div class="flex items-center justify-between mb-3">
+  <h3 class="text-lg font-medium text-gray-900">Optimizations (<%= @optimizations.size %>)</h3>
+  <%= link_to "View all", admin_project_optimizations_path(@project), class: "text-sm text-blue-600 hover:text-blue-800" %>
+</div>
 <% if @optimizations.any? %>
   <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
@@ -62,7 +65,7 @@
             <td class="px-5 py-3 text-sm text-gray-500"><%= opt.cut_direction %></td>
             <td class="px-5 py-3 text-sm text-gray-500"><%= opt.created_at.strftime("%b %d, %Y") %></td>
             <td class="px-5 py-3 text-right">
-              <%= link_to "View", admin_optimization_path(opt), class: "text-sm text-blue-600 hover:text-blue-800" %>
+              <%= link_to "View", admin_project_optimization_path(@project, opt), class: "text-sm text-blue-600 hover:text-blue-800" %>
             </td>
           </tr>
         <% end %>

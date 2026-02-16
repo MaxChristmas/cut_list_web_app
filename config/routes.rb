@@ -6,8 +6,9 @@ Rails.application.routes.draw do
   namespace :admin do
     root "dashboard#index"
     resources :users
-    resources :projects, only: [ :index, :show ]
-    resources :optimizations, only: [ :index, :show ]
+    resources :projects, only: [ :index, :show ] do
+      resources :optimizations, only: [ :index, :show ]
+    end
     resources :report_issues, except: [ :new, :create ]
   end
 

@@ -1,5 +1,5 @@
 <div class="mb-6">
-  <%= link_to "&larr; Back to Optimizations".html_safe, admin_optimizations_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
+  <%= link_to "&larr; Back to Optimizations".html_safe, admin_project_optimizations_path(@project), class: "text-sm text-blue-600 hover:text-blue-800" %>
 </div>
 
 <h2 class="text-2xl font-semibold text-gray-900 mb-6">Optimization #<%= @optimization.id %></h2>
@@ -9,7 +9,7 @@
     <div>
       <dt class="text-sm font-medium text-gray-500">Project</dt>
       <dd class="mt-1 text-sm">
-        <%= link_to @optimization.project.name.presence || "Untitled", admin_project_path(@optimization.project), class: "text-blue-600 hover:text-blue-800" %>
+        <%= link_to @project.name.presence || "Untitled", admin_project_path(@project), class: "text-blue-600 hover:text-blue-800" %>
       </dd>
     </div>
     <div>
