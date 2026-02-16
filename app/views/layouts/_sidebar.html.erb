@@ -116,6 +116,11 @@
           <div data-sidebar-target="label" class="whitespace-nowrap truncate">
             <div class="truncate"><%= current_user.email %></div>
             <span class="text-xs text-gray-500 uppercase"><%= t("plans.#{current_user.plan}.name") %></span>
+            <% if current_user.one_shot_plan? %>
+              <span class="text-xs text-amber-400"><%= t("plans.one_shot.expires_in", duration: time_ago_in_words(current_user.plan_expires_at)) %></span>
+            <% elsif current_user.plan_expired? %>
+              <span class="text-xs text-red-400"><%= t("plans.one_shot.expired") %></span>
+            <% end %>
           </div>
         <% end %>
       <% else %>

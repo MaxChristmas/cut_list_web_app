@@ -33,10 +33,19 @@ class StripeWebhooksController < ApplicationController
     plan = session.metadata["plan"]
     return unless Plannable::PLANS.key?(plan)
 
-    user.update!(
-      plan: plan,
-      stripe_subscription_id: session.subscription
-    )
+    if session.metadata["one_shot"] == "true"
+      user.update!(
+        plan: plan,
+        plan_expires_at: 3.days.from_now,
+        stripe_subscription_id: nil
+      )
+    else
+      user.update!(
+        plan: plan,
+        plan_expires_at: nil,
+        stripe_subscription_id: session.subscription
+      )
+    end
   end
 
   def handle_subscription_updated(subscription)
@@ -54,7 +63,7 @@ class StripeWebhooksController < ApplicationController
     user = User.find_by(stripe_customer_id: subscription.customer)
     return unless user
 
-    user.update!(plan: "free", stripe_subscription_id: nil)
+    user.update!(plan: "free", stripe_subscription_id: nil, plan_expires_at: nil)
   end
 
   def plan_for_price_id(price_id)

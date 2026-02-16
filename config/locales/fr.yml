@@ -118,6 +118,15 @@ fr:
     enterprise:
       name: "Entreprise"
       description: "Puissance illimitée pour les grandes opérations"
+    one_shot:
+      title: "Accès ponctuel"
+      subtitle: "Besoin d'une seule utilisation ? Accédez à toutes les fonctionnalités pendant 3 jours."
+      duration: "Accès 3 jours"
+      buy: "Acheter"
+      worker_name: "Ponctuel Worker"
+      enterprise_name: "Ponctuel Entreprise"
+      expires_in: "Expire dans %{duration}"
+      expired: "Votre accès ponctuel a expiré"
   limits:
     max_projects_reached: "Vous avez atteint la limite de projets actifs. Archivez un projet ou passez au plan supérieur."
     monthly_optimizations_reached: "Vous avez atteint la limite mensuelle d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."

@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
 
   def current_plan_name
     if user_signed_in?
-      current_user.plan
+      current_user.effective_plan
     else
       "free"
     end

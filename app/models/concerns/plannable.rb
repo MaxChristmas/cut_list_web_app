@@ -18,8 +18,9 @@ module Plannable
       max_monthly_optimizations_per_project: Float::INFINITY,
       features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels],
       prices: {
-        monthly: { amount: 1190, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
-        yearly:  { amount: 9900, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },
+        monthly:  { amount: 1190, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
+        yearly:   { amount: 9900, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },
+        one_shot: { amount: 700, env_key: "STRIPE_WORKER_ONE_SHOT_PRICE_ID" },
         tax_label: "TTC"
       }
     },
@@ -28,8 +29,9 @@ module Plannable
       max_monthly_optimizations_per_project: Float::INFINITY,
       features: FEATURES,
       prices: {
-        monthly: { amount: 3900, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
-        yearly:  { amount: 34900, env_key: "STRIPE_ENTERPRISE_YEARLY_PRICE_ID" },
+        monthly:  { amount: 3900, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
+        yearly:   { amount: 34900, env_key: "STRIPE_ENTERPRISE_YEARLY_PRICE_ID" },
+        one_shot: { amount: 1500, env_key: "STRIPE_ENTERPRISE_ONE_SHOT_PRICE_ID" },
         tax_label: "HT"
       }
     }
@@ -47,7 +49,20 @@ module Plannable
   end
 
   def plan_config
+    return PLANS["free"] if plan_expired?
     PLANS[plan]
+  end
+
+  def effective_plan
+    plan_expired? ? "free" : plan
+  end
+
+  def plan_expired?
+    plan_expires_at.present? && plan_expires_at < Time.current
+  end
+
+  def one_shot_plan?
+    plan_expires_at.present? && !plan_expired?
   end
 
   def max_active_projects
@@ -82,15 +97,15 @@ module Plannable
   end
 
   def free_plan?
-    plan == "free"
+    effective_plan == "free"
   end
 
   def worker_plan?
-    plan == "worker"
+    effective_plan == "worker"
   end
 
   def enterprise_plan?
-    plan == "enterprise"
+    effective_plan == "enterprise"
   end
 
   def paid_plan?

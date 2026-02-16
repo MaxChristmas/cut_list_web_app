@@ -118,6 +118,15 @@ en:
     enterprise:
       name: "Enterprise"
       description: "Unlimited power for large operations"
+    one_shot:
+      title: "One-shot Access"
+      subtitle: "Need it just once? Get full access for 3 days."
+      duration: "3 days access"
+      buy: "Buy"
+      worker_name: "One-shot Worker"
+      enterprise_name: "One-shot Enterprise"
+      expires_in: "Expires in %{duration}"
+      expired: "Your one-shot access has expired"
   limits:
     max_projects_reached: "You've reached your active project limit. Archive a project or upgrade your plan."
     monthly_optimizations_reached: "You've reached the monthly optimization limit for this project. Upgrade your plan for more."

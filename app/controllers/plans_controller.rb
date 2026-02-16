@@ -3,7 +3,7 @@ class PlansController < ApplicationController
 
   def index
     @plans = Plannable::PLANS
-    @current_plan = user_signed_in? ? current_user.plan : "free"
+    @current_plan = user_signed_in? ? current_user.effective_plan : "free"
     @billing_cycle = params[:billing_cycle] || "monthly"
   end
 
@@ -33,13 +33,15 @@ class PlansController < ApplicationController
 
     customer_id = current_user.find_or_create_stripe_customer!
 
+    is_one_shot = billing_cycle == :one_shot
+
     session = Stripe::Checkout::Session.create(
       customer: customer_id,
-      mode: "subscription",
+      mode: is_one_shot ? "payment" : "subscription",
       line_items: [{ price: price_id, quantity: 1 }],
       success_url: plan_success_url(plan: plan),
       cancel_url: plans_url,
-      metadata: { user_id: current_user.id, plan: plan }
+      metadata: { user_id: current_user.id, plan: plan, one_shot: is_one_shot.to_s }
     )
 
     redirect_to session.url, allow_other_host: true
