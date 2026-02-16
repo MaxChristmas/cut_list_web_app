@@ -7,6 +7,7 @@ const COLORS = [
 ]
 
 export default class extends Controller {
+  static targets = ["toolbar", "canvas"]
   static values = {
     result: Object,
     editedResult: Object,
@@ -96,7 +97,7 @@ export default class extends Controller {
     const colorMap = this.buildColorMap(data.sheets)
     const labelMap = this.buildLabelMap(data.pieces || [])
 
-    const container = this.element
+    const container = this.hasCanvasTarget ? this.canvasTarget : this.element
     container.innerHTML = ""
 
     // Toolbar
@@ -235,8 +236,12 @@ export default class extends Controller {
   }
 
   renderToolbar(container) {
-    const toolbar = document.createElement("div")
-    toolbar.className = "flex gap-2 mb-4"
+    // Render into the shared toolbar target if available, otherwise inline
+    const toolbar = this.hasToolbarTarget ? this.toolbarTarget : document.createElement("div")
+    toolbar.innerHTML = ""
+    if (!this.hasToolbarTarget) {
+      toolbar.className = "flex flex-wrap gap-2 mb-4"
+    }
 
     // Edit mode toggle
     const editBtn = document.createElement("button")
@@ -269,7 +274,9 @@ export default class extends Controller {
       toolbar.appendChild(resetBtn)
     }
 
-    container.appendChild(toolbar)
+    if (!this.hasToolbarTarget) {
+      container.appendChild(toolbar)
+    }
   }
 
   // --- Drag and drop ---

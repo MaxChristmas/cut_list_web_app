@@ -39,6 +39,7 @@ ja:
       import_csv: "CSVインポート"
       add_piece: "+ パネルを追加"
       stock_sheet: "ベースパネル"
+      mobile_form_toggle: "ピースを設定"
       length: "長さ"
       width: "幅"
       cut_direction: "カット方向"

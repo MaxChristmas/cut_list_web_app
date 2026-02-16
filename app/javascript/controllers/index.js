@@ -4,6 +4,12 @@
 
 import { application } from "./application"
 
+import BillingToggleController from "./billing_toggle_controller"
+application.register("billing-toggle", BillingToggleController)
+
+import FormPanelController from "./form_panel_controller"
+application.register("form-panel", FormPanelController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
@@ -16,17 +22,14 @@ application.register("modal", ModalController)
 import PiecesController from "./pieces_controller"
 application.register("pieces", PiecesController)
 
+import ReportIssueController from "./report_issue_controller"
+application.register("report-issue", ReportIssueController)
+
 import ResizablePanelController from "./resizable_panel_controller"
 application.register("resizable-panel", ResizablePanelController)
 
 import SheetVisualizerController from "./sheet_visualizer_controller"
 application.register("sheet-visualizer", SheetVisualizerController)
 
-import ReportIssueController from "./report_issue_controller"
-application.register("report-issue", ReportIssueController)
-
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
-
-import BillingToggleController from "./billing_toggle_controller"
-application.register("billing-toggle", BillingToggleController)

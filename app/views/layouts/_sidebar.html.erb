@@ -18,7 +18,7 @@
 
   <aside data-sidebar-target="sidebar"
          class="h-full bg-slate-900 text-gray-300 flex flex-col transition-all duration-200 overflow-hidden shrink-0 border-r border-gray-700 w-[260px]
-                max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-50 max-md:!w-[80%] max-md:-translate-x-full max-md:transition-transform max-md:duration-300"
+                max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-50 max-md:w-[80%]! max-md:-translate-x-full max-md:transition-transform max-md:duration-300"
          data-collapsed="false">
 
     <%# Top: Toggle + App name %>
@@ -150,7 +150,7 @@
   </aside>
 
   <%# Main content area %>
-  <div class="flex-1 h-screen overflow-hidden max-md:pt-12">
+  <div class="flex-1 h-screen overflow-hidden max-md:pt-12 max-md:overflow-y-auto">
     <%= yield %>
   </div>
 </div>

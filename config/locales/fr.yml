@@ -39,6 +39,7 @@ fr:
       import_csv: "Importer CSV"
       add_piece: "+ Ajouter un panneau"
       stock_sheet: "Panneau de base"
+      mobile_form_toggle: "Définir vos pièces"
       length: "Longueur"
       width: "Largeur"
       cut_direction: "Direction de coupe"

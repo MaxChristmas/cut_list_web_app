@@ -1,5 +1,19 @@
-<div class="flex h-full" data-controller="resizable-panel">  
-  <div class="shrink-0 bg-slate-900 text-gray-300 border-r border-gray-800 overflow-y-auto p-4 space-y-6" style="width: 40%;" data-resizable-panel-target="panel">
+<div class="flex max-md:flex-col h-full max-md:h-auto max-md:min-h-full" data-controller="resizable-panel form-panel">
+  <%# Mobile: toggle button — sticky at top, always visible %>
+  <div class="md:hidden bg-slate-800 border-b border-gray-700 mt-2">
+    <button data-action="click->form-panel#toggle"
+            class="w-full flex items-center justify-between px-4 py-5 text-base font-medium text-gray-200">
+      <span data-form-panel-target="buttonLabel"><%= t("projects.index.mobile_form_toggle") %></span>
+      <svg data-form-panel-target="arrow" class="w-5 h-5 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+      </svg>
+    </button>
+  </div>
+
+  <%# Form panel — collapsible on mobile %>
+  <div data-form-panel-target="panel"
+       class="shrink-0 bg-slate-900 text-gray-300 border-r border-gray-800 overflow-y-auto p-4 space-y-6 w-[40%]
+              max-md:w-full! max-md:border-r-0 max-md:border-b max-md:border-gray-700 max-md:overflow-visible">
     <%= render "form", form_url: project_path(@project.token), form_method: :patch %>
 
     <% if @project.persisted? && has_feature?(:archive) %>
@@ -16,10 +30,11 @@
     <% end %>
   </div>
 
-  <div class="w-1 shrink-0 bg-gray-800 hover:bg-blue-400 cursor-col-resize transition-colors"
+  <%# Desktop drag handle %>
+  <div class="max-md:hidden w-1 shrink-0 bg-gray-800 hover:bg-blue-400 cursor-col-resize transition-colors"
        data-action="mousedown->resizable-panel#startDrag"></div>
 
-  <div class="flex-1 overflow-y-auto p-6"
+  <div class="flex-1 overflow-y-auto p-6 max-md:min-h-[60vh]"
        style="background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 20px 20px;">
     <%= render "result_panel" %>
   </div>

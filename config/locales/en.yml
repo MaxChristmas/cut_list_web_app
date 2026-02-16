@@ -39,6 +39,7 @@ en:
       import_csv: "Import CSV"
       add_piece: "+ Add Piece"
       stock_sheet: "Original Sheet"
+      mobile_form_toggle: "Set your pieces"
       length: "Length"
       width: "Width"
       cut_direction: "Cut Direction"
