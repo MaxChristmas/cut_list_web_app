@@ -1,4 +1,0 @@
-# Production overrides (base deploy.yml is already production-ready)
-env:
-  clear:
-    RAILS_ENV: production
