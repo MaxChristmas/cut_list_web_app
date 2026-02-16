@@ -144,6 +144,78 @@ en:
     current: "current"
     dimension: "L: %{length}  ×  W: %{width}"
     total: "Total: %{count}"
+  cookie_consent:
+    title: "Cookie Settings"
+    message: "We use cookies to enhance your experience on our site. By accepting, you consent to the use of cookies for analytics and personalization."
+    accept: "Accept"
+    decline: "Decline"
+    learn_more: "Learn more"
+  cookies_policy:
+    page_title: "Cookies Policy — CutList"
+    title: "Cookies Policy"
+    last_updated: "Last updated: February 16, 2026"
+    intro: "Welcome to the CutList Cookies Policy. This policy explains how Noventi SARL (\"Noventi,\" \"we,\" \"us,\" or \"our\") uses cookies and similar technologies when you visit or use our website at cutlist.noventi.fr and related services (collectively, the \"Site\")."
+    link: "Cookies Policy"
+    what_are_cookies:
+      title: "What Are Cookies?"
+      body: "Cookies are small text files placed on your browser or device when you visit a website. They help the website recognize your device and remember certain information about your visit, such as your preferences, login status, or how you use the site. In addition to cookies, we may use similar technologies such as web beacons, local storage, and session storage. For simplicity, we refer to all of these technologies collectively as \"Cookies\" throughout this policy."
+    how_we_use:
+      title: "How We Use Cookies"
+      body: "We use Cookies for a variety of purposes: to keep the Site secure and functional, to remember your preferences, to understand how you use the Site, and to improve your overall experience. Cookies help us determine whether you've visited the Site before, enable you to stay logged in, and let us tailor the service to your needs."
+    types:
+      title: "Types of Cookies We Use"
+      essential:
+        title: "Essential Cookies"
+        body: "These Cookies are strictly necessary for the Site to function properly. Without them, core features such as user authentication, session management, and security protections would not work. Because these Cookies are essential to the operation of the Site, they cannot be disabled."
+        session: "Maintains your user session and login state"
+        remember: "Keeps you logged in if you select \"Remember me\""
+        csrf: "Protects against cross-site request forgery attacks"
+        consent: "Stores your cookie preferences"
+      functionality:
+        title: "Functionality Cookies"
+        body: "Functionality Cookies allow us to remember the choices you make on the Site, such as your language preference or interface settings. They enhance usability by personalizing your experience."
+        locale: "Remembers your language preference"
+        cut_direction: "Saves your preferred cut direction setting"
+      analytics:
+        title: "Performance & Analytics Cookies"
+        body: "Performance Cookies collect aggregated, anonymized information about how visitors use the Site, such as which pages are visited most often. We use this information to improve how the Site works."
+        ga: "Distinguishes unique users by assigning a randomly generated identifier"
+        gid: "Distinguishes users for analytics purposes"
+      third_party:
+        title: "Third-Party & Payment Cookies"
+        body: "When you interact with certain features of the Site, third-party providers may set their own Cookies. Our payment processor Stripe may set Cookies when you access payment-related pages. We also use Google OAuth for authentication."
+        stripe_mid: "Fraud prevention and payment processing"
+        stripe_sid: "Fraud prevention and payment session management"
+    table:
+      cookie: "Cookie"
+      provider: "Provider"
+      purpose: "Purpose"
+      duration: "Duration"
+    duration:
+      session: "Session"
+      two_weeks: "2 weeks"
+      one_year: "1 year"
+      two_years: "2 years"
+      twenty_four_hours: "24 hours"
+      thirty_minutes: "30 minutes"
+    your_choices:
+      title: "Your Cookie Choices"
+      body: "When you first visit our Site, you will see a cookie consent banner that allows you to accept or decline non-essential Cookies. Most web browsers also allow you to control Cookies through their settings. Please note that blocking or deleting certain Cookies may affect the functionality of the Site. Essential Cookies cannot be disabled."
+    gdpr:
+      title: "Cookies and the GDPR"
+      body: "As a company established in France (Nantes), we comply with the European General Data Protection Regulation (GDPR) and the ePrivacy Directive as transposed into French law, as well as the guidelines of the CNIL. Essential Cookies are placed without prior consent, as they are strictly necessary. Non-essential Cookies are only placed after you have given your informed consent. You may withdraw your consent at any time. We do not use Cookies for advertising or profiling purposes."
+    how_long:
+      title: "How Long Do Cookies Stay on My Device?"
+      body: "Session Cookies are temporary and are deleted when you close your browser. Persistent Cookies remain on your device for a set period of time or until you manually delete them. The duration of each Cookie is specified in the tables above."
+    advertising:
+      title: "Do We Use Cookies for Advertising?"
+      body: "No. CutList does not use advertising Cookies and does not display third-party ads on the Site. We do not engage in behavioral advertising or cross-site tracking for marketing purposes."
+    updates:
+      title: "Updates to This Policy"
+      body: "We may update this Cookies Policy from time to time to reflect changes in our practices, technologies, or legal requirements. When we make changes, we will update the \"Last Updated\" date at the top of this page."
+    contact:
+      title: "Contact Us"
+      body: "If you have any questions about this Cookies Policy, please contact us:"
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"

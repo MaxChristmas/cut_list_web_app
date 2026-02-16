@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
   patch "locale", to: "application#set_locale", as: :locale
 
+  get "cookies-policy", to: "pages#cookies_policy", as: :cookies_policy
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "projects#index"

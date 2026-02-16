@@ -1,0 +1,170 @@
+<% content_for(:title) { t("cookies_policy.page_title") } %>
+
+<div class="h-full overflow-y-auto">
+  <div class="max-w-3xl mx-auto px-4 py-8 md:py-12">
+    <div class="mb-8">
+      <%= link_to root_path, class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+        </svg>
+        <%= t("settings.back") %>
+      <% end %>
+    </div>
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= t("cookies_policy.title") %></h1>
+    <p class="text-sm text-gray-500 mb-8"><%= t("cookies_policy.last_updated") %></p>
+
+    <div class="max-w-none space-y-8 text-sm text-gray-600">
+      <p><%= t("cookies_policy.intro") %></p>
+
+      <%# Section 1 — What Are Cookies? %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">1. <%= t("cookies_policy.what_are_cookies.title") %></h2>
+        <p><%= t("cookies_policy.what_are_cookies.body") %></p>
+      </section>
+
+      <%# Section 2 — How We Use Cookies %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">2. <%= t("cookies_policy.how_we_use.title") %></h2>
+        <p><%= t("cookies_policy.how_we_use.body") %></p>
+      </section>
+
+      <%# Section 3 — Types of Cookies %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">3. <%= t("cookies_policy.types.title") %></h2>
+
+        <%# 3.1 Essential %>
+        <div class="mb-6">
+          <h3 class="text-base font-medium text-gray-800 mb-2">3.1 <%= t("cookies_policy.types.essential.title") %></h3>
+          <p class="mb-3"><%= t("cookies_policy.types.essential.body") %></p>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.cookie") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.purpose") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.duration") %></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">_cutlist_session</td><td class="px-3 py-2"><%= t("cookies_policy.types.essential.session") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.session") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">remember_token</td><td class="px-3 py-2"><%= t("cookies_policy.types.essential.remember") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.two_weeks") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">csrf_token</td><td class="px-3 py-2"><%= t("cookies_policy.types.essential.csrf") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.session") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">cookie_consent</td><td class="px-3 py-2"><%= t("cookies_policy.types.essential.consent") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.one_year") %></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <%# 3.2 Functionality %>
+        <div class="mb-6">
+          <h3 class="text-base font-medium text-gray-800 mb-2">3.2 <%= t("cookies_policy.types.functionality.title") %></h3>
+          <p class="mb-3"><%= t("cookies_policy.types.functionality.body") %></p>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.cookie") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.purpose") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.duration") %></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">locale</td><td class="px-3 py-2"><%= t("cookies_policy.types.functionality.locale") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.one_year") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">cut_direction_pref</td><td class="px-3 py-2"><%= t("cookies_policy.types.functionality.cut_direction") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.one_year") %></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <%# 3.3 Analytics %>
+        <div class="mb-6">
+          <h3 class="text-base font-medium text-gray-800 mb-2">3.3 <%= t("cookies_policy.types.analytics.title") %></h3>
+          <p class="mb-3"><%= t("cookies_policy.types.analytics.body") %></p>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.cookie") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.provider") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.purpose") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.duration") %></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">_ga</td><td class="px-3 py-2">Google Analytics</td><td class="px-3 py-2"><%= t("cookies_policy.types.analytics.ga") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.two_years") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">_gid</td><td class="px-3 py-2">Google Analytics</td><td class="px-3 py-2"><%= t("cookies_policy.types.analytics.gid") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.twenty_four_hours") %></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <%# 3.4 Third-Party %>
+        <div class="mb-6">
+          <h3 class="text-base font-medium text-gray-800 mb-2">3.4 <%= t("cookies_policy.types.third_party.title") %></h3>
+          <p class="mb-3"><%= t("cookies_policy.types.third_party.body") %></p>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500">
+                <tr>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.cookie") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.provider") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.purpose") %></th>
+                  <th class="text-left px-3 py-2 font-medium"><%= t("cookies_policy.table.duration") %></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">__stripe_mid</td><td class="px-3 py-2">Stripe</td><td class="px-3 py-2"><%= t("cookies_policy.types.third_party.stripe_mid") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.one_year") %></td></tr>
+                <tr><td class="px-3 py-2 font-mono text-xs text-gray-500">__stripe_sid</td><td class="px-3 py-2">Stripe</td><td class="px-3 py-2"><%= t("cookies_policy.types.third_party.stripe_sid") %></td><td class="px-3 py-2"><%= t("cookies_policy.duration.thirty_minutes") %></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <%# Section 4 — Your Choices %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">4. <%= t("cookies_policy.your_choices.title") %></h2>
+        <p><%= t("cookies_policy.your_choices.body") %></p>
+      </section>
+
+      <%# Section 5 — GDPR %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">5. <%= t("cookies_policy.gdpr.title") %></h2>
+        <p><%= t("cookies_policy.gdpr.body") %></p>
+      </section>
+
+      <%# Section 6 — Duration %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">6. <%= t("cookies_policy.how_long.title") %></h2>
+        <p><%= t("cookies_policy.how_long.body") %></p>
+      </section>
+
+      <%# Section 7 — Advertising %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">7. <%= t("cookies_policy.advertising.title") %></h2>
+        <p><%= t("cookies_policy.advertising.body") %></p>
+      </section>
+
+      <%# Section 8 — Updates %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">8. <%= t("cookies_policy.updates.title") %></h2>
+        <p><%= t("cookies_policy.updates.body") %></p>
+      </section>
+
+      <%# Section 9 — Contact %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">9. <%= t("cookies_policy.contact.title") %></h2>
+        <p><%= t("cookies_policy.contact.body") %></p>
+        <div class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm space-y-1">
+          <p class="font-medium text-gray-900">Noventi SARL</p>
+          <p>Nantes, France</p>
+          <p>SIREN: 931 419 717</p>
+          <p>N° TVA: FR48931419717</p>
+          <p>Email: <a href="mailto:contact@noventi.fr" class="text-blue-600 hover:text-blue-800">contact@noventi.fr</a></p>
+          <p>Website: <a href="https://cutlist.noventi.fr" class="text-blue-600 hover:text-blue-800">cutlist.noventi.fr</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

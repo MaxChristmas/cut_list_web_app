@@ -144,6 +144,78 @@ fr:
     current: "actuel"
     dimension: "L : %{length}  ×  l : %{width}"
     total: "Total : %{count}"
+  cookie_consent:
+    title: "Paramètres des cookies"
+    message: "Nous utilisons des cookies pour améliorer votre expérience sur notre site. En acceptant, vous consentez à l'utilisation de cookies à des fins d'analyse et de personnalisation."
+    accept: "Accepter"
+    decline: "Refuser"
+    learn_more: "En savoir plus"
+  cookies_policy:
+    page_title: "Politique de cookies — CutList"
+    title: "Politique de cookies"
+    last_updated: "Dernière mise à jour : 16 février 2026"
+    intro: "Bienvenue dans la Politique de cookies de CutList. Cette politique explique comment Noventi SARL (« Noventi », « nous », « notre ») utilise les cookies et technologies similaires lorsque vous visitez ou utilisez notre site web cutlist.noventi.fr et les services associés (collectivement, le « Site »)."
+    link: "Politique de cookies"
+    what_are_cookies:
+      title: "Que sont les cookies ?"
+      body: "Les cookies sont de petits fichiers texte placés sur votre navigateur ou appareil lorsque vous visitez un site web. Ils aident le site à reconnaître votre appareil et à mémoriser certaines informations sur votre visite, telles que vos préférences, votre statut de connexion ou la façon dont vous utilisez le site. En plus des cookies, nous pouvons utiliser des technologies similaires telles que les balises web, le stockage local et le stockage de session. Par souci de simplicité, nous désignons toutes ces technologies collectivement comme « Cookies » dans cette politique."
+    how_we_use:
+      title: "Comment utilisons-nous les cookies ?"
+      body: "Nous utilisons les Cookies à diverses fins : assurer la sécurité et le bon fonctionnement du Site, mémoriser vos préférences, comprendre comment vous utilisez le Site et améliorer votre expérience globale. Les Cookies nous aident à déterminer si vous avez déjà visité le Site, vous permettent de rester connecté et nous permettent d'adapter le service à vos besoins."
+    types:
+      title: "Types de cookies que nous utilisons"
+      essential:
+        title: "Cookies essentiels"
+        body: "Ces Cookies sont strictement nécessaires au bon fonctionnement du Site. Sans eux, les fonctionnalités de base telles que l'authentification, la gestion des sessions et les protections de sécurité ne fonctionneraient pas. Ces Cookies ne peuvent pas être désactivés."
+        session: "Maintient votre session utilisateur et votre état de connexion"
+        remember: "Vous garde connecté si vous sélectionnez « Se souvenir de moi »"
+        csrf: "Protège contre les attaques de falsification de requêtes intersites"
+        consent: "Stocke vos préférences en matière de cookies"
+      functionality:
+        title: "Cookies de fonctionnalité"
+        body: "Les Cookies de fonctionnalité nous permettent de mémoriser les choix que vous faites sur le Site, comme votre préférence de langue ou vos paramètres d'interface. Ils améliorent l'utilisabilité en personnalisant votre expérience."
+        locale: "Mémorise votre préférence de langue"
+        cut_direction: "Enregistre votre direction de coupe préférée"
+      analytics:
+        title: "Cookies de performance et d'analyse"
+        body: "Les Cookies de performance collectent des informations agrégées et anonymisées sur la façon dont les visiteurs utilisent le Site, comme les pages les plus visitées. Nous utilisons ces informations pour améliorer le fonctionnement du Site."
+        ga: "Distingue les utilisateurs uniques en attribuant un identifiant généré aléatoirement"
+        gid: "Distingue les utilisateurs à des fins d'analyse"
+      third_party:
+        title: "Cookies tiers et de paiement"
+        body: "Lorsque vous interagissez avec certaines fonctionnalités du Site, des fournisseurs tiers peuvent placer leurs propres Cookies. Notre processeur de paiement Stripe peut placer des Cookies lorsque vous accédez aux pages liées au paiement. Nous utilisons également Google OAuth pour l'authentification."
+        stripe_mid: "Prévention de la fraude et traitement des paiements"
+        stripe_sid: "Prévention de la fraude et gestion de session de paiement"
+    table:
+      cookie: "Cookie"
+      provider: "Fournisseur"
+      purpose: "Finalité"
+      duration: "Durée"
+    duration:
+      session: "Session"
+      two_weeks: "2 semaines"
+      one_year: "1 an"
+      two_years: "2 ans"
+      twenty_four_hours: "24 heures"
+      thirty_minutes: "30 minutes"
+    your_choices:
+      title: "Vos choix en matière de cookies"
+      body: "Lors de votre première visite sur notre Site, vous verrez une bannière de consentement aux cookies qui vous permet d'accepter ou de refuser les Cookies non essentiels. La plupart des navigateurs web vous permettent également de contrôler les Cookies via leurs paramètres. Veuillez noter que le blocage ou la suppression de certains Cookies peut affecter la fonctionnalité du Site. Les Cookies essentiels ne peuvent pas être désactivés."
+    gdpr:
+      title: "Cookies et le RGPD"
+      body: "En tant qu'entreprise établie en France (Nantes), nous respectons le Règlement Général sur la Protection des Données (RGPD) et la Directive ePrivacy transposée en droit français, ainsi que les recommandations de la CNIL. Les Cookies essentiels sont déposés sans consentement préalable, car ils sont strictement nécessaires. Les Cookies non essentiels ne sont déposés qu'après que vous ayez donné votre consentement éclairé. Vous pouvez retirer votre consentement à tout moment. Nous n'utilisons pas les Cookies à des fins publicitaires ou de profilage."
+    how_long:
+      title: "Combien de temps les cookies restent-ils sur mon appareil ?"
+      body: "Les Cookies de session sont temporaires et sont supprimés lorsque vous fermez votre navigateur. Les Cookies persistants restent sur votre appareil pendant une durée déterminée ou jusqu'à ce que vous les supprimiez manuellement. La durée de chaque Cookie est précisée dans les tableaux ci-dessus."
+    advertising:
+      title: "Utilisons-nous des cookies publicitaires ?"
+      body: "Non. CutList n'utilise pas de Cookies publicitaires et n'affiche pas de publicités tierces sur le Site. Nous ne pratiquons pas la publicité comportementale ni le suivi intersites à des fins marketing."
+    updates:
+      title: "Mises à jour de cette politique"
+      body: "Nous pouvons mettre à jour cette Politique de cookies de temps à autre pour refléter les changements dans nos pratiques, technologies ou exigences légales. Lorsque nous apportons des modifications, nous mettrons à jour la date de « Dernière mise à jour » en haut de cette page."
+    contact:
+      title: "Nous contacter"
+      body: "Si vous avez des questions concernant cette Politique de cookies, veuillez nous contacter :"
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

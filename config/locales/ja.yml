@@ -144,6 +144,78 @@ ja:
     current: "現在"
     dimension: "長さ: %{length}  ×  幅: %{width}"
     total: "合計: %{count}"
+  cookie_consent:
+    title: "Cookieの設定"
+    message: "当サイトでは、より良い体験を提供するためにCookieを使用しています。承認すると、分析およびパーソナライズのためのCookieの使用に同意したことになります。"
+    accept: "承認する"
+    decline: "拒否する"
+    learn_more: "詳しく見る"
+  cookies_policy:
+    page_title: "Cookieポリシー — CutList"
+    title: "Cookieポリシー"
+    last_updated: "最終更新日：2026年2月16日"
+    intro: "CutListのCookieポリシーへようこそ。このポリシーでは、Noventi SARL（「Noventi」、「当社」）が、cutlist.noventi.frおよび関連サービス（総称して「サイト」）へのアクセスまたは利用時にCookieおよび類似技術をどのように使用するかについて説明します。"
+    link: "Cookieポリシー"
+    what_are_cookies:
+      title: "Cookieとは？"
+      body: "Cookieは、ウェブサイトにアクセスした際にブラウザまたはデバイスに保存される小さなテキストファイルです。ウェブサイトがデバイスを認識し、設定、ログイン状態、サイトの使用方法など、訪問に関する特定の情報を記憶するのに役立ちます。Cookieに加え、ウェブビーコン、ローカルストレージ、セッションストレージなどの類似技術を使用する場合があります。簡便化のため、これらの技術を総称して「Cookie」と呼びます。"
+    how_we_use:
+      title: "Cookieの使用方法"
+      body: "当社はCookieを様々な目的で使用します：サイトのセキュリティと機能の維持、設定の記憶、サイトの使用状況の把握、全体的な体験の向上です。Cookieにより、以前サイトを訪問したかどうかの判断、ログイン状態の維持、ニーズに合わせたサービスの提供が可能になります。"
+    types:
+      title: "使用するCookieの種類"
+      essential:
+        title: "必須Cookie"
+        body: "これらのCookieは、サイトが正常に機能するために厳密に必要です。これらがなければ、ユーザー認証、セッション管理、セキュリティ保護などの基本機能が動作しません。これらのCookieは無効にできません。"
+        session: "ユーザーセッションとログイン状態を維持します"
+        remember: "「ログイン状態を保持」を選択した場合にログイン状態を維持します"
+        csrf: "クロスサイトリクエストフォージェリ攻撃から保護します"
+        consent: "Cookieの設定を保存します"
+      functionality:
+        title: "機能Cookie"
+        body: "機能Cookieにより、言語設定やインターフェース設定など、サイトで行った選択を記憶できます。体験をパーソナライズすることで使いやすさを向上させます。"
+        locale: "言語設定を記憶します"
+        cut_direction: "カット方向の設定を保存します"
+      analytics:
+        title: "パフォーマンス・分析Cookie"
+        body: "パフォーマンスCookieは、最もよく訪問されるページなど、訪問者のサイト利用方法に関する集約・匿名化された情報を収集します。この情報をサイトの改善に活用します。"
+        ga: "ランダムに生成された識別子を割り当てることでユニークユーザーを区別します"
+        gid: "分析目的でユーザーを区別します"
+      third_party:
+        title: "サードパーティ・決済Cookie"
+        body: "サイトの特定の機能を利用する際、サードパーティプロバイダーが独自のCookieを設定する場合があります。決済処理業者Stripeは、決済関連ページにアクセスした際にCookieを設定する場合があります。また、認証にGoogle OAuthを使用しています。"
+        stripe_mid: "不正防止と決済処理"
+        stripe_sid: "不正防止と決済セッション管理"
+    table:
+      cookie: "Cookie"
+      provider: "プロバイダー"
+      purpose: "目的"
+      duration: "有効期間"
+    duration:
+      session: "セッション"
+      two_weeks: "2週間"
+      one_year: "1年"
+      two_years: "2年"
+      twenty_four_hours: "24時間"
+      thirty_minutes: "30分"
+    your_choices:
+      title: "Cookieに関する選択"
+      body: "初めてサイトにアクセスした際、必須でないCookieの受け入れまたは拒否を選択できるCookie同意バナーが表示されます。ほとんどのウェブブラウザでは、設定からCookieを制御することもできます。特定のCookieのブロックまたは削除は、サイトの機能に影響を与える可能性がありますのでご注意ください。必須Cookieは無効にできません。"
+    gdpr:
+      title: "CookieとGDPR"
+      body: "フランス（ナント）に拠点を置く企業として、当社はEU一般データ保護規則（GDPR）およびフランス法に基づくeプライバシー指令、ならびにCNILのガイドラインを遵守しています。必須Cookieは、厳密に必要なため、事前の同意なしに設定されます。必須でないCookieは、お客様の明示的な同意を得た後にのみ設定されます。いつでも同意を撤回できます。当社は広告やプロファイリングの目的でCookieを使用しません。"
+    how_long:
+      title: "Cookieはどのくらいデバイスに残りますか？"
+      body: "セッションCookieは一時的なもので、ブラウザを閉じると削除されます。永続Cookieは、設定された期間またはお客様が手動で削除するまでデバイスに残ります。各Cookieの有効期間は上記の表に記載されています。"
+    advertising:
+      title: "広告Cookieは使用していますか？"
+      body: "いいえ。CutListは広告Cookieを使用せず、サイト上にサードパーティの広告を表示しません。当社はマーケティング目的での行動ターゲティング広告やクロスサイトトラッキングは行っていません。"
+    updates:
+      title: "このポリシーの更新"
+      body: "当社の慣行、技術、または法的要件の変更を反映するため、このCookieポリシーを随時更新する場合があります。変更を行った場合、このページの上部にある「最終更新日」を更新します。"
+    contact:
+      title: "お問い合わせ"
+      body: "このCookieポリシーについてご質問がある場合は、以下までお問い合わせください："
   report_issue:
     button: "問題を報告"
     title: "問題を報告する"
