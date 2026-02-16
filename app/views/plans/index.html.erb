@@ -52,15 +52,16 @@
             <%# Pricing %>
             <div class="mb-6">
               <% if has_prices %>
+                <% tax_label = config[:prices][:tax_label] %>
                 <div data-billing-toggle-target="monthlyPrice">
-                  <span class="text-3xl font-bold text-white"><%= config[:prices][:monthly][:amount] / 100 %>&euro;</span>
-                  <span class="text-gray-400 text-sm">/ <%= t("plans.month") %></span>
+                  <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:monthly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
+                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.month") %></span>
                 </div>
                 <div data-billing-toggle-target="yearlyPrice" class="hidden">
-                  <span class="text-3xl font-bold text-white"><%= config[:prices][:yearly][:amount] / 1200 %>&euro;</span>
-                  <span class="text-gray-400 text-sm">/ <%= t("plans.month") %></span>
+                  <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:yearly][:amount] / 1200.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
+                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.month") %></span>
                   <div class="text-xs text-gray-500 mt-1">
-                    <%= t("plans.billed_yearly", amount: config[:prices][:yearly][:amount] / 100) %>
+                    <%= t("plans.billed_yearly", amount: number_with_precision(config[:prices][:yearly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true)) %> <%= tax_label %>
                   </div>
                 </div>
               <% else %>

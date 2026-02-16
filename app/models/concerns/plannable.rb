@@ -18,8 +18,9 @@ module Plannable
       max_monthly_optimizations_per_project: Float::INFINITY,
       features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels],
       prices: {
-        monthly: { amount: 1200, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
-        yearly:  { amount: 12000, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" }
+        monthly: { amount: 1190, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
+        yearly:  { amount: 9900, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },
+        tax_label: "TTC"
       }
     },
     "enterprise" => {
@@ -27,8 +28,9 @@ module Plannable
       max_monthly_optimizations_per_project: Float::INFINITY,
       features: FEATURES,
       prices: {
-        monthly: { amount: 3500, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
-        yearly:  { amount: 33600, env_key: "STRIPE_ENTERPRISE_YEARLY_PRICE_ID" }
+        monthly: { amount: 3900, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
+        yearly:  { amount: 34900, env_key: "STRIPE_ENTERPRISE_YEARLY_PRICE_ID" },
+        tax_label: "HT"
       }
     }
   }.freeze

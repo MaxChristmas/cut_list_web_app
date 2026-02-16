@@ -91,7 +91,7 @@ fr:
     use_portal_to_downgrade: "Utilisez 'Gérer l'abonnement' pour modifier ou annuler votre plan."
     monthly: "Mensuel"
     yearly: "Annuel"
-    yearly_save: "-17%"
+    yearly_save: "-31%"
     month: "mois"
     free_price: "Gratuit"
     billed_yearly: "Facturé %{amount}€ / an"
