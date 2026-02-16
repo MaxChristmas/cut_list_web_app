@@ -35,6 +35,8 @@ env:
     - STRIPE_WORKER_YEARLY_PRICE_ID
     - STRIPE_ENTERPRISE_MONTHLY_PRICE_ID
     - STRIPE_ENTERPRISE_YEARLY_PRICE_ID
+    - SMTP_USER_NAME
+    - SMTP_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     SOLID_QUEUE_IN_PUMA: true
