@@ -15,7 +15,7 @@ servers:
 # Enable SSL auto certification via Let's Encrypt and route by hostname.
 proxy:
   ssl: true
-  host: cutlist.noventi.fr
+  host: cutoptima.com
 
 # Docker Hub registry.
 registry:

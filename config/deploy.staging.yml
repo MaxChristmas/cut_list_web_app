@@ -1,6 +1,6 @@
 # Staging overrides
 proxy:
-  host: staging.cutlist.noventi.fr
+  host: staging.cutoptima.com
 
 env:
   clear:

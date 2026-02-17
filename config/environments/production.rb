@@ -54,7 +54,7 @@ Rails.application.configure do
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "cutlist.noventi.fr" }
+  config.action_mailer.default_url_options = { host: "cutoptima.com" }
 
   # Brevo (Sendinblue) SMTP. Credentials set via ENV (SMTP_USER_NAME, SMTP_PASSWORD).
   config.action_mailer.delivery_method = :smtp
