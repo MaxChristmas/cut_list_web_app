@@ -76,6 +76,9 @@
             </div>
 
             <%# Features list %>
+            <% parent_plan = { "worker" => "free", "enterprise" => "worker" }[plan_key] %>
+            <% parent_features = parent_plan ? Plannable::PLANS[parent_plan][:features] : [] %>
+            <% extra_features = config[:features] - parent_features %>
             <ul class="space-y-3 flex-1 mb-6">
               <li class="flex items-center gap-3 text-sm">
                 <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -99,19 +102,17 @@
                   <%= t("plans.monthly_optimizations_per_project") %>
                 </span>
               </li>
-              <% Plannable::FEATURES.each do |feature| %>
+              <% if parent_plan %>
+                <li class="text-sm text-gray-400 italic pt-1">
+                  <%= t("plans.includes_all_from", plan: t("plans.#{parent_plan}.name")) %>
+                </li>
+              <% end %>
+              <% extra_features.each do |feature| %>
                 <li class="flex items-center gap-3 text-sm">
-                  <% if config[:features].include?(feature) %>
-                    <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                    </svg>
-                    <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
-                  <% else %>
-                    <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                    <span class="text-gray-600"><%= t("plans.features.#{feature}") %></span>
-                  <% end %>
+                  <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                  </svg>
+                  <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
                 </li>
               <% end %>
             </ul>
@@ -178,6 +179,25 @@
                 <span class="text-gray-400 text-sm"><%= tax_label %></span>
                 <div class="text-xs text-gray-500 mt-1"><%= t("plans.one_shot.duration") %></div>
               </div>
+
+              <% parent_plan = { "enterprise" => "worker" }[plan_key] %>
+              <% parent_features = parent_plan ? Plannable::PLANS[parent_plan][:features] : [] %>
+              <% extra_features = config[:features] - parent_features %>
+              <ul class="space-y-2 flex-1 mb-6">
+                <% if parent_plan %>
+                  <li class="text-sm text-gray-400 italic">
+                    <%= t("plans.includes_all_from", plan: t("plans.#{parent_plan}.name")) %>
+                  </li>
+                <% end %>
+                <% extra_features.each do |feature| %>
+                  <li class="flex items-center gap-2 text-sm">
+                    <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                    </svg>
+                    <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
+                  </li>
+                <% end %>
+              </ul>
 
               <% if user_signed_in? %>
                 <%= form_with url: plan_checkout_path, method: :post, class: "w-full mt-auto" do |f| %>

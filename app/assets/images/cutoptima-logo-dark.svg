@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <defs>
+    <linearGradient id="iconBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a6bce;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d4a9e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect x="0" y="0" width="400" height="120" fill="#0f172a"/>
+
+  <!-- Icon: 90x90, exact same ratios as 120x120 icon v5 -->
+  <g transform="translate(10, 15)">
+    <rect x="0" y="0" width="90" height="90" rx="18" ry="18" fill="url(#iconBg)"/>
+
+    <g transform="translate(12, 12)">
+      <rect x="0" y="0" width="66" height="22.5" rx="3.75" ry="3.75" fill="white" opacity="0.95"/>
+      <rect x="0" y="26.25" width="28.5" height="39.75" rx="3.75" ry="3.75" fill="white" opacity="0.75"/>
+      <rect x="32.25" y="26.25" width="33.75" height="17.25" rx="3.75" ry="3.75" fill="white" opacity="0.85"/>
+      <rect x="32.25" y="47.25" width="15" height="18.75" rx="3.75" ry="3.75" fill="white" opacity="0.55"/>
+      <rect x="51" y="47.25" width="15" height="18.75" rx="3.75" ry="3.75" fill="white" opacity="0.45"/>
+    </g>
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(115, 0)">
+    <text x="0" y="68" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="800" fill="#ffffff" letter-spacing="-1">Cut</text>
+    <text x="96" y="68" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="52" font-weight="300" fill="#4a9eff" letter-spacing="-1">Optima</text>
+    <text x="2" y="92" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400" fill="#64748b" letter-spacing="3">CUTTING OPTIMIZATION</text>
+  </g>
+</svg>

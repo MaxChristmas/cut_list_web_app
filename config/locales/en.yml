@@ -99,6 +99,7 @@ en:
     monthly_optimizations_per_project: "Optimizations per project / month"
     pdf_export: "PDF export"
     unlimited: "Unlimited"
+    includes_all_from: "Everything in %{plan}, plus:"
     features:
       pdf_export: "PDF export"
       label_pieces: "Label pieces"
