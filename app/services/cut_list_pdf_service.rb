@@ -51,6 +51,13 @@ class CutListPdfService
     right_w = pdf.bounds.width * 0.5
     top = pdf.cursor
 
+    # Measurements note
+    pdf.fill_color MUTED_COLOR
+    pdf.font_size(LABEL_FONT) { pdf.text t("measurements_in_mm") }
+    pdf.fill_color TEXT_COLOR
+    pdf.move_down 4
+    top = pdf.cursor
+
     # Left: global stats
     pdf.bounding_box([0, top], width: left_w) do
       stock_area = stock[:l] * stock[:w]
