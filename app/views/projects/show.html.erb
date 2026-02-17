@@ -16,7 +16,7 @@
               max-md:w-full! max-md:border-r-0 max-md:border-b max-md:border-gray-700 max-md:overflow-visible">
     <%= render "form", form_url: project_path(@project.token), form_method: :patch %>
 
-    <% if @project.persisted? && has_feature?(:archive) %>
+    <% if @project.persisted? && !@project.template? && has_feature?(:archive) %>
       <div class="pt-4 border-t border-gray-800">
         <% if @project.archived? %>
           <%= button_to t("projects.unarchive"), unarchive_project_path(@project.token),

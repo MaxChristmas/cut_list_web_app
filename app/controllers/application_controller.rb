@@ -46,7 +46,9 @@ class ApplicationController < ActionController::Base
       @recent_projects = current_user.projects.active.order(created_at: :desc).limit(20)
     else
       tokens = session[:guest_project_tokens] || []
-      @recent_projects = Project.where(token: tokens).active.order(created_at: :desc).limit(20)
+      guest_projects = Project.where(token: tokens).active.order(created_at: :desc).limit(20)
+      template = Project.templates.first
+      @recent_projects = template ? [template] + guest_projects.to_a : guest_projects.to_a
     end
   end
 

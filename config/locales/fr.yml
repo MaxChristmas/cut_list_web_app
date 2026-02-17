@@ -66,6 +66,8 @@ fr:
     unarchived: "Projet désarchivé."
     archive_confirm: "Archiver ce projet ? Vous pourrez le désarchiver plus tard."
     unarchive_limit_reached: "Impossible de désarchiver : limite de projets actifs atteinte. Archivez un autre projet ou passez au plan supérieur."
+    template_read_only: "Ceci est un projet exemple en lecture seule. Créez le vôtre pour commencer !"
+    template_badge: "Exemple"
   settings:
     title: "Paramètres du compte"
     email: "Email"

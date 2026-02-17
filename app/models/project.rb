@@ -7,6 +7,7 @@ class Project < ApplicationRecord
   validates :token, uniqueness: true
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+  scope :templates, -> { where(template: true) }
 
   def archived?
     archived_at.present?

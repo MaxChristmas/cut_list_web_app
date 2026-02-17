@@ -16,7 +16,15 @@
   </div>
 <% end %>
 
+<% template_project = @project&.template? %>
+<% if template_project %>
+  <div class="p-3 bg-blue-900/50 text-blue-300 rounded text-sm">
+    <%= t("projects.template_read_only") %>
+  </div>
+<% end %>
+
 <%= form_with url: form_url, method: form_method, class: "space-y-10" do |f| %>
+  <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10">
   <section>
     <input type="text" name="name" value="<%= @name %>"
            placeholder="<%= t("projects.index.project_name") %>"
@@ -182,8 +190,11 @@
     </section>
   <% end %>
 
+  </fieldset>
+
   <button type="submit" data-action="click->form-panel#submitAndCollapse"
-          class="w-full bg-white text-gray-950 px-4 py-2 rounded hover:bg-gray-200 font-medium text-sm">
+          class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
+          <%= "disabled" if template_project %>>
     <%= t("projects.index.optimize") %>
   </button>
 <% end %>

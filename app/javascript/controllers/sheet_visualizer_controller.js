@@ -17,6 +17,7 @@ export default class extends Controller {
     editingLabel: String,
     saveLabel: String,
     resetLabel: String,
+    readonly: { type: Boolean, default: false },
   }
 
   connect() {
@@ -236,6 +237,8 @@ export default class extends Controller {
   }
 
   renderToolbar(container) {
+    if (this.readonlyValue) return
+
     // Render into the shared toolbar target if available, otherwise inline
     const toolbar = this.hasToolbarTarget ? this.toolbarTarget : document.createElement("div")
     toolbar.innerHTML = ""

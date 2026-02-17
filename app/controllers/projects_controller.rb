@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  before_action :reject_template_project, only: [:update, :save_layout, :reset_layout, :archive, :unarchive]
+
   def index
   end
 
@@ -215,6 +217,13 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def reject_template_project
+    project = Project.find_by!(token: params[:token])
+    if project.template?
+      redirect_to project_path(project.token), alert: t("projects.template_read_only")
+    end
+  end
 
   def parse_pieces
     (params[:pieces] || []).filter_map do |piece|

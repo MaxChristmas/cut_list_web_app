@@ -66,6 +66,8 @@ en:
     unarchived: "Project unarchived."
     archive_confirm: "Archive this project? You can unarchive it later."
     unarchive_limit_reached: "Cannot unarchive: active project limit reached. Archive another project or upgrade."
+    template_read_only: "This is a read-only example project. Create your own to get started!"
+    template_badge: "Example"
   settings:
     title: "Account Settings"
     email: "Email"
