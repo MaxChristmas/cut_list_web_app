@@ -36,3 +36,6 @@ application.register("sheet-visualizer", SheetVisualizerController)
 
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
+
+import TabsController from "./tabs_controller"
+application.register("tabs", TabsController)

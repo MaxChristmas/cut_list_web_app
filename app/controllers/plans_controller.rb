@@ -38,6 +38,7 @@ class PlansController < ApplicationController
     session = Stripe::Checkout::Session.create(
       customer: customer_id,
       mode: is_one_shot ? "payment" : "subscription",
+      locale: I18n.locale.to_s,
       line_items: [{ price: price_id, quantity: 1 }],
       success_url: plan_success_url(plan: plan),
       cancel_url: plans_url,
@@ -59,7 +60,8 @@ class PlansController < ApplicationController
 
     session = Stripe::BillingPortal::Session.create(
       customer: current_user.stripe_customer_id,
-      return_url: plans_url
+      return_url: plans_url,
+      locale: I18n.locale.to_s
     )
 
     redirect_to session.url, allow_other_host: true

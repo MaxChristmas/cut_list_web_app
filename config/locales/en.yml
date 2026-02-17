@@ -74,6 +74,10 @@ en:
     password_confirmation: "Confirm New Password"
     current_password: "Current Password"
     current_password_hint: "Required to confirm changes"
+    tabs:
+      language: "Language"
+      security: "Security"
+    language: "Language"
     save: "Save Changes"
     back: "Back"
     sign_out: "Sign Out"
@@ -93,6 +97,7 @@ en:
     yearly: "Yearly"
     yearly_save: "Save 31%"
     month: "mo"
+    year: "yr"
     free_price: "Free"
     billed_yearly: "Billed %{amount}€ / year"
     active_projects: "Active projects"

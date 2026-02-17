@@ -64,10 +64,10 @@
                   <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.month") %></span>
                 </div>
                 <div data-billing-toggle-target="yearlyPrice" class="hidden">
-                  <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:yearly][:amount] / 1200.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
-                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.month") %></span>
+                  <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:yearly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
+                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.year") %></span>
                   <div class="text-xs text-gray-500 mt-1">
-                    <%= t("plans.billed_yearly", amount: number_with_precision(config[:prices][:yearly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true)) %> <%= tax_label %>
+                    <%= number_with_precision(config[:prices][:yearly][:amount] / 1200.0, precision: 2, strip_insignificant_zeros: true) %>&euro; <%= tax_label %> / <%= t("plans.month") %>
                   </div>
                 </div>
               <% else %>

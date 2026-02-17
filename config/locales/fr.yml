@@ -74,6 +74,10 @@ fr:
     password_confirmation: "Confirmer le nouveau mot de passe"
     current_password: "Mot de passe actuel"
     current_password_hint: "Requis pour confirmer les modifications"
+    tabs:
+      language: "Langue"
+      security: "Sécurité"
+    language: "Langue"
     save: "Enregistrer"
     back: "Retour"
     sign_out: "Déconnexion"
@@ -93,6 +97,7 @@ fr:
     yearly: "Annuel"
     yearly_save: "-31%"
     month: "mois"
+    year: "an"
     free_price: "Gratuit"
     billed_yearly: "Facturé %{amount}€ / an"
     active_projects: "Projets actifs"

@@ -10,54 +10,93 @@
       <div class="p-3 mb-4 bg-green-900/50 text-green-300 rounded text-sm"><%= notice %></div>
     <% end %>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
-      <% if resource.errors.any? %>
-        <div class="p-3 bg-red-900/50 text-red-300 rounded text-sm">
-          <ul class="list-disc list-inside space-y-1">
-            <% resource.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <%# Email %>
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+    <div data-controller="tabs">
+      <%# Tab bar %>
+      <div class="flex border-b border-gray-800 mb-6">
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
+          <%= t("settings.tabs.language") %>
+        </button>
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
+          <%= t("settings.tabs.security") %>
+        </button>
       </div>
 
-      <hr class="border-gray-800">
+      <%# Language panel %>
+      <div data-tabs-target="panel">
+        <%= form_with url: locale_path, method: :patch, class: "space-y-6" do |f| %>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.language") %></label>
+            <select name="locale"
+                    class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600">
+              <% I18n.available_locales.each do |loc| %>
+                <option value="<%= loc %>" <%= "selected" if loc == I18n.locale %>>
+                  <%= t("locale_selector.#{loc}") %>
+                </option>
+              <% end %>
+            </select>
+          </div>
 
-      <%# New password (optional) %>
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.new_password") %></label>
-        <%= f.password_field :password, autocomplete: "new-password", placeholder: t("settings.leave_blank"),
-              class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600 placeholder:text-gray-600" %>
+          <button type="submit"
+                  class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+            <%= t("settings.save") %>
+          </button>
+        <% end %>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.password_confirmation") %></label>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password",
-              class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+      <%# Security panel %>
+      <div data-tabs-target="panel" class="hidden">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
+          <% if resource.errors.any? %>
+            <div class="p-3 bg-red-900/50 text-red-300 rounded text-sm">
+              <ul class="list-disc list-inside space-y-1">
+                <% resource.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <%# Email %>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                  class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+          </div>
+
+          <hr class="border-gray-800">
+
+          <%# New password (optional) %>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.new_password") %></label>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: t("settings.leave_blank"),
+                  class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600 placeholder:text-gray-600" %>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.password_confirmation") %></label>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                  class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+          </div>
+
+          <hr class="border-gray-800">
+
+          <%# Current password (required) %>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.current_password") %></label>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                  class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+            <p class="mt-1 text-xs text-gray-500"><%= t("settings.current_password_hint") %></p>
+          </div>
+
+          <button type="submit"
+                  class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+            <%= t("settings.save") %>
+          </button>
+        <% end %>
       </div>
-
-      <hr class="border-gray-800">
-
-      <%# Current password (required) %>
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.current_password") %></label>
-        <%= f.password_field :current_password, autocomplete: "current-password",
-              class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
-        <p class="mt-1 text-xs text-gray-500"><%= t("settings.current_password_hint") %></p>
-      </div>
-
-      <button type="submit"
-              class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
-        <%= t("settings.save") %>
-      </button>
-    <% end %>
+    </div>
 
     <div class="mt-6 flex items-center justify-between">
       <%= link_to t("settings.back"), root_path, class: "text-sm text-gray-500 hover:text-gray-300 transition-colors" %>

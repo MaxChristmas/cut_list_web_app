@@ -74,6 +74,10 @@ ja:
     password_confirmation: "新しいパスワード（確認）"
     current_password: "現在のパスワード"
     current_password_hint: "変更を確認するために必要です"
+    tabs:
+      language: "言語"
+      security: "セキュリティ"
+    language: "言語"
     save: "保存"
     back: "戻る"
     sign_out: "ログアウト"
@@ -93,6 +97,7 @@ ja:
     yearly: "年額"
     yearly_save: "31%お得"
     month: "月"
+    year: "年"
     free_price: "無料"
     billed_yearly: "年額%{amount}€で請求"
     active_projects: "アクティブプロジェクト数"
