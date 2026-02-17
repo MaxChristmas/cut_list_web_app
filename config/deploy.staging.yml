@@ -1,6 +1,6 @@
 # Staging overrides
 proxy:
-  host: staging.cutoptima.com
+  host: staging.app.cutoptima.com
 
 env:
   clear:
