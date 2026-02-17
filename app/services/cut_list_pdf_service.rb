@@ -4,7 +4,7 @@ class CutListPdfService
   STOCK_BORDER = "a0aec0"
   PIECE_BORDER = "2d3748"
   TEXT_COLOR = "1a202c"
-  HEADER_COLOR = "c53030"
+  HEADER_COLOR = "1A6ACD"
   MUTED_COLOR = "718096"
   LABEL_FONT = 7
   INFO_FONT = 8
@@ -23,6 +23,7 @@ class CutListPdfService
       @color_map = build_color_map
       @piece_summary = build_piece_summary
       @label_map = build_label_map
+      @display_key_map = build_display_key_map
 
       draw_global_header(pdf)
       draw_sheets(pdf)
@@ -62,20 +63,20 @@ class CutListPdfService
 
       info_rows = [
         [t("sheets_used"), sheets.size.to_s],
-        [t("total_area_used"), "#{total_used.round(0)} #{used_pct}%"],
-        [t("total_waste_area"), "#{total_waste.round(0)} #{waste_pct}%"],
+        [t("total_area_used"), "#{used_pct}%"],
+        [t("total_waste_area"), "#{waste_pct}%"],
         [t("total_pieces"), total_cuts.to_s],
-        [t("blade_kerf"), (@result["kerf"] || 0).to_s]
+        [t("blade_kerf"), (@result["kerf"] || 0).to_s + " mm"]
       ]
       draw_info_table(pdf, info_rows)
     end
 
     # Right: piece types + stock
     pdf.bounding_box([left_w, top], width: right_w) do
-      pieces_text = @piece_summary.map { |k, q| "#{k} x#{q}" }.join("  ·  ")
+      pieces_text = @piece_summary.map { |k, q| "#{display_key(k)} (x#{q})" }.join("  ·  ")
       draw_info_table(pdf, [
         [t("pieces"), pieces_text],
-        [t("stock_sheet"), "#{stock[:l].to_i}×#{stock[:w].to_i} x#{sheets.size}"]
+        [t("stock_sheet"), "#{stock[:l].to_i}×#{stock[:w].to_i} (x#{sheets.size})"]
       ])
     end
 
@@ -136,8 +137,8 @@ class CutListPdfService
 
     rows = [
       [t("stock_sheet"), "#{stock[:l].to_i}×#{stock[:w].to_i}"],
-      [t("area_used"), "#{used_area.round(0)} #{used_pct}%"],
-      [t("waste_area"), "#{waste_area.round(0)} #{waste_pct}%"],
+      [t("area_used"), "#{used_pct}%"],
+      [t("waste_area"), "#{waste_pct}%"],
       [t("pieces"), placements.size.to_s],
       [t("unique_sizes"), unique_pieces.to_s]
     ]
@@ -181,7 +182,8 @@ class CutListPdfService
         # Piece name and qty
         pdf.fill_color TEXT_COLOR
         piece_label = @label_map[k]
-        piece_text = piece_label ? "#{k} — #{piece_label}" : k
+        dk = display_key(k)
+        piece_text = piece_label ? "#{dk} — #{piece_label}" : dk
         pdf.text_box piece_text, at: [sq + 6, y], width: table_w - sq - 36, size: LABEL_FONT
         pdf.text_box q.to_s, at: [table_w - 30, y], width: 30, align: :right, size: LABEL_FONT
         pdf.move_down row_h
@@ -276,20 +278,41 @@ class CutListPdfService
           min_font_size: 2
       end
 
-      # Piece label centered
+      # Piece label centered, oriented along the length direction
       label = @label_map[key]
       if label
-        label_font = [[pw * 0.22, ph * 0.22, 8].min, 3].max
-        pdf.fill_color TEXT_COLOR
-        pdf.text_box label,
-          at: [rect_x + 1, rect_y - ph / 2 + label_font / 2 + 1],
-          width: pw - 2,
-          height: label_font + 2,
-          align: :center,
-          size: label_font,
-          overflow: :shrink_to_fit,
-          min_font_size: 2,
-          style: :bold
+        original_l = @original_length_map[key] || [rw, rh].max
+        length_is_vertical = portrait ? (rw - original_l).abs < 0.01 : (rh - original_l).abs < 0.01
+
+        if length_is_vertical
+          label_font = [[ph * 0.22, pw * 0.22, 8].min, 3].max
+          mid_x = rect_x + pw / 2
+          mid_y = rect_y - ph / 2
+          pdf.fill_color TEXT_COLOR
+          pdf.rotate(90, origin: [mid_x, mid_y]) do
+            pdf.text_box label,
+              at: [mid_x - (ph - 2) / 2, mid_y + (label_font + 2) / 2],
+              width: ph - 2,
+              height: label_font + 2,
+              align: :center,
+              size: label_font,
+              overflow: :shrink_to_fit,
+              min_font_size: 2,
+              style: :bold
+          end
+        else
+          label_font = [[pw * 0.22, ph * 0.22, 8].min, 3].max
+          pdf.fill_color TEXT_COLOR
+          pdf.text_box label,
+            at: [rect_x + 1, rect_y - ph / 2 + label_font / 2 + 1],
+            width: pw - 2,
+            height: label_font + 2,
+            align: :center,
+            size: label_font,
+            overflow: :shrink_to_fit,
+            min_font_size: 2,
+            style: :bold
+        end
       end
     end
 
@@ -320,13 +343,25 @@ class CutListPdfService
   # ── Footer ─────────────────────────────────────────────────────
 
   def draw_footer(pdf)
-    pdf.number_pages "Page <page>/<total>",
-      at: [pdf.bounds.width - 80, -10],
-      size: 7,
-      color: MUTED_COLOR
+    locale_suffix = I18n.locale == :ja ? "jp" : I18n.locale.to_s
+    logo_path = Rails.root.join("app/assets/images/cutoptima-logo-#{locale_suffix}.svg")
+    logo_h = 19
+    logo_w = logo_h * (400.0 / 120)
+    footer_y = -30 + logo_h + 5
+
+    pdf.repeat(:all) do
+      pdf.svg File.read(logo_path), at: [0, footer_y], width: logo_w, height: logo_h
+    end
 
     pdf.number_pages I18n.l(Time.current, format: :short),
-      at: [0, -10],
+      at: [0, footer_y - (logo_h - 7) / 2],
+      width: pdf.bounds.width,
+      size: 7,
+      align: :center,
+      color: MUTED_COLOR
+
+    pdf.number_pages "Page <page>/<total>",
+      at: [pdf.bounds.width - 80, footer_y - (logo_h - 7) / 2],
       size: 7,
       color: MUTED_COLOR
   end
@@ -381,6 +416,23 @@ class CutListPdfService
       map[key] ||= p["label"]
     end
     map
+  end
+
+  def build_display_key_map
+    map = {}
+    @original_length_map = {}
+    (@result["pieces"] || []).each do |p|
+      l = (p["length"] || p["l"]).to_f
+      w = (p["width"] || p["w"]).to_f
+      key = normalize_key(l, w)
+      map[key] ||= "#{fmt(l)}×#{fmt(w)}"
+      @original_length_map[key] ||= l
+    end
+    map
+  end
+
+  def display_key(k)
+    @display_key_map[k] || k
   end
 
   def build_piece_summary

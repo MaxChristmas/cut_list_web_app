@@ -8,6 +8,8 @@
        data-sheet-visualizer-editing-label-value="<%= t('projects.index.editing_layout') %>"
        data-sheet-visualizer-save-label-value="<%= t('projects.index.save_layout') %>"
        data-sheet-visualizer-reset-label-value="<%= t('projects.index.reset_layout') %>"
+       data-sheet-visualizer-sheet-heading-template-value="<%= t('projects.index.sheet_heading', number: '%{number}', waste: '%{waste}') %>"
+       data-sheet-visualizer-summary-template-value="<%= t('projects.index.summary', count: '%{count}', waste: '%{waste}') %>"
        data-sheet-visualizer-readonly-value="<%= @project&.template? || false %>">
 
     <div class="flex flex-wrap gap-2 mb-4" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">

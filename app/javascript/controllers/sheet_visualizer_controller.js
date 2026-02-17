@@ -17,6 +17,8 @@ export default class extends Controller {
     editingLabel: String,
     saveLabel: String,
     resetLabel: String,
+    sheetHeadingTemplate: String,
+    summaryTemplate: String,
     readonly: { type: Boolean, default: false },
   }
 
@@ -108,7 +110,8 @@ export default class extends Controller {
       const heading = document.createElement("h3")
       heading.className = "text-md font-semibold mt-6 mb-2"
       const wastePercent = ((sheet.waste_area / (stock.w * stock.h)) * 100).toFixed(1)
-      heading.textContent = `Sheet ${i + 1} — Waste: ${wastePercent}%`
+      const headingTpl = this.sheetHeadingTemplateValue || "Sheet %{number} — Waste: %{waste}%"
+      heading.textContent = headingTpl.replace("%{number}", i + 1).replace("%{waste}", wastePercent)
       container.appendChild(heading)
 
       const labelMargin = stock.w * 0.06
@@ -232,7 +235,8 @@ export default class extends Controller {
     // Summary
     const summary = document.createElement("p")
     summary.className = "mt-4 text-sm text-gray-600"
-    summary.textContent = `${data.sheet_count} sheet(s) — Overall waste: ${data.waste_percent}%`
+    const summaryTpl = this.summaryTemplateValue || "%{count} sheet(s) — Overall waste: %{waste}%"
+    summary.textContent = summaryTpl.replace("%{count}", data.sheet_count).replace("%{waste}", parseFloat(data.waste_percent).toFixed(1))
     container.appendChild(summary)
   }
 

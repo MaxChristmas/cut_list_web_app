@@ -71,3 +71,5 @@ gem "prawn"
 gem "prawn-table"
 gem "stripe"
 gem "dotenv-rails", groups: [:development, :test]
+
+gem "prawn-svg", "~> 0.38.1"

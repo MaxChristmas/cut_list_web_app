@@ -59,6 +59,8 @@ en:
       save_layout: "Save Layout"
       reset_layout: "Reset to Original"
       editing_layout: "Editing..."
+      sheet_heading: "Sheet %{number} — Waste: %{waste}%"
+      summary: "%{count} sheet(s) — Overall waste: %{waste}%"
       empty_state: "Add pieces and click Optimize to see results"
     archive: "Archive"
     unarchive: "Unarchive"

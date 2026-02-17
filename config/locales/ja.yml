@@ -59,6 +59,8 @@ ja:
       save_layout: "保存"
       reset_layout: "元に戻す"
       editing_layout: "編集中..."
+      sheet_heading: "シート %{number} — 端材: %{waste}%"
+      summary: "%{count} シート — 端材合計: %{waste}%"
       empty_state: "パネルを追加し、「最適化」をクリックして結果を表示します"
     archive: "アーカイブ"
     unarchive: "アーカイブ解除"
