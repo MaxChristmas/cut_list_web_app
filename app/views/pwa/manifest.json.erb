@@ -1,22 +1,30 @@
 {
-  "name": "CutListWebApp",
+  "name": "CutOptima – Online Cutting Optimizer",
+  "short_name": "CutOptima",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "<%= image_path('android-chrome-192.png') %>",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "<%= image_path('android-chrome-512.png') %>",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "/icon.png",
+      "src": "<%= image_path('android-chrome-512.png') %>",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
   ],
+  "id": "/",
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "CutListWebApp.",
-  "theme_color": "red",
-  "background_color": "red"
+  "orientation": "any",
+  "description": "Optimize your cutting layouts for panels, sheets and boards.",
+  "theme_color": "#1a6bce",
+  "background_color": "#ffffff"
 }

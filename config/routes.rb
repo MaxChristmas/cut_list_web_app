@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker"
   devise_for :admin_users, path: "admin", controllers: {
     sessions: "admin/sessions"
   }
