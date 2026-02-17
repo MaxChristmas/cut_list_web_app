@@ -27,9 +27,15 @@
             <%= t("plans.yearly") %>
             <span class="ml-1 text-xs text-green-400"><%= t("plans.yearly_save") %></span>
           </button>
+          <button data-action="click->billing-toggle#selectOneShot"
+                  data-billing-toggle-target="oneShotBtn"
+                  class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-transparent text-gray-400">
+            <%= t("plans.one_shot.title") %>
+          </button>
         </div>
       </div>
 
+      <div data-billing-toggle-target="subscriptionPlans">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <% %w[free worker enterprise].each do |plan_key| %>
           <% config = Plannable::PLANS[plan_key] %>
@@ -150,53 +156,49 @@
           </div>
         <% end %>
       </div>
-    </div>
-
-    <%# One-shot section %>
-    <div class="mt-12">
-      <div class="text-center mb-6">
-        <h2 class="text-xl font-bold text-white"><%= t("plans.one_shot.title") %></h2>
-        <p class="text-gray-400 mt-1 text-sm"><%= t("plans.one_shot.subtitle") %></p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-        <% %w[worker enterprise].each do |plan_key| %>
-          <% config = Plannable::PLANS[plan_key] %>
-          <% one_shot_price = config[:prices][:one_shot] %>
-          <% tax_label = config[:prices][:tax_label] %>
+      <%# One-shot plans (hidden by default) %>
+      <div data-billing-toggle-target="oneShotPlans" class="hidden">
+        <p class="text-center text-sm text-gray-400 mb-6"><%= t("plans.one_shot.subtitle") %></p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <% %w[worker enterprise].each do |plan_key| %>
+            <% config = Plannable::PLANS[plan_key] %>
+            <% one_shot_price = config[:prices][:one_shot] %>
+            <% tax_label = config[:prices][:tax_label] %>
 
-          <div class="rounded-xl border border-gray-700 bg-gray-900 p-6 flex flex-col">
-            <div class="mb-4">
-              <h3 class="text-lg font-bold text-white"><%= t("plans.one_shot.#{plan_key}_name") %></h3>
-              <p class="text-sm text-gray-400"><%= t("plans.#{plan_key}.description") %></p>
-            </div>
-
-            <div class="mb-4">
-              <span class="text-3xl font-bold text-white"><%= number_with_precision(one_shot_price[:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
-              <span class="text-gray-400 text-sm"><%= tax_label %></span>
-              <div class="text-xs text-gray-500 mt-1"><%= t("plans.one_shot.duration") %></div>
-            </div>
-
-            <% if user_signed_in? %>
-              <%= form_with url: plan_checkout_path, method: :post, class: "w-full mt-auto" do |f| %>
-                <%= f.hidden_field :plan, value: plan_key %>
-                <%= f.hidden_field :billing_cycle, value: "one_shot" %>
-                <%= f.submit t("plans.one_shot.buy"),
-                      class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors" %>
-              <% end %>
-            <% else %>
-              <div data-controller="modal" class="mt-auto">
-                <button data-action="click->modal#open"
-                        class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
-                  <%= t("plans.one_shot.buy") %>
-                </button>
-                <%= render "layouts/login_modal" %>
+            <div class="rounded-xl border border-gray-700 bg-gray-900 p-6 flex flex-col">
+              <div class="mb-4">
+                <h3 class="text-lg font-bold text-white"><%= t("plans.one_shot.#{plan_key}_name") %></h3>
+                <p class="text-sm text-gray-400"><%= t("plans.#{plan_key}.description") %></p>
               </div>
-            <% end %>
-          </div>
-        <% end %>
+
+              <div class="mb-4">
+                <span class="text-3xl font-bold text-white"><%= number_with_precision(one_shot_price[:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
+                <span class="text-gray-400 text-sm"><%= tax_label %></span>
+                <div class="text-xs text-gray-500 mt-1"><%= t("plans.one_shot.duration") %></div>
+              </div>
+
+              <% if user_signed_in? %>
+                <%= form_with url: plan_checkout_path, method: :post, class: "w-full mt-auto" do |f| %>
+                  <%= f.hidden_field :plan, value: plan_key %>
+                  <%= f.hidden_field :billing_cycle, value: "one_shot" %>
+                  <%= f.submit t("plans.one_shot.buy"),
+                        class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors" %>
+                <% end %>
+              <% else %>
+                <div data-controller="modal" class="mt-auto">
+                  <button data-action="click->modal#open"
+                          class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
+                    <%= t("plans.one_shot.buy") %>
+                  </button>
+                  <%= render "layouts/login_modal" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       </div>
-    </div>
 
     <div class="mt-8 text-center">
       <%= link_to t("settings.back"), root_path, class: "text-sm text-gray-400 hover:text-white" %>
