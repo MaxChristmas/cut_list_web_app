@@ -36,8 +36,14 @@
 </div>
 
 <% if @optimization.result.present? %>
-  <h3 class="text-lg font-medium text-gray-900 mb-3">Result (JSON)</h3>
-  <div class="bg-white rounded-lg border border-gray-200 p-5">
-    <pre class="text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap"><%= JSON.pretty_generate(@optimization.result) %></pre>
+  <div data-controller="sheet-visualizer"
+       data-sheet-visualizer-result-value="<%= @optimization.result.to_json %>"
+       data-sheet-visualizer-readonly-value="true">
+    <div data-sheet-visualizer-target="canvas"></div>
   </div>
+
+  <details class="mt-6">
+    <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">Raw JSON</summary>
+    <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-xs mt-2"><%= JSON.pretty_generate(@optimization.result) %></pre>
+  </details>
 <% end %>
