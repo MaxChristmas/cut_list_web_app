@@ -18,6 +18,8 @@ ja:
     optimizations_usage: "本日の最適化"
     optimizations_per_project: "プロジェクトごとに月%{count}回の最適化"
     unlimited_optimizations: "無制限の最適化"
+    install_app: "アプリをインストール"
+    ios_install: "%{share_icon}をタップして「ホーム画面に追加」"
   login:
     remember_me: "ログイン状態を保持"
     sign_up: "アカウント作成"

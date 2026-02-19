@@ -18,6 +18,8 @@ en:
     optimizations_usage: "Optimizations today"
     optimizations_per_project: "%{count} optimizations / project / month"
     unlimited_optimizations: "Unlimited optimizations"
+    install_app: "Install App"
+    ios_install: "Tap %{share_icon} then \"Add to Home Screen\""
   login:
     remember_me: "Remember me"
     sign_up: "Create an account"

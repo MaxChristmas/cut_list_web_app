@@ -25,6 +25,9 @@ application.register("modal", ModalController)
 import PiecesController from "./pieces_controller"
 application.register("pieces", PiecesController)
 
+import PwaInstallController from "./pwa_install_controller"
+application.register("pwa-install", PwaInstallController)
+
 import ReportIssueController from "./report_issue_controller"
 application.register("report-issue", ReportIssueController)
 

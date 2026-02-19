@@ -18,6 +18,8 @@ fr:
     optimizations_usage: "Optimisations aujourd'hui"
     optimizations_per_project: "%{count} optimisations / projet / mois"
     unlimited_optimizations: "Optimisations illimitées"
+    install_app: "Installer l'app"
+    ios_install: "Appuyez sur %{share_icon} puis \"Sur l'écran d'accueil\""
   login:
     remember_me: "Se souvenir de moi"
     sign_up: "Créer un compte"
