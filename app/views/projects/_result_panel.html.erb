@@ -16,7 +16,17 @@
        data-sheet-visualizer-grain-direction-value="<%= @project&.grain_direction || 'none' %>"
        data-sheet-visualizer-grain-image-value="<%= image_path('patterns/wood_grain_transparent.png') %>">
 
-    <div class="flex flex-wrap gap-2 mb-4" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">
+    <div class="flex flex-wrap items-center gap-2 mb-4" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">
+      <%# Desktop: panel toggle button %>
+      <button data-action="click->form-panel#toggleDesktop"
+              data-form-panel-target="desktopToggle"
+              class="max-md:hidden p-1.5 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-md border border-gray-700 transition-colors"
+              title="Toggle panel">
+        <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M3 8h18M3 12h10M3 16h10M3 20h10"/>
+        </svg>
+      </button>
+
       <%# Slot for JS-rendered Edit Layout / Save / Reset buttons %>
       <span data-sheet-visualizer-target="toolbar" class="contents"></span>
 
@@ -54,7 +64,17 @@
     <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
   </details>
 <% else %>
-  <div class="flex items-center justify-center h-full text-gray-400">
-    <p class="text-lg bg-stone-100 p-4 border-0 rounded-xl"><%= t("projects.index.empty_state") %></p>
+  <div class="h-full">
+    <button data-action="click->form-panel#toggleDesktop"
+            data-form-panel-target="desktopToggle"
+            class="max-md:hidden p-1.5 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-md border border-gray-700 transition-colors"
+            title="Toggle panel">
+      <svg class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M3 8h18M3 12h10M3 16h10M3 20h10"/>
+      </svg>
+    </button>
+    <div class="flex items-center justify-center h-full text-gray-400">
+      <p class="text-lg bg-stone-100 p-4 border-0 rounded-xl"><%= t("projects.index.empty_state") %></p>
+    </div>
   </div>
 <% end %>
