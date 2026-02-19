@@ -53,19 +53,11 @@ class ApplicationController < ActionController::Base
   end
 
   def can_create_project?
-    if user_signed_in?
-      current_user.can_create_project?
-    else
-      GuestLimits.can_create_project?(session)
-    end
+    user_signed_in? && current_user.can_create_project?
   end
 
   def can_run_optimization?(project = nil)
-    if user_signed_in?
-      current_user.can_run_optimization?(project)
-    else
-      GuestLimits.can_run_optimization?(session, project&.token)
-    end
+    user_signed_in? && current_user.can_run_optimization?(project)
   end
 
   def current_plan_name
@@ -109,7 +101,7 @@ class ApplicationController < ActionController::Base
     elsif user_signed_in?
       { used: current_user.monthly_optimizations_count_for(project), max: max }
     else
-      { used: GuestLimits.monthly_count_for(session, project.token), max: max }
+      { used: GuestLimits.monthly_count_for(project.token), max: max }
     end
   end
 end

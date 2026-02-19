@@ -16,12 +16,6 @@
               max-md:w-full! max-md:border-r-0 max-md:border-b max-md:border-gray-700 max-md:overflow-visible
               transition-[width,padding] duration-300 ease-in-out"
        data-resizable-panel-target="panel">
-    <% unless can_create_project? %>
-      <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
-        <%= t("limits.max_projects_reached") %>
-        <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
-      </div>
-    <% end %>
     <%= render "form", form_url: projects_path, form_method: :post %>
   </div>
 

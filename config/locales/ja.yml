@@ -15,7 +15,7 @@ ja:
     sign_in: "ログイン"
     upgrade: "アップグレード"
     projects_usage: "プロジェクト"
-    optimizations_usage: "本日の最適化"
+    optimizations_usage: "最適化"
     optimizations_per_project: "プロジェクトごとに月%{count}回の最適化"
     unlimited_optimizations: "無制限の最適化"
     install_app: "アプリをインストール"
@@ -145,6 +145,7 @@ ja:
   limits:
     max_projects_reached: "アクティブプロジェクトの上限に達しました。プロジェクトをアーカイブするか、プランをアップグレードしてください。"
     monthly_optimizations_reached: "このプロジェクトの月間最適化回数の上限に達しました。プランをアップグレードしてください。"
+    guest_signup_prompt: "無料登録してカットリストを最適化しましょう！"
   pdf:
     measurements_in_mm: "すべての寸法はミリメートル（mm）表記です"
     sheets_used: "使用シート数"

@@ -2,19 +2,6 @@
   <div class="p-3 bg-red-900/50 text-red-300 rounded text-sm"><%= @error %></div>
 <% end %>
 
-<% if flash[:alert].present? %>
-  <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
-    <%= flash[:alert] %>
-    <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
-  </div>
-<% end %>
-
-<% unless can_run_optimization?(@project) %>
-  <div class="p-3 bg-amber-900/50 text-amber-300 rounded text-sm">
-    <%= t("limits.monthly_optimizations_reached") %>
-    <%= link_to t("sidebar.upgrade"), plans_path, class: "underline font-medium ml-1" %>
-  </div>
-<% end %>
 
 <% template_project = @project&.template? %>
 <% if template_project %>
@@ -23,7 +10,8 @@
   </div>
 <% end %>
 
-<%= form_with url: form_url, method: form_method, class: "space-y-10" do |f| %>
+<%= form_with url: form_url, method: form_method, class: "space-y-10",
+    data: { controller: "pending-project", "pending-project-create-url-value": projects_path } do |f| %>
   <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10">
   <section>
     <input type="text" name="name" value="<%= @name %>"
@@ -215,9 +203,18 @@
 
   </fieldset>
 
-  <button type="submit" data-action="click->form-panel#submitAndCollapse"
-          class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
-          <%= "disabled" if template_project %>>
-    <%= t("projects.index.optimize") %>
-  </button>
+  <% if !user_signed_in? && !template_project %>
+    <button type="button"
+            data-action="click->pending-project#saveAndPrompt"
+            data-pending-project-message-param="<%= t("limits.guest_signup_prompt") %>"
+            class="mt-10 w-full px-4 py-2 rounded font-medium text-sm bg-white text-gray-950 hover:bg-gray-200">
+      <%= t("projects.index.optimize") %>
+    </button>
+  <% else %>
+    <button type="submit" data-action="click->form-panel#submitAndCollapse"
+            class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
+            <%= "disabled" if template_project %>>
+      <%= t("projects.index.optimize") %>
+    </button>
+  <% end %>
 <% end %>

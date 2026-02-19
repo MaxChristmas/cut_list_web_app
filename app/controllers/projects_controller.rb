@@ -73,8 +73,13 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    unless user_signed_in?
+      redirect_to root_path, flash: { show_signup: t("limits.guest_signup_prompt") }
+      return
+    end
+
     unless can_create_project?
-      redirect_to root_path, alert: t("limits.max_projects_reached")
+      redirect_to plans_path, alert: t("limits.max_projects_reached")
       return
     end
 
@@ -104,13 +109,6 @@ class ProjectsController < ApplicationController
       cut_direction: cut_direction
     )
 
-    if user_signed_in?
-      # Project already associated via current_user
-    else
-      GuestLimits.track_project!(session, @project.token)
-      GuestLimits.record_optimization!(session, @project.token)
-    end
-
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
@@ -127,8 +125,13 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find_by!(token: params[:token])
 
+    unless user_signed_in?
+      redirect_to project_path(@project.token), flash: { show_signup: t("limits.guest_signup_prompt") }
+      return
+    end
+
     unless can_run_optimization?(@project)
-      redirect_to project_path(@project.token), alert: t("limits.monthly_optimizations_reached")
+      redirect_to plans_path, alert: t("limits.monthly_optimizations_reached")
       return
     end
 
@@ -156,8 +159,6 @@ class ProjectsController < ApplicationController
       status: "completed",
       cut_direction: cut_direction
     )
-
-    GuestLimits.record_optimization!(session, @project.token) unless user_signed_in?
 
     redirect_to project_path(@project.token)
   rescue => e
@@ -208,7 +209,11 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
 
     unless can_create_project?
-      redirect_to project_path(@project.token), alert: t("projects.unarchive_limit_reached")
+      if user_signed_in?
+        redirect_to project_path(@project.token), alert: t("projects.unarchive_limit_reached")
+      else
+        redirect_to project_path(@project.token), flash: { show_signup: t("limits.guest_signup_prompt") }
+      end
       return
     end
 

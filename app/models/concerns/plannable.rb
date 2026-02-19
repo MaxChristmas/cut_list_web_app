@@ -82,9 +82,15 @@ module Plannable
   end
 
   def monthly_optimizations_count_for(project)
-    project.optimizations
-           .where(created_at: Time.current.beginning_of_month..)
-           .count
+    count = project.optimizations
+                   .where(created_at: Time.current.beginning_of_month..)
+                   .count
+    # Don't count the initial creation optimization
+    if project.created_at >= Time.current.beginning_of_month
+      [count - 1, 0].max
+    else
+      count
+    end
   end
 
   def can_run_optimization?(project = nil)

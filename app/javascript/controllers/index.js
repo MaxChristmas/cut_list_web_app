@@ -22,6 +22,9 @@ application.register("label-modal", LabelModalController)
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
 
+import PendingProjectController from "./pending_project_controller"
+application.register("pending-project", PendingProjectController)
+
 import PiecesController from "./pieces_controller"
 application.register("pieces", PiecesController)
 

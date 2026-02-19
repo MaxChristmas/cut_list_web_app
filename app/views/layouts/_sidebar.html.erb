@@ -100,14 +100,23 @@
             </div>
           </div>
 
-          <% monthly_max = Plannable::PLANS[current_plan_name][:max_monthly_optimizations_per_project] %>
-          <div class="text-xs text-gray-500">
-            <% if monthly_max == Float::INFINITY %>
-              <%= t("sidebar.unlimited_optimizations") %>
-            <% else %>
-              <%= t("sidebar.optimizations_per_project", count: monthly_max) %>
-            <% end %>
-          </div>
+          <% opt = usage_optimizations(defined?(@project) && @project&.persisted? ? @project : nil) %>
+          <% if opt[:max] == Float::INFINITY %>
+            <div class="text-xs text-gray-500"><%= t("sidebar.unlimited_optimizations") %></div>
+          <% elsif defined?(@project) && @project&.persisted? %>
+            <div>
+              <div class="flex justify-between text-xs text-gray-500 mb-0.5">
+                <span><%= t("sidebar.optimizations_usage") %></span>
+                <span><%= opt[:used] %>/<%= opt[:max] %></span>
+              </div>
+              <div class="h-1 bg-gray-800 rounded-full overflow-hidden">
+                <% pct = opt[:max] > 0 ? [(opt[:used].to_f / opt[:max] * 100), 100].min : 0 %>
+                <div class="h-full rounded-full <%= pct >= 100 ? 'bg-red-500' : pct >= 75 ? 'bg-amber-500' : 'bg-blue-500' %>" style="width: <%= pct %>%"></div>
+              </div>
+            </div>
+          <% else %>
+            <div class="text-xs text-gray-500"><%= t("sidebar.optimizations_per_project", count: opt[:max]) %></div>
+          <% end %>
         </div>
       </div>
     <% end %>
@@ -130,7 +139,7 @@
           </div>
         <% end %>
       <% else %>
-        <div data-controller="modal">
+        <div data-controller="modal" <%= "data-modal-message-value=\"#{flash[:show_signup]}\"".html_safe if flash[:show_signup].present? %>>
           <button data-action="click->modal#open"
                   class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-gray-800 transition-colors text-sm w-full group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-0">
             <svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">

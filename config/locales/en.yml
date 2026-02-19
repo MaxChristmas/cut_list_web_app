@@ -15,7 +15,7 @@ en:
     sign_in: "Sign In"
     upgrade: "Upgrade"
     projects_usage: "Projects"
-    optimizations_usage: "Optimizations today"
+    optimizations_usage: "Optimizations"
     optimizations_per_project: "%{count} optimizations / project / month"
     unlimited_optimizations: "Unlimited optimizations"
     install_app: "Install App"
@@ -155,6 +155,7 @@ en:
   limits:
     max_projects_reached: "You've reached your active project limit. Archive a project or upgrade your plan."
     monthly_optimizations_reached: "You've reached the monthly optimization limit for this project. Upgrade your plan for more."
+    guest_signup_prompt: "Sign up for free to optimize your cut list!"
   pdf:
     measurements_in_mm: "All measurements in millimeters (mm)"
     sheets_used: "Sheets used"

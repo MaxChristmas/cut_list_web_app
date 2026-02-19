@@ -40,7 +40,7 @@ class PlansController < ApplicationController
       mode: is_one_shot ? "payment" : "subscription",
       locale: I18n.locale.to_s,
       line_items: [{ price: price_id, quantity: 1 }],
-      success_url: plan_success_url(plan: plan),
+      success_url: "#{plan_success_url(plan: plan)}&session_id={CHECKOUT_SESSION_ID}",
       cancel_url: plans_url,
       metadata: { user_id: current_user.id, plan: plan, one_shot: is_one_shot.to_s }
     )
@@ -49,7 +49,24 @@ class PlansController < ApplicationController
   end
 
   def success
-    @plan = params[:plan]
+    if params[:session_id].present? && user_signed_in?
+      begin
+        session = Stripe::Checkout::Session.retrieve(params[:session_id])
+        if session.payment_status == "paid" && session.metadata["user_id"] == current_user.id.to_s
+          plan = session.metadata["plan"]
+          if Plannable::PLANS.key?(plan)
+            if session.metadata["one_shot"] == "true"
+              current_user.update!(plan: plan, plan_expires_at: 3.days.from_now, stripe_subscription_id: nil)
+            else
+              current_user.update!(plan: plan, plan_expires_at: nil, stripe_subscription_id: session.subscription)
+            end
+          end
+        end
+      rescue Stripe::StripeError => e
+        Rails.logger.error("Stripe session retrieval failed: #{e.message}")
+      end
+    end
+
     redirect_to plans_path, notice: t("plans.checkout_success")
   end
 

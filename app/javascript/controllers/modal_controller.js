@@ -1,7 +1,32 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["dialog", "tab", "panel", "error"]
+  static targets = ["dialog", "tab", "panel", "error", "promo"]
+  static values = { message: String }
+
+  connect() {
+    if (this.messageValue) {
+      this.showPromo(this.messageValue)
+      this.activateSignUpTab()
+      this.dialogTarget.showModal()
+    }
+
+    this._boundOpenFromEvent = this._openFromEvent.bind(this)
+    window.addEventListener("open-login-modal", this._boundOpenFromEvent)
+  }
+
+  disconnect() {
+    window.removeEventListener("open-login-modal", this._boundOpenFromEvent)
+  }
+
+  _openFromEvent(event) {
+    const message = event.detail?.message
+    if (message) {
+      this.showPromo(message)
+      this.activateSignUpTab()
+    }
+    this.dialogTarget.showModal()
+  }
 
   open() {
     this.dialogTarget.showModal()
@@ -33,6 +58,7 @@ export default class extends Controller {
     })
 
     this.clearErrors()
+    this.togglePromo(tab === "sign_up")
   }
 
   async submitForm(event) {
@@ -75,5 +101,30 @@ export default class extends Controller {
     if (!this.hasErrorTarget) return
     this.errorTarget.textContent = ""
     this.errorTarget.classList.add("hidden")
+  }
+
+  showPromo(message) {
+    if (!this.hasPromoTarget) return
+    this.promoTarget.textContent = message
+    this.promoTarget.classList.remove("hidden")
+  }
+
+  togglePromo(visible) {
+    if (!this.hasPromoTarget || !this.messageValue) return
+    this.promoTarget.classList.toggle("hidden", !visible)
+  }
+
+  activateSignUpTab() {
+    this.tabTargets.forEach(t => {
+      const active = t.dataset.tab === "sign_up"
+      t.classList.toggle("text-white", active)
+      t.classList.toggle("border-white", active)
+      t.classList.toggle("text-gray-500", !active)
+      t.classList.toggle("border-transparent", !active)
+    })
+
+    this.panelTargets.forEach(p => {
+      p.classList.toggle("hidden", p.dataset.tab !== "sign_up")
+    })
   }
 }

@@ -13,9 +13,9 @@ fr:
     new_cut_list: "Nouvelle découpe"
     recent_projects: "Récents"
     sign_in: "Connexion"
-    upgrade: "Passer au supérieur"
+    upgrade: "Version Pro"
     projects_usage: "Projets"
-    optimizations_usage: "Optimisations aujourd'hui"
+    optimizations_usage: "Optimisations"
     optimizations_per_project: "%{count} optimisations / projet / mois"
     unlimited_optimizations: "Optimisations illimitées"
     install_app: "Installer l'app"
@@ -155,6 +155,7 @@ fr:
   limits:
     max_projects_reached: "Vous avez atteint la limite de projets actifs. Archivez un projet ou passez au plan supérieur."
     monthly_optimizations_reached: "Vous avez atteint la limite mensuelle d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."
+    guest_signup_prompt: "Inscrivez-vous gratuitement pour optimiser vos découpes !"
   pdf:
     measurements_in_mm: "Toutes les mesures sont en millimètres (mm)"
     sheets_used: "Panneaux utilisés"
