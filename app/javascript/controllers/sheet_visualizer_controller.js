@@ -1,13 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 const COLORS = [
-  "#4299e1", "#48bb78", "#ed8936", "#9f7aea",
-  "#f56565", "#38b2ac", "#ecc94b", "#e53e9e",
-  "#667eea", "#dd6b20",
+  "#7DD3FC", "#6EE7B7", "#FDBA74", "#C4B5FD",
+  "#FCA5A5", "#5EEAD4", "#FDE047", "#F9A8D4",
+  "#A5B4FC", "#BEF264",
 ]
 
 export default class extends Controller {
-  static targets = ["toolbar", "canvas"]
+  static targets = ["toolbar", "canvas", "pdfLink"]
   static values = {
     result: Object,
     editedResult: Object,
@@ -19,11 +19,14 @@ export default class extends Controller {
     resetLabel: String,
     sheetHeadingTemplate: String,
     summaryTemplate: String,
+    colorsLabel: String,
+    noColorsLabel: String,
     readonly: { type: Boolean, default: false },
   }
 
   connect() {
     this.editMode = false
+    this.colorsEnabled = true
     this.dragging = null
     this.workingData = null
     this.render()
@@ -154,7 +157,7 @@ export default class extends Controller {
         const rw = p.rect.w ?? p.rect.length
         const rh = p.rect.h ?? p.rect.width
         const key = this.normalizeKey(rw, rh, p.rotated)
-        const color = colorMap[key] || "#a0aec0"
+        const color = this.colorsEnabled ? (colorMap[key] || "#a0aec0") : "#E2E8F0"
 
         const pw = rw
         const ph = rh
@@ -281,9 +284,38 @@ export default class extends Controller {
       toolbar.appendChild(resetBtn)
     }
 
+    // Colors toggle
+    const colorsBtn = document.createElement("button")
+    colorsBtn.className = this.colorsEnabled
+      ? "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50"
+      : "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg shadow-sm hover:bg-blue-700"
+    colorsBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg>`
+    colorsBtn.innerHTML += this.colorsEnabled
+      ? (this.colorsLabelValue || "Colors")
+      : (this.noColorsLabelValue || "No Colors")
+    colorsBtn.addEventListener("click", () => this.toggleColors())
+    toolbar.appendChild(colorsBtn)
+
     if (!this.hasToolbarTarget) {
       container.appendChild(toolbar)
     }
+  }
+
+  toggleColors() {
+    this.colorsEnabled = !this.colorsEnabled
+    this.updatePdfLink()
+    this.render()
+  }
+
+  updatePdfLink() {
+    if (!this.hasPdfLinkTarget) return
+    const url = new URL(this.pdfLinkTarget.href)
+    if (this.colorsEnabled) {
+      url.searchParams.delete("colors")
+    } else {
+      url.searchParams.set("colors", "0")
+    }
+    this.pdfLinkTarget.href = url.toString()
   }
 
   // --- Drag and drop ---

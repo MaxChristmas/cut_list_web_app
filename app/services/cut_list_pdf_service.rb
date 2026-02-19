@@ -1,5 +1,5 @@
 class CutListPdfService
-  COLORS = %w[4299e1 48bb78 ed8936 9f7aea f56565 38b2ac ecc94b e53e9e 667eea dd6b20].freeze
+  COLORS = %w[7DD3FC 6EE7B7 FDBA74 C4B5FD FCA5A5 5EEAD4 FDE047 F9A8D4 A5B4FC BEF264].freeze
   STOCK_BG = "f7fafc"
   STOCK_BORDER = "a0aec0"
   PIECE_BORDER = "2d3748"
@@ -13,9 +13,10 @@ class CutListPdfService
   RIGHT_COL_RATIO = 0.62
   COL_GAP = 12
 
-  def initialize(result, project)
+  def initialize(result, project, colors: true)
     @result = result
     @project = project
+    @colors_enabled = colors
   end
 
   def generate
@@ -176,7 +177,7 @@ class CutListPdfService
 
       # Data rows
       counts.each do |k, q|
-        color = @color_map[k] || "a0aec0"
+        color = @colors_enabled ? (@color_map[k] || "a0aec0") : "E2E8F0"
         y = pdf.cursor
 
         # Color swatch
@@ -244,7 +245,7 @@ class CutListPdfService
       end
 
       key = normalize_key(rw, rh)
-      color = @color_map[key] || "a0aec0"
+      color = @colors_enabled ? (@color_map[key] || "a0aec0") : "E2E8F0"
 
       rect_x = origin_x + px
       rect_y = origin_y - py

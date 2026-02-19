@@ -57,6 +57,8 @@ en:
       optimize: "Optimize"
       raw_json: "Raw JSON"
       export_pdf: "Export PDF"
+      colors: "Colors"
+      no_colors: "No Colors"
       edit_layout: "Edit Layout"
       save_layout: "Save Layout"
       reset_layout: "Reset to Original"

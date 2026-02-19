@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
       return
     end
 
-    pdf = CutListPdfService.new(result, @project).generate
+    pdf = CutListPdfService.new(result, @project, colors: params[:colors] != "0").generate
     filename = if @project.name.present?
       "#{@project.name.parameterize}.pdf"
     else
