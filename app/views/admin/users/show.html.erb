@@ -17,6 +17,19 @@
       <dd class="mt-1 text-sm text-gray-900 capitalize"><%= @user.plan %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Plan Expires At</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <% if @user.plan_expires_at.present? %>
+          <%= @user.plan_expires_at.strftime("%b %d, %Y at %H:%M") %>
+          <% if @user.plan_expired? %>
+            <span class="ml-1 text-xs text-red-600 font-medium">Expired</span>
+          <% end %>
+        <% else %>
+          <span class="text-gray-400">No expiration</span>
+        <% end %>
+      </dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Provider</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @user.provider.presence || "Email" %></dd>
     </div>
