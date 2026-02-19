@@ -50,6 +50,17 @@ ja:
         auto: "自動"
         along_length: "長さ方向"
         along_width: "幅方向"
+      grain_direction: "木目方向"
+      grain_direction_hint: "ベースパネルの木目方向を設定します。各ピースで木目に沿う寸法を選択できます。"
+      grain_directions:
+        none: "木目なし"
+        along_length: "長さ方向"
+        along_width: "幅方向"
+      piece_grain_short: "木目"
+      piece_grains:
+        auto: "自動"
+        length: "長さ"
+        width: "幅"
       allow_rotation: "回転を許可"
       allow_rotation_hint: "最適化のためにパネルの回転を許可する"
       blade_kerf: "刃の切りしろ"

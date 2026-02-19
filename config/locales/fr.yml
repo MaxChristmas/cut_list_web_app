@@ -50,6 +50,17 @@ fr:
         auto: "Automatique"
         along_length: "Sur la longueur"
         along_width: "Sur la largeur"
+      grain_direction: "Fil du bois"
+      grain_direction_hint: "Définissez le sens du fil de votre panneau de base. Chaque pièce peut indiquer quelle dimension suit le fil."
+      grain_directions:
+        none: "Pas de fil"
+        along_length: "Sur la longueur"
+        along_width: "Sur la largeur"
+      piece_grain_short: "Fil"
+      piece_grains:
+        auto: "Auto"
+        length: "Longueur"
+        width: "Largeur"
       allow_rotation: "Autoriser la rotation"
       allow_rotation_hint: "Permet de tourner les pièces pour une meilleure optimisation"
       blade_kerf: "Epaisseur de la lame"

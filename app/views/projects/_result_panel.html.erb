@@ -12,7 +12,9 @@
        data-sheet-visualizer-summary-template-value="<%= t('projects.index.summary', count: '%{count}', waste: '%{waste}') %>"
        data-sheet-visualizer-colors-label-value="<%= t('projects.index.colors') %>"
        data-sheet-visualizer-no-colors-label-value="<%= t('projects.index.no_colors') %>"
-       data-sheet-visualizer-readonly-value="<%= @project&.template? || false %>">
+       data-sheet-visualizer-readonly-value="<%= @project&.template? || false %>"
+       data-sheet-visualizer-grain-direction-value="<%= @project&.grain_direction || 'none' %>"
+       data-sheet-visualizer-grain-image-value="<%= image_path('patterns/wood_grain_transparent.png') %>">
 
     <div class="flex flex-wrap gap-2 mb-4" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">
       <%# Slot for JS-rendered Edit Layout / Save / Reset buttons %>

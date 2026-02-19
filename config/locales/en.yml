@@ -50,6 +50,17 @@ en:
         auto: "Auto"
         along_length: "Along Length"
         along_width: "Along Width"
+      grain_direction: "Wood Grain"
+      grain_direction_hint: "Set the grain direction of your stock panel. Each piece can specify which dimension follows the grain."
+      grain_directions:
+        none: "No grain"
+        along_length: "Along Length"
+        along_width: "Along Width"
+      piece_grain_short: "Grain"
+      piece_grains:
+        auto: "Auto"
+        length: "Length"
+        width: "Width"
       allow_rotation: "Allow Rotation"
       allow_rotation_hint: "Allow pieces to be rotated for better optimization. Be careful with grain direction."
       blade_kerf: "Blade Kerf"

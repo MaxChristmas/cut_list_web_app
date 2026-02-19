@@ -4,8 +4,8 @@ RSpec.describe RustCuttingService do
   let(:stock) { { l: 1000, w: 500 } }
   let(:cuts) do
     [
-      { l: 200, w: 100, qty: 3 },
-      { l: 150, w: 75, qty: 2 }
+      { l: 200, w: 100, qty: 3, grain: "length" },
+      { l: 150, w: 75, qty: 2, grain: "auto" }
     ]
   end
   let(:success_body) { { "sheets" => [{ "cuts" => [] }] }.to_json }
@@ -37,35 +37,40 @@ RSpec.describe RustCuttingService do
       expect(result).to eq("sheets" => [{ "cuts" => [] }])
     end
 
-    it "sends correct payload structure" do
+    it "sends correct payload structure with per-cut grain" do
       stub_optimizer
-      described_class.optimize(stock: stock, cuts: cuts, kerf: 2.5)
+      described_class.optimize(stock: stock, cuts: cuts, kerf: 2.5, grain_direction: "along_length")
 
       payload = JSON.parse(@captured_request.body)
-      expect(payload["stock"]).to eq("length" => 1000, "width" => 500)
+      expect(payload["stock"]).to eq("length" => 1000, "width" => 500, "grain" => "along_length")
       expect(payload["kerf"]).to eq(2.5)
       expect(payload["cuts"].length).to eq(2)
       expect(payload["cuts"][0]).to eq(
         "rect" => { "length" => 200, "width" => 100 },
-        "qty" => 3
+        "qty" => 3,
+        "grain" => "length"
+      )
+      expect(payload["cuts"][1]).to eq(
+        "rect" => { "length" => 150, "width" => 75 },
+        "qty" => 2,
+        "grain" => "auto"
       )
     end
 
-    it "sends allow_rotate at the top level, defaulting to true" do
+    it "sends grain direction defaulting to none" do
       stub_optimizer
       described_class.optimize(stock: stock, cuts: cuts)
 
       payload = JSON.parse(@captured_request.body)
-      expect(payload["allow_rotate"]).to eq(true)
-      expect(payload["cuts"][0]).not_to have_key("allow_rotate")
+      expect(payload["stock"]["grain"]).to eq("none")
     end
 
-    it "sends allow_rotate false when specified" do
+    it "does not send a global allow_rotate" do
       stub_optimizer
-      described_class.optimize(stock: stock, cuts: cuts, allow_rotate: false)
+      described_class.optimize(stock: stock, cuts: cuts)
 
       payload = JSON.parse(@captured_request.body)
-      expect(payload["allow_rotate"]).to eq(false)
+      expect(payload).not_to have_key("allow_rotate")
     end
 
     it "defaults kerf to 0.0" do

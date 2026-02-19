@@ -17,7 +17,7 @@ template_project = Project.find_or_create_by!(template: true) do |project|
   project.name = "Example Cut List"
   project.sheet_length = 2500
   project.sheet_width = 600
-  project.allow_rotation = true
+  project.grain_direction = "along_length"
 end
 
 if template_project.optimizations.empty?
@@ -25,12 +25,12 @@ if template_project.optimizations.empty?
     "kerf" => "3",
     "stock" => { "width" => 600, "length" => 2500 },
     "pieces" => [
-      { "label" => "DDH", "width" => "188", "length" => "648", "quantity" => "4" },
+      { "label" => "DDH", "width" => "188", "length" => "648", "quantity" => "4", "grain" => "length" },
       { "label" => "EQP", "width" => "188", "length" => "473", "quantity" => "4" },
-      { "label" => "RRR", "width" => "244", "length" => "790", "quantity" => "2" },
+      { "label" => "RRR", "width" => "244", "length" => "790", "quantity" => "2", "grain" => "length" },
       { "label" => "SWO", "width" => "150", "length" => "648", "quantity" => "12" },
       { "label" => "QAQ", "width" => "150", "length" => "473", "quantity" => "12" },
-      { "label" => "XYC", "width" => "170", "length" => "790", "quantity" => "4" },
+      { "label" => "XYC", "width" => "170", "length" => "790", "quantity" => "4", "grain" => "width" },
       { "label" => "GEA", "width" => "220", "length" => "790", "quantity" => "2" }
     ],
     "sheets" => [

@@ -1,12 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["body", "template", "csvInput", "labelsToggle", "labelCol"]
-  static values = { labelsVisible: Boolean }
+  static targets = ["body", "template", "csvInput", "labelsToggle", "labelCol", "grainSelect", "grainCol"]
+  static values = { labelsVisible: Boolean, grainVisible: Boolean }
 
   connect() {
     if (this.labelsVisibleValue) {
       this.showLabelColumns()
+    }
+    if (this.grainVisibleValue) {
+      this.showGrainColumns()
     }
     this.element.closest("form")?.addEventListener("submit", this.autoFillLabels.bind(this))
   }
@@ -15,6 +18,9 @@ export default class extends Controller {
     const content = this.templateTarget.content.cloneNode(true)
     if (this.labelsVisibleValue) {
       content.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
+    }
+    if (this.grainVisibleValue) {
+      content.querySelectorAll("[data-pieces-target='grainCol']").forEach(el => el.removeAttribute("hidden"))
     }
     this.bodyTarget.appendChild(content)
   }
@@ -32,6 +38,15 @@ export default class extends Controller {
     }
   }
 
+  toggleGrain() {
+    this.grainVisibleValue = this.grainSelectTarget.value !== "none"
+    if (this.grainVisibleValue) {
+      this.showGrainColumns()
+    } else {
+      this.hideGrainColumns()
+    }
+  }
+
   showLabelColumns() {
     this.labelColTargets.forEach(el => el.removeAttribute("hidden"))
   }
@@ -41,6 +56,18 @@ export default class extends Controller {
       el.setAttribute("hidden", "")
       const input = el.querySelector("input")
       if (input) input.value = ""
+    })
+  }
+
+  showGrainColumns() {
+    this.grainColTargets.forEach(el => el.removeAttribute("hidden"))
+  }
+
+  hideGrainColumns() {
+    this.grainColTargets.forEach(el => {
+      el.setAttribute("hidden", "")
+      const select = el.querySelector("select")
+      if (select) select.value = "auto"
     })
   }
 
@@ -103,6 +130,10 @@ export default class extends Controller {
 
         if (this.labelsVisibleValue) {
           row.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
+        }
+
+        if (this.grainVisibleValue) {
+          row.querySelectorAll("[data-pieces-target='grainCol']").forEach(el => el.removeAttribute("hidden"))
         }
 
         this.bodyTarget.appendChild(row)

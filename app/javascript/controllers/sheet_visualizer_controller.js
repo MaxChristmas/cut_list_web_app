@@ -22,6 +22,8 @@ export default class extends Controller {
     colorsLabel: String,
     noColorsLabel: String,
     readonly: { type: Boolean, default: false },
+    grainDirection: { type: String, default: "none" },
+    grainImage: { type: String, default: "" },
   }
 
   connect() {
@@ -231,6 +233,47 @@ export default class extends Controller {
           }
         }
       })
+
+      // Grain direction image overlay — tiled pattern on top of pieces
+      if (this.grainDirectionValue !== "none" && this.grainImageValue) {
+        const patternId = `grain-pattern-${i}`
+        const tileW = 300
+        const tileH = Math.round(300 * (950 / 1400))
+
+        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+        const pattern = document.createElementNS("http://www.w3.org/2000/svg", "pattern")
+        pattern.setAttribute("id", patternId)
+        pattern.setAttribute("patternUnits", "userSpaceOnUse")
+        pattern.setAttribute("width", tileW)
+        pattern.setAttribute("height", tileH)
+
+        if (this.grainDirectionValue === "along_width") {
+          const cx = stock.w / 2
+          const cy = stock.h / 2
+          pattern.setAttribute("patternTransform", `rotate(90, ${cx}, ${cy})`)
+        }
+
+        const img = document.createElementNS("http://www.w3.org/2000/svg", "image")
+        img.setAttribute("href", this.grainImageValue)
+        img.setAttribute("x", 0)
+        img.setAttribute("y", 0)
+        img.setAttribute("width", tileW)
+        img.setAttribute("height", tileH)
+        img.setAttribute("preserveAspectRatio", "none")
+        pattern.appendChild(img)
+        defs.appendChild(pattern)
+        svg.appendChild(defs)
+
+        const grainRect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        grainRect.setAttribute("x", 0)
+        grainRect.setAttribute("y", 0)
+        grainRect.setAttribute("width", stock.w)
+        grainRect.setAttribute("height", stock.h)
+        grainRect.setAttribute("fill", `url(#${patternId})`)
+        grainRect.setAttribute("opacity", "0.6")
+        grainRect.setAttribute("pointer-events", "none")
+        svg.appendChild(grainRect)
+      }
 
       container.appendChild(svg)
     })

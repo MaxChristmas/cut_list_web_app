@@ -5,6 +5,7 @@ class Project < ApplicationRecord
   before_create :generate_token
 
   validates :token, uniqueness: true
+  validates :grain_direction, inclusion: { in: %w[none along_length along_width] }
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :templates, -> { where(template: true) }

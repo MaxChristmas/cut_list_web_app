@@ -65,7 +65,7 @@ class ProjectsController < ApplicationController
     @stock_w = @project.sheet_width
     @kerf = @optimization&.result&.dig("kerf") || 0
     @cut_direction = @optimization&.cut_direction || "auto"
-    @allow_rotation = @project.allow_rotation.nil? ? true : @project.allow_rotation
+    @grain_direction = @project.grain_direction || "none"
     @original_result = @optimization&.result
     @edited_result = @optimization&.edited_result
     @result = @edited_result || @original_result
@@ -82,19 +82,19 @@ class ProjectsController < ApplicationController
     stock_w = params[:stock_w]
     kerf = params[:kerf] || 0
     cut_direction = params[:cut_direction] || "auto"
-    allow_rotation = params[:allow_rotation] == "1"
+    grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
 
     stock = { l: stock_l, w: stock_w }
-    cuts = build_cuts(pieces)
+    cuts = build_cuts(pieces, grain_direction: grain_direction)
 
-    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, allow_rotate: allow_rotation)
+    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction)
 
     @project = Project.create!(
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      allow_rotation: allow_rotation,
+      grain_direction: grain_direction,
       user: current_user
     )
 
@@ -119,7 +119,7 @@ class ProjectsController < ApplicationController
     @stock_w = stock_w
     @kerf = kerf
     @cut_direction = cut_direction
-    @allow_rotation = allow_rotation
+    @grain_direction = grain_direction
     @pieces = pieces || []
     render :index, status: :unprocessable_entity
   end
@@ -136,19 +136,19 @@ class ProjectsController < ApplicationController
     stock_w = params[:stock_w]
     kerf = params[:kerf] || 0
     cut_direction = params[:cut_direction] || "auto"
-    allow_rotation = params[:allow_rotation] == "1"
+    grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
 
     stock = { l: stock_l, w: stock_w }
-    cuts = build_cuts(pieces)
+    cuts = build_cuts(pieces, grain_direction: grain_direction)
 
-    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, allow_rotate: allow_rotation)
+    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction)
 
     @project.update!(
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      allow_rotation: allow_rotation
+      grain_direction: grain_direction
     )
 
     @project.optimizations.create!(
@@ -167,7 +167,7 @@ class ProjectsController < ApplicationController
     @stock_w = stock_w
     @kerf = kerf
     @cut_direction = cut_direction
-    @allow_rotation = allow_rotation
+    @grain_direction = grain_direction
     @pieces = pieces || []
     @result = @project&.optimizations&.order(created_at: :desc)&.first&.result
     render :show, status: :unprocessable_entity
@@ -230,17 +230,20 @@ class ProjectsController < ApplicationController
       next if piece[:length].blank? || piece[:width].blank?
       h = { length: piece[:length], width: piece[:width], quantity: piece[:quantity] }
       h[:label] = piece[:label].strip if piece[:label].present?
+      h[:grain] = piece[:grain] if piece[:grain].present? && piece[:grain] != "auto"
       h
     end
   end
 
-  def build_cuts(pieces)
+  def build_cuts(pieces, grain_direction:)
     pieces.map do |piece|
-      {
+      cut = {
         l: piece[:length],
         w: piece[:width],
         qty: piece[:quantity]
       }
+      cut[:grain] = grain_direction == "none" ? "auto" : (piece[:grain] || "auto")
+      cut
     end
   end
 end
