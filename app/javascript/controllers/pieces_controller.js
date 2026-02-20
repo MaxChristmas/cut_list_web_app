@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { COLORS, normalizeKey } from "../utils/piece_colors"
 
 export default class extends Controller {
   static targets = ["body", "template", "csvInput", "labelsSelect", "labelCol", "grainSelect", "grainCol"]
@@ -14,6 +15,30 @@ export default class extends Controller {
     if (this.grainVisibleValue) {
       this.showGrainColumns()
     }
+
+    this.colorMap = null
+    this._onColorsUpdated = (e) => {
+      this.colorMap = e.detail.colorMap
+      this.applyColors()
+    }
+    document.addEventListener("piece-colors:updated", this._onColorsUpdated)
+
+    // Reapply colors when length/width inputs change
+    this._onDimensionChange = (e) => {
+      const name = e.target.name
+      if (name === "pieces[][length]" || name === "pieces[][width]") {
+        this.applyColors()
+      }
+    }
+    this.bodyTarget.addEventListener("input", this._onDimensionChange)
+
+    // Apply colors on next frame (visualizer may have rendered first)
+    requestAnimationFrame(() => this.applyColors())
+  }
+
+  disconnect() {
+    document.removeEventListener("piece-colors:updated", this._onColorsUpdated)
+    this.bodyTarget.removeEventListener("input", this._onDimensionChange)
   }
 
   add() {
@@ -29,10 +54,12 @@ export default class extends Controller {
       const lastRow = this.bodyTarget.lastElementChild
       this.autoFillLabel(lastRow)
     }
+    this.applyColors()
   }
 
   remove(event) {
     event.currentTarget.closest("tr").remove()
+    this.applyColors()
   }
 
   toggleLabels() {
@@ -227,9 +254,54 @@ export default class extends Controller {
         this.autoFillLabels()
       }
 
+      this.applyColors()
+
       // Reset the input so re-importing the same file triggers change
       event.target.value = ""
     }
     reader.readAsText(file)
+  }
+
+  // --- Piece color indicators ---
+
+  applyColors() {
+    const colorMap = this.colorMap || this.buildFormColorMap()
+    const rows = this.bodyTarget.querySelectorAll("tr")
+    rows.forEach(row => {
+      const lengthInput = row.querySelector("input[name='pieces[][length]']")
+      const widthInput = row.querySelector("input[name='pieces[][width]']")
+      const quantityInput = row.querySelector("input[name='pieces[][quantity]']")
+      if (!lengthInput || !widthInput || !quantityInput) return
+
+      const l = parseFloat(lengthInput.value)
+      const w = parseFloat(widthInput.value)
+      if (isNaN(l) || isNaN(w)) {
+        quantityInput.style.backgroundColor = ""
+        quantityInput.style.color = ""
+        quantityInput.style.borderColor = ""
+        return
+      }
+
+      const key = normalizeKey(l, w)
+      const color = colorMap[key]
+      if (color) {
+        quantityInput.style.backgroundColor = color
+        quantityInput.style.color = "#1a202c"
+        quantityInput.style.borderColor = color
+      }
+    })
+  }
+
+  buildFormColorMap() {
+    const keys = new Set()
+    this.bodyTarget.querySelectorAll("tr").forEach(row => {
+      const l = parseFloat(row.querySelector("input[name='pieces[][length]']")?.value)
+      const w = parseFloat(row.querySelector("input[name='pieces[][width]']")?.value)
+      if (!isNaN(l) && !isNaN(w)) keys.add(normalizeKey(l, w))
+    })
+    const map = {}
+    let i = 0
+    keys.forEach(k => { map[k] = COLORS[i % COLORS.length]; i++ })
+    return map
   }
 }

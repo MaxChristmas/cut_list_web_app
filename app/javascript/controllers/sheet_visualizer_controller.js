@@ -1,10 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-
-const COLORS = [
-  "#7DD3FC", "#6EE7B7", "#FDBA74", "#C4B5FD",
-  "#FCA5A5", "#5EEAD4", "#FDE047", "#F9A8D4",
-  "#A5B4FC", "#BEF264",
-]
+import { COLORS, normalizeKey } from "../utils/piece_colors"
 
 export default class extends Controller {
   static targets = ["toolbar", "canvas", "pdfLink"]
@@ -162,7 +157,7 @@ export default class extends Controller {
       sheet.placements.forEach((p, pi) => {
         const rw = p.rect.w ?? p.rect.length
         const rh = p.rect.h ?? p.rect.width
-        const key = this.normalizeKey(rw, rh, p.rotated)
+        const key = normalizeKey(rw, rh, p.rotated)
         const color = this.colorsEnabled ? (colorMap[key] || "#a0aec0") : "#E2E8F0"
 
         const pw = rw
@@ -281,6 +276,9 @@ export default class extends Controller {
 
       container.appendChild(svg)
     })
+
+    // Broadcast color map so the pieces form can use it
+    document.dispatchEvent(new CustomEvent("piece-colors:updated", { detail: { colorMap } }))
 
     // Summary
     const summary = document.createElement("p")
@@ -478,17 +476,13 @@ export default class extends Controller {
 
   // --- Helpers ---
 
-  normalizeKey(w, h, _rotated) {
-    return `${Math.min(w, h)}×${Math.max(w, h)}`
-  }
-
   buildLabelMap(pieces) {
     const map = {}
     pieces.forEach((p) => {
       if (!p.label) return
       const l = parseFloat(p.length) || parseFloat(p.l) || 0
       const w = parseFloat(p.width) || parseFloat(p.w) || 0
-      const key = this.normalizeKey(l, w)
+      const key = normalizeKey(l, w)
       if (!map[key]) map[key] = p.label
     })
     return map
@@ -498,7 +492,7 @@ export default class extends Controller {
     const keys = new Set()
     sheets.forEach((s) => {
       s.placements.forEach((p) => {
-        keys.add(this.normalizeKey(p.rect.w ?? p.rect.length, p.rect.h ?? p.rect.width))
+        keys.add(normalizeKey(p.rect.w ?? p.rect.length, p.rect.h ?? p.rect.width))
       })
     })
     const map = {}

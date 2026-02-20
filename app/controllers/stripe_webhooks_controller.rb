@@ -55,14 +55,30 @@ class StripeWebhooksController < ApplicationController
     # Map Stripe price ID back to plan name
     price_id = subscription.items.data.first&.price&.id
     plan = plan_for_price_id(price_id)
+    return unless plan
 
-    user.update!(plan: plan, stripe_subscription_id: subscription.id) if plan
+    if subscription.cancel_at_period_end
+      # User cancelled — keep plan active until the end of the paid period
+      user.update!(
+        plan: plan,
+        stripe_subscription_id: subscription.id,
+        plan_expires_at: Time.at(subscription.current_period_end)
+      )
+    else
+      # Subscription renewed or reactivated — clear any expiration
+      user.update!(
+        plan: plan,
+        stripe_subscription_id: subscription.id,
+        plan_expires_at: nil
+      )
+    end
   end
 
   def handle_subscription_deleted(subscription)
     user = User.find_by(stripe_customer_id: subscription.customer)
     return unless user
 
+    # Subscription fully ended — downgrade to free
     user.update!(plan: "free", stripe_subscription_id: nil, plan_expires_at: nil)
   end
 
