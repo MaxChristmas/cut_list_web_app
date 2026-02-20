@@ -1,28 +1,34 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["body", "template", "csvInput", "labelsToggle", "labelCol", "grainSelect", "grainCol"]
-  static values = { labelsVisible: Boolean, grainVisible: Boolean }
+  static targets = ["body", "template", "csvInput", "labelsSelect", "labelCol", "grainSelect", "grainCol"]
+  static values = { labelsMode: { type: String, default: "none" }, grainVisible: Boolean }
 
   connect() {
-    if (this.labelsVisibleValue) {
+    if (this.labelsModeValue !== "none") {
       this.showLabelColumns()
+      if (this.labelsModeValue === "auto") {
+        this.autoFillLabels()
+      }
     }
     if (this.grainVisibleValue) {
       this.showGrainColumns()
     }
-    this.element.closest("form")?.addEventListener("submit", this.autoFillLabels.bind(this))
   }
 
   add() {
     const content = this.templateTarget.content.cloneNode(true)
-    if (this.labelsVisibleValue) {
+    if (this.labelsModeValue !== "none") {
       content.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
     }
     if (this.grainVisibleValue) {
       content.querySelectorAll("[data-pieces-target='grainCol']").forEach(el => el.removeAttribute("hidden"))
     }
     this.bodyTarget.appendChild(content)
+    if (this.labelsModeValue === "auto") {
+      const lastRow = this.bodyTarget.lastElementChild
+      this.autoFillLabel(lastRow)
+    }
   }
 
   remove(event) {
@@ -30,20 +36,31 @@ export default class extends Controller {
   }
 
   toggleLabels() {
-    this.labelsVisibleValue = this.labelsToggleTarget.checked
-    if (this.labelsVisibleValue) {
-      this.showLabelColumns()
-    } else {
+    this.labelsModeValue = this.labelsSelectTarget.value
+    if (this.labelsModeValue === "none") {
       this.hideLabelColumns()
+    } else {
+      this.showLabelColumns()
+      this.flashLabelColumns()
+      if (this.labelsModeValue === "auto") {
+        this.autoFillLabels()
+      }
     }
   }
 
   toggleGrain() {
-    this.grainVisibleValue = this.grainSelectTarget.value !== "none"
+    const direction = this.grainSelectTarget.value
+    this.grainVisibleValue = direction !== "none"
     if (this.grainVisibleValue) {
       this.showGrainColumns()
+      this.flashGrainColumns()
     } else {
       this.hideGrainColumns()
+    }
+
+    const visualizer = document.querySelector("[data-controller~='sheet-visualizer']")
+    if (visualizer) {
+      visualizer.setAttribute("data-sheet-visualizer-grain-direction-value", direction)
     }
   }
 
@@ -59,34 +76,80 @@ export default class extends Controller {
     })
   }
 
+  flashLabelColumns() {
+    this.labelColTargets.forEach(el => {
+      const input = el.querySelector("input")
+      if (!input) return
+      input.style.transition = "none"
+      input.style.backgroundColor = "rgb(187 247 208)"
+      requestAnimationFrame(() => {
+        input.style.transition = "background-color 1s ease"
+        input.style.backgroundColor = ""
+      })
+    })
+  }
+
   showGrainColumns() {
     this.grainColTargets.forEach(el => el.removeAttribute("hidden"))
+  }
+
+  flashGrainColumns() {
+    this.grainColTargets.forEach(el => {
+      const targets = el.querySelectorAll("label span")
+      if (!targets.length) return
+      targets.forEach(span => {
+        span.style.transition = "none"
+        span.style.backgroundColor = "rgb(187 247 208)"
+        span.style.color = "rgb(17 24 39)"
+        requestAnimationFrame(() => {
+          span.style.transition = "background-color 1s ease, color 1s ease"
+          span.style.backgroundColor = ""
+          span.style.color = ""
+        })
+      })
+    })
   }
 
   hideGrainColumns() {
     this.grainColTargets.forEach(el => {
       el.setAttribute("hidden", "")
-      const select = el.querySelector("select")
-      if (select) select.value = "auto"
+      const autoRadio = el.querySelector("input[type='radio'][value='auto']")
+      if (autoRadio) autoRadio.checked = true
     })
   }
 
   autoFillLabels() {
-    if (!this.labelsVisibleValue) return
-
+    const used = this.usedLabelCodes()
     const labelInputs = this.bodyTarget.querySelectorAll("input[name='pieces[][label]']")
-    const allEmpty = Array.from(labelInputs).every(input => !input.value.trim())
-    if (!allEmpty) return
-
-    const used = new Set()
     labelInputs.forEach(input => {
-      let code
-      do {
-        code = Array.from({ length: 3 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join("")
-      } while (used.has(code))
-      used.add(code)
-      input.value = code
+      if (!input.value.trim()) {
+        input.value = this.generateUniqueCode(used)
+      }
     })
+  }
+
+  autoFillLabel(row) {
+    const input = row.querySelector("input[name='pieces[][label]']")
+    if (input && !input.value.trim()) {
+      input.value = this.generateUniqueCode(this.usedLabelCodes())
+    }
+  }
+
+  usedLabelCodes() {
+    const used = new Set()
+    this.bodyTarget.querySelectorAll("input[name='pieces[][label]']").forEach(input => {
+      if (input.value.trim()) used.add(input.value.trim())
+    })
+    return used
+  }
+
+  generateUniqueCode(used) {
+    let code
+    do {
+      code = Array.from({ length: 3 }, () => String.fromCharCode(65 + Math.floor(Math.random() * 26))).join("")
+    } while (used.has(code))
+    used.add(code)
+    return code
   }
 
   openCsvDialog() {
@@ -123,12 +186,12 @@ export default class extends Controller {
         numberInputs[1].value = width
         numberInputs[2].value = quantity
 
-        if (label && this.labelsVisibleValue) {
+        if (label && this.labelsModeValue !== "none") {
           const labelInput = row.querySelector("input[type='text']")
           if (labelInput) labelInput.value = label
         }
 
-        if (this.labelsVisibleValue) {
+        if (this.labelsModeValue !== "none") {
           row.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
         }
 
@@ -137,6 +200,10 @@ export default class extends Controller {
         }
 
         this.bodyTarget.appendChild(row)
+      }
+
+      if (this.labelsModeValue === "auto") {
+        this.autoFillLabels()
       }
 
       // Reset the input so re-importing the same file triggers change

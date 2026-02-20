@@ -7,6 +7,9 @@ import { application } from "./application"
 import BillingToggleController from "./billing_toggle_controller"
 application.register("billing-toggle", BillingToggleController)
 
+import CollapsibleController from "./collapsible_controller"
+application.register("collapsible", CollapsibleController)
+
 import CookieConsentController from "./cookie_consent_controller"
 application.register("cookie-consent", CookieConsentController)
 

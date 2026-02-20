@@ -34,6 +34,10 @@ export default class extends Controller {
     this.render()
   }
 
+  grainDirectionValueChanged() {
+    if (this.getDisplayData()?.sheets) this.render()
+  }
+
   getDisplayData() {
     if (this.workingData) return this.workingData
     const edited = this.editedResultValue
@@ -270,7 +274,7 @@ export default class extends Controller {
         grainRect.setAttribute("width", stock.w)
         grainRect.setAttribute("height", stock.h)
         grainRect.setAttribute("fill", `url(#${patternId})`)
-        grainRect.setAttribute("opacity", "0.6")
+        grainRect.setAttribute("opacity", "0.8")
         grainRect.setAttribute("pointer-events", "none")
         svg.appendChild(grainRect)
       }

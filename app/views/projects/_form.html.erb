@@ -10,9 +10,13 @@
   </div>
 <% end %>
 
+<% labels_mode = (@pieces.present? && @pieces.any? { |p| (p[:label] || p["label"]).present? }) ? "manual" : "none" %>
+<% has_grain = (@grain_direction || "none") != "none" %>
+
 <%= form_with url: form_url, method: form_method, class: "space-y-10",
     data: { controller: "pending-project", "pending-project-create-url-value": projects_path } do |f| %>
-  <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10">
+  <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10"
+             data-controller="pieces" data-pieces-labels-mode-value="<%= labels_mode %>" data-pieces-grain-visible-value="<%= has_grain %>">
   <section>
     <input type="text" name="name" value="<%= @name %>"
            placeholder="<%= t("projects.index.project_name") %>"
@@ -20,20 +24,14 @@
            maxlength="100">
   </section>
 
-  <% has_labels = @pieces.present? && @pieces.any? { |p| (p[:label] || p["label"]).present? } %>
-  <% has_grain = (@grain_direction || "none") != "none" %>
-  <section data-controller="pieces" data-pieces-labels-visible-value="<%= has_labels %>" data-pieces-grain-visible-value="<%= has_grain %>">
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
+  <%# Step 1 — Pieces to cut %>
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">1</div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
+      </div>
       <div class="flex items-center gap-4">
-        <% if has_feature?(:label_pieces) %>
-          <label class="flex items-center gap-1.5 cursor-pointer">
-            <input type="checkbox" data-pieces-target="labelsToggle" data-action="pieces#toggleLabels"
-                   <%= "checked" if has_labels %>
-                   class="h-3.5 w-3.5 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
-            <span class="text-xs text-gray-400"><%= t("projects.index.show_labels") %></span>
-          </label>
-        <% end %>
         <% if has_feature?(:import_csv) %>
           <input type="file" accept=".csv,.tsv,.txt" class="hidden" data-pieces-target="csvInput" data-action="change->pieces#importCsv">
           <button type="button" data-action="pieces#openCsvDialog"
@@ -43,163 +41,217 @@
         <% end %>
       </div>
     </div>
+    <section class="w-full pb-6">
 
-    <table class="w-full text-left border-collapse text-sm">
-      <thead>
-        <tr class="border-b border-gray-700">
-          <th class="py-1 pr-2 font-light"><%= t("projects.index.length_short") %></th>
-          <th class="py-1 pr-2 font-light"><%= t("projects.index.width_short") %></th>
-          <th class="py-1 pr-2 font-light"><%= t("projects.index.quantity_short") %></th>
-          <th class="py-1 pr-2 font-light" data-pieces-target="labelCol" <%= 'hidden' unless has_labels %>><%= t("projects.index.label_short") %></th>
-          <th class="py-1 pr-2 font-light" data-pieces-target="grainCol" <%= 'hidden' unless has_grain %>><%= t("projects.index.piece_grain_short") %></th>
-          <th class="py-1 w-8 font-light"></th>
+      <table class="w-full text-left border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="py-1 pr-2 font-light"><%= t("projects.index.length_short") %></th>
+            <th class="py-1 pr-2 font-light"><%= t("projects.index.width_short") %></th>
+            <th class="py-1 pr-2 font-light w-20"><%= t("projects.index.quantity_short") %></th>
+            <th class="py-1 pr-2 font-light" data-pieces-target="labelCol" <%= 'hidden' if labels_mode == "none" %>><%= t("projects.index.label_short") %></th>
+            <th class="py-1 pr-2 font-light" data-pieces-target="grainCol" <%= 'hidden' unless has_grain %>><%= t("projects.index.piece_grain_short") %></th>
+            <th class="py-1 w-8 font-light"></th>
+          </tr>
+        </thead>
+        <tbody data-pieces-target="body">
+          <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1 }] %>
+          <% pieces.each do |piece| %>
+            <tr class="border-b border-gray-800">
+              <td class="py-1 pr-2">
+                <input type="number" name="pieces[][length]" min="1" step="any" required
+                       value="<%= piece[:length] || piece["length"] %>"
+                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </td>
+              <td class="py-1 pr-2">
+                <input type="number" name="pieces[][width]" min="1" step="any" required
+                       value="<%= piece[:width] || piece["width"] %>"
+                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </td>
+              <td class="py-1 pr-2">
+                <input type="number" name="pieces[][quantity]" min="1" value="<%= piece[:quantity] || piece["quantity"] || 1 %>" required
+                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </td>
+              <td class="py-1 pr-2" data-pieces-target="labelCol" <%= 'hidden' if labels_mode == "none" %>>
+                <input type="text" name="pieces[][label]" maxlength="20"
+                       value="<%= piece[:label] || piece["label"] %>"
+                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </td>
+              <td class="py-1 pr-2" data-pieces-target="grainCol" <%= 'hidden' unless has_grain %>>
+                <% piece_grain = piece[:grain] || piece["grain"] || "auto" %>
+                <div class="flex rounded overflow-hidden border border-gray-600">
+                  <label class="flex-1 text-center cursor-pointer">
+                    <input type="radio" name="pieces[][grain]" value="auto" <%= "checked" if piece_grain == "auto" %> class="hidden peer">
+                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">auto</span>
+                  </label>
+                  <label class="flex-1 text-center cursor-pointer border-x border-gray-600">
+                    <input type="radio" name="pieces[][grain]" value="length" <%= "checked" if piece_grain == "length" %> class="hidden peer">
+                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&rarr;</span>
+                  </label>
+                  <label class="flex-1 text-center cursor-pointer">
+                    <input type="radio" name="pieces[][grain]" value="width" <%= "checked" if piece_grain == "width" %> class="hidden peer">
+                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&uarr;</span>
+                  </label>
+                </div>
+              </td>
+              <td class="py-1">
+                <button type="button" data-action="pieces#remove"
+                        class="text-red-400 hover:text-red-300 text-xs font-medium">
+                  &times;
+                </button>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <template data-pieces-target="template">
+        <tr class="border-b border-gray-800">
+          <td class="py-1 pr-2">
+            <input type="number" name="pieces[][length]" min="1" step="any" required
+                   class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </td>
+          <td class="py-1 pr-2">
+            <input type="number" name="pieces[][width]" min="1" step="any" required
+                   class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </td>
+          <td class="py-1 pr-2">
+            <input type="number" name="pieces[][quantity]" min="1" value="1" required
+                   class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </td>
+          <td class="py-1 pr-2" data-pieces-target="labelCol" hidden>
+            <input type="text" name="pieces[][label]" maxlength="20"
+                   class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </td>
+          <td class="py-1 pr-2" data-pieces-target="grainCol" hidden>
+            <div class="flex rounded overflow-hidden border border-gray-600">
+              <label class="flex-1 text-center cursor-pointer">
+                <input type="radio" name="pieces[][grain]" value="auto" checked class="hidden peer">
+                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">auto</span>
+              </label>
+              <label class="flex-1 text-center cursor-pointer border-x border-gray-600">
+                <input type="radio" name="pieces[][grain]" value="length" class="hidden peer">
+                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&rarr;</span>
+              </label>
+              <label class="flex-1 text-center cursor-pointer">
+                <input type="radio" name="pieces[][grain]" value="width" class="hidden peer">
+                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&uarr;</span>
+              </label>
+            </div>
+          </td>
+          <td class="py-1">
+            <button type="button" data-action="pieces#remove"
+                    class="text-red-400 hover:text-red-300 text-xs font-medium">
+              &times;
+            </button>
+          </td>
         </tr>
-      </thead>
-      <tbody data-pieces-target="body">
-        <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1 }] %>
-        <% pieces.each do |piece| %>
-          <tr class="border-b border-gray-800">
-            <td class="py-1 pr-2">
-              <input type="number" name="pieces[][length]" min="1" step="any" required
-                     value="<%= piece[:length] || piece["length"] %>"
-                     class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </td>
-            <td class="py-1 pr-2">
-              <input type="number" name="pieces[][width]" min="1" step="any" required
-                     value="<%= piece[:width] || piece["width"] %>"
-                     class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </td>
-            <td class="py-1 pr-2">
-              <input type="number" name="pieces[][quantity]" min="1" value="<%= piece[:quantity] || piece["quantity"] || 1 %>" required
-                     class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </td>
-            <td class="py-1 pr-2" data-pieces-target="labelCol" <%= 'hidden' unless has_labels %>>
-              <input type="text" name="pieces[][label]" maxlength="20"
-                     value="<%= piece[:label] || piece["label"] %>"
-                     class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </td>
-            <td class="py-1 pr-2" data-pieces-target="grainCol" <%= 'hidden' unless has_grain %>>
-              <% piece_grain = piece[:grain] || piece["grain"] || "auto" %>
-              <select name="pieces[][grain]"
+      </template>
+
+      <button type="button" data-action="pieces#add"
+              class="mt-2 text-sm text-white hover:text-gray-300 font-medium">
+        <%= t("projects.index.add_piece") %>
+      </button>
+    </section>
+  </div>
+
+  <%# Step 2 — Stock Sheet %>
+  <div>
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">2</div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.stock_sheet") %></h2>
+    </div>
+    <section class="w-full pb-6">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
+          <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
+                 value="<%= @stock_l %>"
+                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
+          <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
+                 value="<%= @stock_w %>"
+                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <%# Step 3 — Options (collapsible) %>
+  <div data-controller="collapsible">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">3</div>
+      <button type="button" data-action="collapsible#toggle"
+              class="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-300 hover:text-white">
+        <span><%= t("projects.index.options") %></span>
+        <svg data-collapsible-target="icon" class="w-4 h-4 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+    </div>
+    <section class="w-full">
+      <div data-collapsible-target="body" class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200">
+        <div class="overflow-hidden">
+          <div class="space-y-6">
+            <% if has_feature?(:label_pieces) %>
+              <div>
+                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.labels") %></h3>
+                <select data-pieces-target="labelsSelect" data-action="pieces#toggleLabels"
+                        class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <% %w[none auto manual].each do |mode| %>
+                    <option value="<%= mode %>" <%= "selected" if labels_mode == mode %>>
+                      <%= t("projects.index.label_modes.#{mode}") %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            <% end %>
+
+            <div>
+              <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.grain_direction") %></h3>
+              <select name="grain_direction" id="grain_direction"
+                      data-pieces-target="grainSelect"
+                      data-action="pieces#toggleGrain"
                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <% %w[auto length width].each do |g| %>
-                  <option value="<%= g %>" <%= "selected" if piece_grain == g %>><%= t("projects.index.piece_grains.#{g}") %></option>
+                <% %w[none along_length along_width].each do |dir| %>
+                  <option value="<%= dir %>" <%= "selected" if (@grain_direction || "none") == dir %>>
+                    <%= t("projects.index.grain_directions.#{dir}") %>
+                  </option>
                 <% end %>
               </select>
-            </td>
-            <td class="py-1">
-              <button type="button" data-action="pieces#remove"
-                      class="text-red-400 hover:text-red-300 text-xs font-medium">
-                &times;
-              </button>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+              <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.grain_direction_hint") %></p>
+            </div>
 
-    <template data-pieces-target="template">
-      <tr class="border-b border-gray-800">
-        <td class="py-1 pr-2">
-          <input type="number" name="pieces[][length]" min="1" step="any" required
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </td>
-        <td class="py-1 pr-2">
-          <input type="number" name="pieces[][width]" min="1" step="any" required
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </td>
-        <td class="py-1 pr-2">
-          <input type="number" name="pieces[][quantity]" min="1" value="1" required
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </td>
-        <td class="py-1 pr-2" data-pieces-target="labelCol" hidden>
-          <input type="text" name="pieces[][label]" maxlength="20"
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </td>
-        <td class="py-1 pr-2" data-pieces-target="grainCol" hidden>
-          <select name="pieces[][grain]"
-                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <% %w[auto length width].each do |g| %>
-              <option value="<%= g %>"><%= t("projects.index.piece_grains.#{g}") %></option>
+            <% if has_feature?(:cut_direction) %>
+              <div>
+                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.cut_direction") %></h3>
+                <select name="cut_direction"
+                        class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <% %w[auto along_length along_width].each do |dir| %>
+                    <option value="<%= dir %>" <%= "selected" if (@cut_direction || "auto") == dir %>>
+                      <%= t("projects.index.cut_directions.#{dir}") %>
+                    </option>
+                  <% end %>
+                </select>
+                <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.cut_direction_hint") %></p>
+              </div>
             <% end %>
-          </select>
-        </td>
-        <td class="py-1">
-          <button type="button" data-action="pieces#remove"
-                  class="text-red-400 hover:text-red-300 text-xs font-medium">
-            &times;
-          </button>
-        </td>
-      </tr>
-    </template>
 
-    <button type="button" data-action="pieces#add"
-            class="mt-2 text-sm text-white hover:text-gray-300 font-medium">
-      <%= t("projects.index.add_piece") %>
-    </button>
-
-    <%# Grain Direction %>
-    <div class="mt-6">
-      <h2 class="text-sm font-semibold mb-2 uppercase tracking-wide"><%= t("projects.index.grain_direction") %></h2>
-      <select name="grain_direction" id="grain_direction"
-              data-pieces-target="grainSelect"
-              data-action="pieces#toggleGrain"
-              class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <% %w[none along_length along_width].each do |dir| %>
-          <option value="<%= dir %>" <%= "selected" if (@grain_direction || "none") == dir %>>
-            <%= t("projects.index.grain_directions.#{dir}") %>
-          </option>
-        <% end %>
-      </select>
-      <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.grain_direction_hint") %></p>
-    </div>
-  </section>
-
-  <%# Stock Sheet %>
-  <section>
-    <h2 class="text-sm font-semibold mb-2 uppercase tracking-wide"><%= t("projects.index.stock_sheet") %></h2>
-
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
-        <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
-               value="<%= @stock_l %>"
-               class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <% if has_feature?(:blade_kerf) %>
+              <div>
+                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.blade_kerf") %></h3>
+                <input type="number" name="kerf" min="0" step="any" value="<%= @kerf || 0 %>"
+                       class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.kerf_hint") %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
-        <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
-               value="<%= @stock_w %>"
-               class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-    </div>
-  </section>
-
-  <%# Cut Direction %>
-  <% if has_feature?(:cut_direction) %>
-    <section>
-      <h2 class="text-sm font-semibold mb-2 uppercase tracking-wide"><%= t("projects.index.cut_direction") %></h2>
-      <select name="cut_direction"
-              class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <% %w[auto along_length along_width].each do |dir| %>
-          <option value="<%= dir %>" <%= "selected" if (@cut_direction || "auto") == dir %>>
-            <%= t("projects.index.cut_directions.#{dir}") %>
-          </option>
-        <% end %>
-      </select>
-      <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.cut_direction_hint") %></p>
     </section>
-  <% end %>
-
-  <%# Kerf %>
-  <% if has_feature?(:blade_kerf) %>
-    <section>
-      <h2 class="text-sm font-semibold mb-2 uppercase tracking-wide"><%= t("projects.index.blade_kerf") %></h2>
-      <input type="number" name="kerf" min="0" step="any" value="<%= @kerf || 0 %>"
-             class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.kerf_hint") %></p>
-    </section>
-  <% end %>
+  </div>
 
   </fieldset>
 
