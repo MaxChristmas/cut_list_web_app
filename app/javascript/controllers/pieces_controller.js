@@ -110,11 +110,32 @@ export default class extends Controller {
     })
   }
 
+  selectGrain(event) {
+    const btn = event.currentTarget
+    const td = btn.closest("td")
+    td.querySelector("input[type='hidden']").value = btn.value
+    td.querySelectorAll("button[data-action*='selectGrain']").forEach(b => {
+      b.classList.remove("bg-blue-600", "text-white")
+      b.classList.add("bg-gray-700", "text-gray-400")
+    })
+    btn.classList.remove("bg-gray-700", "text-gray-400")
+    btn.classList.add("bg-blue-600", "text-white")
+  }
+
   hideGrainColumns() {
     this.grainColTargets.forEach(el => {
       el.setAttribute("hidden", "")
-      const autoRadio = el.querySelector("input[type='radio'][value='auto']")
-      if (autoRadio) autoRadio.checked = true
+      const hidden = el.querySelector("input[type='hidden']")
+      if (hidden) hidden.value = "auto"
+      const autoBtn = el.querySelector("button[value='auto']")
+      if (autoBtn) {
+        el.querySelectorAll("button[data-action*='selectGrain']").forEach(b => {
+          b.classList.remove("bg-blue-600", "text-white")
+          b.classList.add("bg-gray-700", "text-gray-400")
+        })
+        autoBtn.classList.remove("bg-gray-700", "text-gray-400")
+        autoBtn.classList.add("bg-blue-600", "text-white")
+      }
     })
   }
 

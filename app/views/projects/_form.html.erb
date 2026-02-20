@@ -79,19 +79,14 @@
               </td>
               <td class="py-1 pr-2" data-pieces-target="grainCol" <%= 'hidden' unless has_grain %>>
                 <% piece_grain = piece[:grain] || piece["grain"] || "auto" %>
+                <input type="hidden" name="pieces[][grain]" value="<%= piece_grain %>">
                 <div class="flex rounded overflow-hidden border border-gray-600">
-                  <label class="flex-1 text-center cursor-pointer">
-                    <input type="radio" name="pieces[][grain]" value="auto" <%= "checked" if piece_grain == "auto" %> class="hidden peer">
-                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">auto</span>
-                  </label>
-                  <label class="flex-1 text-center cursor-pointer border-x border-gray-600">
-                    <input type="radio" name="pieces[][grain]" value="length" <%= "checked" if piece_grain == "length" %> class="hidden peer">
-                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&rarr;</span>
-                  </label>
-                  <label class="flex-1 text-center cursor-pointer">
-                    <input type="radio" name="pieces[][grain]" value="width" <%= "checked" if piece_grain == "width" %> class="hidden peer">
-                    <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&uarr;</span>
-                  </label>
+                  <button type="button" value="auto" data-action="pieces#selectGrain"
+                          class="flex-1 py-1 text-xs transition-colors <%= piece_grain == "auto" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-400" %>">auto</button>
+                  <button type="button" value="length" data-action="pieces#selectGrain"
+                          class="flex-1 py-1 text-xs border-x border-gray-600 transition-colors <%= piece_grain == "length" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-400" %>">&rarr;</button>
+                  <button type="button" value="width" data-action="pieces#selectGrain"
+                          class="flex-1 py-1 text-xs transition-colors <%= piece_grain == "width" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-400" %>">&uarr;</button>
                 </div>
               </td>
               <td class="py-1">
@@ -124,19 +119,14 @@
                    class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
           </td>
           <td class="py-1 pr-2" data-pieces-target="grainCol" hidden>
+            <input type="hidden" name="pieces[][grain]" value="auto">
             <div class="flex rounded overflow-hidden border border-gray-600">
-              <label class="flex-1 text-center cursor-pointer">
-                <input type="radio" name="pieces[][grain]" value="auto" checked class="hidden peer">
-                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">auto</span>
-              </label>
-              <label class="flex-1 text-center cursor-pointer border-x border-gray-600">
-                <input type="radio" name="pieces[][grain]" value="length" class="hidden peer">
-                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&rarr;</span>
-              </label>
-              <label class="flex-1 text-center cursor-pointer">
-                <input type="radio" name="pieces[][grain]" value="width" class="hidden peer">
-                <span class="block py-1 text-xs text-gray-400 bg-gray-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">&uarr;</span>
-              </label>
+              <button type="button" value="auto" data-action="pieces#selectGrain"
+                      class="flex-1 py-1 text-xs transition-colors bg-blue-600 text-white">auto</button>
+              <button type="button" value="length" data-action="pieces#selectGrain"
+                      class="flex-1 py-1 text-xs border-x border-gray-600 transition-colors bg-gray-700 text-gray-400">&rarr;</button>
+              <button type="button" value="width" data-action="pieces#selectGrain"
+                      class="flex-1 py-1 text-xs transition-colors bg-gray-700 text-gray-400">&uarr;</button>
             </div>
           </td>
           <td class="py-1">
