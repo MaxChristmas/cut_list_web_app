@@ -102,10 +102,19 @@ ja:
     tabs:
       language: "言語"
       security: "セキュリティ"
+      subscription: "サブスクリプション"
+    subscription:
+      current_plan: "現在のプラン"
+      active: "有効"
+      one_shot: "ワンショット"
+      expired: "期限切れ"
+      expires: "有効期限"
+      ends_on: "終了日"
     language: "言語"
     save: "保存"
     back: "戻る"
     sign_out: "ログアウト"
+    sign_out_confirmation: "ログアウトしてもよろしいですか？"
   plans:
     title: "プランを選択"
     subtitle: "あなたに合ったプランをお選びください"

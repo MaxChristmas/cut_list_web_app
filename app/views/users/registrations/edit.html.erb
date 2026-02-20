@@ -21,6 +21,14 @@
                 class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
           <%= t("settings.tabs.security") %>
         </button>
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
+          <%= t("settings.tabs.subscription") %>
+        </button>
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="ml-auto px-4 py-2 text-sm font-medium border-b-2 transition-colors text-red-400">
+          <%= t("settings.sign_out") %>
+        </button>
       </div>
 
       <%# Language panel %>
@@ -96,12 +104,82 @@
           </button>
         <% end %>
       </div>
+
+      <%# Subscription panel %>
+      <div data-tabs-target="panel" class="hidden">
+        <div class="space-y-6">
+          <%# Current plan %>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2"><%= t("settings.subscription.current_plan") %></label>
+            <div class="flex items-center gap-3">
+              <span class="text-lg font-semibold text-white"><%= t("plans.#{resource.effective_plan}.name") %></span>
+              <% if resource.paid_plan? && !resource.one_shot_plan? && !resource.plan_expired? %>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-medium"><%= t("settings.subscription.active") %></span>
+              <% elsif resource.one_shot_plan? %>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-medium"><%= t("settings.subscription.one_shot") %></span>
+              <% elsif resource.plan_expired? %>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 font-medium"><%= t("settings.subscription.expired") %></span>
+              <% end %>
+            </div>
+          </div>
+
+          <%# Plan details %>
+          <div class="p-4 bg-gray-900 border border-gray-800 rounded-lg space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-400"><%= t("plans.active_projects") %></span>
+              <span class="text-gray-200">
+                <% max = resource.max_active_projects %>
+                <%= max == Float::INFINITY ? t("plans.unlimited") : max %>
+              </span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-400"><%= t("plans.monthly_optimizations_per_project") %></span>
+              <span class="text-gray-200">
+                <% max_opt = resource.max_monthly_optimizations_per_project %>
+                <%= max_opt == Float::INFINITY ? t("plans.unlimited") : max_opt %>
+              </span>
+            </div>
+
+            <% if resource.one_shot_plan? %>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400"><%= t("settings.subscription.expires") %></span>
+                <span class="text-amber-400"><%= l(resource.plan_expires_at, format: :short) %></span>
+              </div>
+            <% elsif resource.plan_expires_at.present? && resource.paid_plan? %>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400"><%= t("settings.subscription.ends_on") %></span>
+                <span class="text-amber-400"><%= l(resource.plan_expires_at, format: :short) %></span>
+              </div>
+            <% end %>
+          </div>
+
+          <%# Actions %>
+          <div class="space-y-3">
+            <% has_stripe = resource.stripe_customer_id.present? %>
+            <%= button_to t("plans.manage_subscription"), plan_portal_path, method: :post,
+                  disabled: !has_stripe,
+                  class: "w-full font-semibold py-2 px-4 rounded transition-colors text-sm text-center #{has_stripe ? 'bg-white text-gray-950 hover:bg-gray-200' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}" %>
+
+            <% unless resource.enterprise_plan? %>
+              <%= link_to t("sidebar.upgrade"), plans_path,
+                    class: "block w-full bg-gray-800 text-white font-semibold py-2 px-4 rounded hover:bg-gray-700 transition-colors text-sm text-center" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Sign out panel %>
+      <div data-tabs-target="panel" class="hidden">
+        <div class="space-y-4">
+          <p class="text-sm text-gray-400"><%= t("settings.sign_out_confirmation") %></p>
+          <%= button_to t("settings.sign_out"), destroy_user_session_path, method: :delete, data: { turbo: false },
+                class: "w-full bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-500 transition-colors text-sm" %>
+        </div>
+      </div>
     </div>
 
-    <div class="mt-6 flex items-center justify-between">
+    <div class="mt-6">
       <%= link_to t("settings.back"), root_path, class: "text-sm text-gray-500 hover:text-gray-300 transition-colors" %>
-      <%= button_to t("settings.sign_out"), destroy_user_session_path, method: :delete, data: { turbo: false },
-            class: "text-sm text-red-400 hover:text-red-300 transition-colors" %>
     </div>
   </div>
 </div>

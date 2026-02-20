@@ -102,10 +102,19 @@ fr:
     tabs:
       language: "Langue"
       security: "Sécurité"
+      subscription: "Abonnement"
+    subscription:
+      current_plan: "Plan actuel"
+      active: "Actif"
+      one_shot: "Ponctuel"
+      expired: "Expiré"
+      expires: "Expire le"
+      ends_on: "Se termine le"
     language: "Langue"
     save: "Enregistrer"
     back: "Retour"
     sign_out: "Déconnexion"
+    sign_out_confirmation: "Êtes-vous sûr de vouloir vous déconnecter ?"
   plans:
     title: "Choisissez votre plan"
     subtitle: "Sélectionnez le plan qui vous convient"

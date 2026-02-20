@@ -102,10 +102,19 @@ en:
     tabs:
       language: "Language"
       security: "Security"
+      subscription: "Subscription"
+    subscription:
+      current_plan: "Current Plan"
+      active: "Active"
+      one_shot: "One-shot"
+      expired: "Expired"
+      expires: "Expires"
+      ends_on: "Ends on"
     language: "Language"
     save: "Save Changes"
     back: "Back"
     sign_out: "Sign Out"
+    sign_out_confirmation: "Are you sure you want to sign out?"
   plans:
     title: "Choose Your Plan"
     subtitle: "Select the plan that fits your needs"
