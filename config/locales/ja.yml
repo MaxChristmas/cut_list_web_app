@@ -233,7 +233,7 @@ ja:
       purpose: "目的"
       duration: "有効期間"
     duration:
-      session: "セッション"
+      session: "1日"
       two_weeks: "2週間"
       one_year: "1年"
       two_years: "2年"
@@ -257,6 +257,42 @@ ja:
     contact:
       title: "お問い合わせ"
       body: "このCookieポリシーについてご質問がある場合は、以下までお問い合わせください："
+  legal_notices:
+    page_title: "法的通知 — CutOptima"
+    title: "法的通知"
+    last_updated: "最終更新日：2026年2月22日"
+    link: "法的通知"
+    intro: "2004年6月21日のフランス法律第2004-575号（「デジタル経済における信頼に関する法律」— LCEN）の規定に従い、cutoptima.comの利用者に以下の情報を提供いたします。"
+    editor:
+      title: "サイト運営者"
+      legal_form: "有限会社（SARL）"
+      vat: "VAT番号"
+      address: "本社所在地"
+      website: "ウェブサイト"
+    publication_director:
+      title: "発行責任者"
+      body: "発行責任者は、法人としてcutoptima.comを運営するNoventi SARLです。"
+    hosting:
+      title: "ホスティングプロバイダー"
+      website: "ウェブサイト"
+    intellectual_property:
+      title: "知的財産権"
+      body: "cutoptima.comのすべてのコンテンツ（テキスト、グラフィック、ロゴ、アイコン、画像、ソフトウェア、ソースコードを含むがこれらに限定されない）は、Noventi SARLまたはそのライセンサーの独占的な財産であり、フランスおよび国際的な知的財産法によって保護されています。Noventi SARLの事前の書面による同意なしに、本サイトの一部または全部を複製、表示、変更、配布、利用することは固く禁じられています。"
+    personal_data:
+      title: "個人データの保護"
+      body: "一般データ保護規則（GDPR — EU規則2016/679）およびフランスデータ保護法（情報処理と自由に関する法律）に従い、Noventi SARLはサービスの運営に必要な個人データを収集・処理します。収集されるデータには、メールアドレスおよび認証情報が含まれます。ユーザーは、個人データへのアクセス、訂正、削除、ポータビリティの権利、ならびに処理の制限および異議申立ての権利を有します。これらの権利を行使するには、contact@cutoptima.comまでご連絡ください。詳細については、CNIL（情報処理と自由に関する国家委員会）のウェブサイトwww.cnil.frをご参照ください。"
+    cookies:
+      title: "Cookie"
+      body: "cutoptima.comではCookieを使用しています。使用しているCookieの詳細および設定の管理については、"
+    liability:
+      title: "免責事項"
+      body: "Noventi SARLは、cutoptima.comで公開される情報の正確性と最新性の確保に努めます。ただし、情報が常に完全、正確、または最新であることを保証するものではありません。Noventi SARLは、ウェブサイトへのアクセスまたは使用に起因する直接的または間接的な損害（データの損失、機器の損傷、サービスの中断を含む）について責任を負いません。"
+    applicable_law:
+      title: "準拠法および管轄裁判所"
+      body: "本法的通知はフランス法に準拠します。cutoptima.comの利用に関するいかなる紛争も、法律の強行規定に別段の定めがない限り、フランス・ナントの管轄裁判所の専属管轄に服するものとします。"
+    contact:
+      title: "お問い合わせ"
+      body: "本法的通知に関するご質問は、以下までお問い合わせください："
   report_issue:
     button: "問題を報告"
     title: "問題を報告する"

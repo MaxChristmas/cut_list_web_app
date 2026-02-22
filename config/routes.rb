@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   patch "locale", to: "application#set_locale", as: :locale
 
   get "cookies-policy", to: "pages#cookies_policy", as: :cookies_policy
+  get "legal-notices", to: "pages#legal_notices", as: :legal_notices
 
   get "up" => "rails/health#show", as: :rails_health_check
 

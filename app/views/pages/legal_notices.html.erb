@@ -1,0 +1,99 @@
+<% content_for(:title) { t("legal_notices.page_title") } %>
+
+<div class="h-full overflow-y-auto">
+  <div class="max-w-3xl mx-auto px-4 py-8 md:py-12">
+    <div class="mb-8">
+      <%= link_to root_path, class: "inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+        </svg>
+        <%= t("settings.back") %>
+      <% end %>
+    </div>
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-2"><%= t("legal_notices.title") %></h1>
+    <p class="text-sm text-gray-500 mb-8"><%= t("legal_notices.last_updated") %></p>
+
+    <div class="max-w-none space-y-8 text-sm text-gray-600">
+      <p><%= t("legal_notices.intro") %></p>
+
+      <%# Section 1 — Site Editor %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">1. <%= t("legal_notices.editor.title") %></h2>
+        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm space-y-1">
+          <p class="font-medium text-gray-900">Noventi SARL</p>
+          <p><%= t("legal_notices.editor.legal_form") %></p>
+          <p>SIREN: 931 419 717</p>
+          <p>RCS Nantes</p>
+          <p><%= t("legal_notices.editor.vat") %>: FR48931419717</p>
+          <p><%= t("legal_notices.editor.address") %>: Nantes, France</p>
+          <p>Email: <a href="mailto:contact@cutoptima.com" class="text-blue-600 hover:text-blue-800">contact@cutoptima.com</a></p>
+          <p><%= t("legal_notices.editor.website") %>: <a href="https://cutoptima.com" class="text-blue-600 hover:text-blue-800">cutoptima.com</a></p>
+        </div>
+      </section>
+
+      <%# Section 2 — Publication Director %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">2. <%= t("legal_notices.publication_director.title") %></h2>
+        <p><%= t("legal_notices.publication_director.body") %></p>
+      </section>
+
+      <%# Section 3 — Hosting %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">3. <%= t("legal_notices.hosting.title") %></h2>
+        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm space-y-1">
+          <p class="font-medium text-gray-900">OVHcloud</p>
+          <p>SAS au capital de 10 174 560 €</p>
+          <p>RCS Lille Métropole 424 761 419 00045</p>
+          <p>2 rue Kellermann, 59100 Roubaix, France</p>
+          <p><%= t("legal_notices.hosting.website") %>: <a href="https://www.ovhcloud.com" class="text-blue-600 hover:text-blue-800">ovhcloud.com</a></p>
+        </div>
+      </section>
+
+      <%# Section 4 — Intellectual Property %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">4. <%= t("legal_notices.intellectual_property.title") %></h2>
+        <p><%= t("legal_notices.intellectual_property.body") %></p>
+      </section>
+
+      <%# Section 5 — Personal Data %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">5. <%= t("legal_notices.personal_data.title") %></h2>
+        <p><%= t("legal_notices.personal_data.body") %></p>
+      </section>
+
+      <%# Section 6 — Cookies %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">6. <%= t("legal_notices.cookies.title") %></h2>
+        <p>
+          <%= t("legal_notices.cookies.body") %>
+          <%= link_to t("cookies_policy.link"), cookies_policy_path, class: "text-blue-600 hover:text-blue-800 underline" %>.
+        </p>
+      </section>
+
+      <%# Section 7 — Liability %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">7. <%= t("legal_notices.liability.title") %></h2>
+        <p><%= t("legal_notices.liability.body") %></p>
+      </section>
+
+      <%# Section 8 — Applicable Law %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">8. <%= t("legal_notices.applicable_law.title") %></h2>
+        <p><%= t("legal_notices.applicable_law.body") %></p>
+      </section>
+
+      <%# Section 9 — Contact %>
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 mb-3">9. <%= t("legal_notices.contact.title") %></h2>
+        <p><%= t("legal_notices.contact.body") %></p>
+        <div class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200 text-sm space-y-1">
+          <p class="font-medium text-gray-900">Noventi SARL</p>
+          <p>Nantes, France</p>
+          <p>Email: <a href="mailto:contact@cutoptima.com" class="text-blue-600 hover:text-blue-800">contact@cutoptima.com</a></p>
+          <p>Website: <a href="https://cutoptima.com" class="text-blue-600 hover:text-blue-800">cutoptima.com</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

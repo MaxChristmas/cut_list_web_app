@@ -243,7 +243,7 @@ en:
       purpose: "Purpose"
       duration: "Duration"
     duration:
-      session: "Session"
+      session: "1 day"
       two_weeks: "2 weeks"
       one_year: "1 year"
       two_years: "2 years"
@@ -267,6 +267,42 @@ en:
     contact:
       title: "Contact Us"
       body: "If you have any questions about this Cookies Policy, please contact us:"
+  legal_notices:
+    page_title: "Legal Notices — CutOptima"
+    title: "Legal Notices"
+    last_updated: "Last updated: February 22, 2026"
+    link: "Legal Notices"
+    intro: "In accordance with the provisions of French Law No. 2004-575 of June 21, 2004 (\"Loi pour la Confiance dans l'Économie Numérique\" — LCEN), the following information is provided to users of the website cutoptima.com."
+    editor:
+      title: "Site Editor"
+      legal_form: "Société à responsabilité limitée (SARL)"
+      vat: "VAT Number"
+      address: "Registered Office"
+      website: "Website"
+    publication_director:
+      title: "Publication Director"
+      body: "The publication director is Noventi SARL, in its capacity as legal entity and operator of the website cutoptima.com."
+    hosting:
+      title: "Hosting Provider"
+      website: "Website"
+    intellectual_property:
+      title: "Intellectual Property"
+      body: "All content on the website cutoptima.com — including but not limited to text, graphics, logos, icons, images, software, and the underlying source code — is the exclusive property of Noventi SARL or its licensors and is protected by French and international intellectual property laws. Any reproduction, representation, modification, distribution, or exploitation of any part of this website without the prior written consent of Noventi SARL is strictly prohibited."
+    personal_data:
+      title: "Personal Data Protection"
+      body: "In accordance with the General Data Protection Regulation (GDPR — EU Regulation 2016/679) and the French Data Protection Act (Loi Informatique et Libertés), Noventi SARL collects and processes personal data necessary for the operation of the service. Data collected includes: email address and authentication information. Users have the right to access, rectify, delete, and port their personal data, as well as the right to restrict or object to processing. To exercise these rights, please contact us at contact@cutoptima.com. For more information, you may contact the CNIL (Commission Nationale de l'Informatique et des Libertés) at www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "The website cutoptima.com uses cookies. For full details on the cookies we use and how to manage your preferences, please see our "
+    liability:
+      title: "Limitation of Liability"
+      body: "Noventi SARL strives to ensure the accuracy and timeliness of the information published on cutoptima.com. However, Noventi SARL cannot guarantee that the information is complete, accurate, or up to date at all times. Noventi SARL shall not be held liable for any direct or indirect damages resulting from access to or use of the website, including any data loss, damage to equipment, or service interruptions."
+    applicable_law:
+      title: "Applicable Law and Jurisdiction"
+      body: "These legal notices are governed by French law. Any dispute arising from the use of the website cutoptima.com shall be subject to the exclusive jurisdiction of the competent courts of Nantes, France, unless otherwise provided by mandatory rules of law."
+    contact:
+      title: "Contact"
+      body: "For any questions regarding these legal notices, you may contact us:"
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"

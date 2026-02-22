@@ -243,7 +243,7 @@ fr:
       purpose: "Finalité"
       duration: "Durée"
     duration:
-      session: "Session"
+      session: "1 jour"
       two_weeks: "2 semaines"
       one_year: "1 an"
       two_years: "2 ans"
@@ -267,6 +267,42 @@ fr:
     contact:
       title: "Nous contacter"
       body: "Si vous avez des questions concernant cette Politique de cookies, veuillez nous contacter :"
+  legal_notices:
+    page_title: "Mentions légales — CutOptima"
+    title: "Mentions légales"
+    last_updated: "Dernière mise à jour : 22 février 2026"
+    link: "Mentions légales"
+    intro: "Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la Confiance dans l'Économie Numérique (LCEN), les informations suivantes sont portées à la connaissance des utilisateurs du site cutoptima.com."
+    editor:
+      title: "Éditeur du site"
+      legal_form: "Société à responsabilité limitée (SARL)"
+      vat: "N° TVA intracommunautaire"
+      address: "Siège social"
+      website: "Site web"
+    publication_director:
+      title: "Directeur de la publication"
+      body: "Le directeur de la publication est la société Noventi SARL, en sa qualité de personne morale et exploitante du site cutoptima.com."
+    hosting:
+      title: "Hébergeur"
+      website: "Site web"
+    intellectual_property:
+      title: "Propriété intellectuelle"
+      body: "L'ensemble du contenu du site cutoptima.com — incluant notamment les textes, graphismes, logos, icônes, images, logiciels et le code source sous-jacent — est la propriété exclusive de Noventi SARL ou de ses concédants de licence et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle. Toute reproduction, représentation, modification, distribution ou exploitation de tout ou partie de ce site sans l'autorisation écrite préalable de Noventi SARL est strictement interdite."
+    personal_data:
+      title: "Protection des données personnelles"
+      body: "Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679) et à la loi Informatique et Libertés, Noventi SARL collecte et traite les données personnelles nécessaires au fonctionnement du service. Les données collectées comprennent : adresse e-mail et informations d'authentification. Les utilisateurs disposent d'un droit d'accès, de rectification, de suppression et de portabilité de leurs données personnelles, ainsi que d'un droit de limitation et d'opposition au traitement. Pour exercer ces droits, veuillez nous contacter à contact@cutoptima.com. Pour plus d'informations, vous pouvez contacter la CNIL (Commission Nationale de l'Informatique et des Libertés) sur www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "Le site cutoptima.com utilise des cookies. Pour connaître le détail des cookies utilisés et gérer vos préférences, veuillez consulter notre "
+    liability:
+      title: "Limitation de responsabilité"
+      body: "Noventi SARL s'efforce d'assurer l'exactitude et la mise à jour des informations publiées sur cutoptima.com. Toutefois, Noventi SARL ne peut garantir que les informations sont complètes, exactes ou à jour en permanence. Noventi SARL ne saurait être tenue responsable de tout dommage direct ou indirect résultant de l'accès ou de l'utilisation du site, y compris toute perte de données, tout dommage matériel ou toute interruption de service."
+    applicable_law:
+      title: "Droit applicable et juridiction"
+      body: "Les présentes mentions légales sont régies par le droit français. Tout litige découlant de l'utilisation du site cutoptima.com sera soumis à la compétence exclusive des tribunaux compétents de Nantes, France, sauf disposition impérative contraire."
+    contact:
+      title: "Contact"
+      body: "Pour toute question relative aux présentes mentions légales, vous pouvez nous contacter :"
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

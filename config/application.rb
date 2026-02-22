@@ -18,5 +18,7 @@ module CutListWebApp
 
     config.i18n.available_locales = [ :en, :fr, :ja ]
     config.i18n.default_locale = :en
+
+    config.session_store :cookie_store, expire_after: 1.day
   end
 end
