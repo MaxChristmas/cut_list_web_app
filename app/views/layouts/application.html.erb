@@ -35,7 +35,7 @@
     <%= render "layouts/sidebar" do %>
       <%= yield %>
     <% end %>
-    <%= render "layouts/cookie_consent" %>
+    <%= render "layouts/cookie_consent" unless content_for?(:skip_cookie_consent) %>
     <%= render "layouts/report_issue" if user_signed_in? %>
   </body>
 </html>
