@@ -39,6 +39,7 @@ env:
     - STRIPE_ENTERPRISE_ONE_SHOT_PRICE_ID
     - SMTP_USER_NAME
     - SMTP_PASSWORD
+    - SENTRY_DSN
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     SOLID_QUEUE_IN_PUMA: true
