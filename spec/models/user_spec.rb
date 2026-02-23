@@ -9,6 +9,26 @@ RSpec.describe User, type: :model do
     }.merge(overrides))
   end
 
+  describe "default plan on first sign-up" do
+    it "assigns the free plan to a new user" do
+      user = build_user
+      user.save!
+      expect(user.plan).to eq("free")
+    end
+
+    it "limits to 2 active projects" do
+      user = build_user
+      user.save!
+      expect(user.max_active_projects).to eq(2)
+    end
+
+    it "limits to 10 monthly optimizations per project" do
+      user = build_user
+      user.save!
+      expect(user.max_monthly_optimizations_per_project).to eq(10)
+    end
+  end
+
   describe "validations" do
     it "is valid with valid attributes" do
       expect(build_user).to be_valid

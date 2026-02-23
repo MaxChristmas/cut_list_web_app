@@ -1,5 +1,10 @@
 class ProjectsController < ApplicationController
+  RATE_LIMIT_STORE = ActiveSupport::Cache::MemoryStore.new
+  rate_limit to: 3, within: 1.second, only: [:create, :update],
+             store: RATE_LIMIT_STORE, with: -> { head :too_many_requests }
+
   before_action :reject_template_project, only: [:update, :save_layout, :reset_layout, :archive, :unarchive]
+  before_action :require_archive_feature!, only: [:archive, :unarchive]
 
   def index
   end
@@ -222,6 +227,13 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def require_archive_feature!
+    unless has_feature?(:archive)
+      project = Project.find_by!(token: params[:token])
+      redirect_to project_path(project.token), alert: t("limits.feature_not_available")
+    end
+  end
 
   def reject_template_project
     project = Project.find_by!(token: params[:token])

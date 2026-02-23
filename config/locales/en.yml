@@ -175,9 +175,10 @@ en:
       expires_in: "Expires in %{duration}"
       expired: "Your one-shot access has expired"
   limits:
-    max_projects_reached: "You've reached your active project limit. Archive a project or upgrade your plan."
+    max_projects_reached: "You've reached your active project limit. Upgrade your plan to create more."
     monthly_optimizations_reached: "You've reached the monthly optimization limit for this project. Upgrade your plan for more."
     guest_signup_prompt: "Sign up for free to optimize your cut list!"
+    feature_not_available: "This feature is not available on your current plan. Upgrade to access it."
   pdf:
     measurements_in_mm: "All measurements in millimeters (mm)"
     sheets_used: "Sheets used"

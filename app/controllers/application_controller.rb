@@ -100,8 +100,10 @@ class ApplicationController < ActionController::Base
       { used: 0, max: max }
     elsif user_signed_in?
       { used: current_user.monthly_optimizations_count_for(project), max: max }
-    else
+    elsif GuestLimits.guest_tokens(session).include?(project.token)
       { used: GuestLimits.monthly_count_for(project.token), max: max }
+    else
+      { used: 0, max: max }
     end
   end
 end
