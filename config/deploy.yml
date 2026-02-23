@@ -49,6 +49,8 @@ env:
 
     OPTIMIZER_URL: http://cut-optimizer:3001/optimize
 
+    GOOGLE_ANALYTICS_ID: G-M83WH5P1YY
+
 # SSH user (not root).
 ssh:
   user: debian
