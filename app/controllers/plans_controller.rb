@@ -40,6 +40,9 @@ class PlansController < ApplicationController
       mode: is_one_shot ? "payment" : "subscription",
       locale: I18n.locale.to_s,
       line_items: [{ price: price_id, quantity: 1 }],
+      billing_address_collection: "required",
+      tax_id_collection: { enabled: true },
+      customer_update: { name: "auto", address: "auto" },
       success_url: "#{plan_success_url(plan: plan)}&session_id={CHECKOUT_SESSION_ID}",
       cancel_url: plans_url,
       metadata: { user_id: current_user.id, plan: plan, one_shot: is_one_shot.to_s }

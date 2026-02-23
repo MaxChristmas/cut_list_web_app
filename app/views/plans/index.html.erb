@@ -58,16 +58,15 @@
             <%# Pricing %>
             <div class="mb-6">
               <% if has_prices %>
-                <% tax_label = config[:prices][:tax_label] %>
                 <div data-billing-toggle-target="monthlyPrice">
                   <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:monthly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
-                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.month") %></span>
+                  <span class="text-gray-400 text-sm"><%= t("plans.tax_label") %> / <%= t("plans.month") %></span>
                 </div>
                 <div data-billing-toggle-target="yearlyPrice" class="hidden">
                   <span class="text-3xl font-bold text-white"><%= number_with_precision(config[:prices][:yearly][:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
-                  <span class="text-gray-400 text-sm"><%= tax_label %> / <%= t("plans.year") %></span>
+                  <span class="text-gray-400 text-sm"><%= t("plans.tax_label") %> / <%= t("plans.year") %></span>
                   <div class="text-xs text-gray-500 mt-1">
-                    <%= number_with_precision(config[:prices][:yearly][:amount] / 1200.0, precision: 2, strip_insignificant_zeros: true) %>&euro; <%= tax_label %> / <%= t("plans.month") %>
+                    <%= number_with_precision(config[:prices][:yearly][:amount] / 1200.0, precision: 2, strip_insignificant_zeros: true) %>&euro; <%= t("plans.tax_label") %> / <%= t("plans.month") %>
                   </div>
                 </div>
               <% else %>
@@ -166,7 +165,6 @@
           <% %w[worker enterprise].each do |plan_key| %>
             <% config = Plannable::PLANS[plan_key] %>
             <% one_shot_price = config[:prices][:one_shot] %>
-            <% tax_label = config[:prices][:tax_label] %>
 
             <div class="rounded-xl border border-gray-700 bg-gray-900 p-6 flex flex-col">
               <div class="mb-4">
@@ -176,7 +174,7 @@
 
               <div class="mb-4">
                 <span class="text-3xl font-bold text-white"><%= number_with_precision(one_shot_price[:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
-                <span class="text-gray-400 text-sm"><%= tax_label %></span>
+                <span class="text-gray-400 text-sm"><%= t("plans.tax_label") %></span>
                 <div class="text-xs text-gray-500 mt-1"><%= t("plans.one_shot.duration") %></div>
               </div>
 
