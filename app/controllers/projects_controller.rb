@@ -136,7 +136,7 @@ class ProjectsController < ApplicationController
     end
 
     unless can_run_optimization?(@project)
-      redirect_to plans_path, alert: t("limits.monthly_optimizations_reached")
+      redirect_to plans_path, alert: t("limits.daily_optimizations_reached")
       return
     end
 

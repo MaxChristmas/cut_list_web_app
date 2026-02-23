@@ -142,7 +142,7 @@ ja:
     free_price: "無料"
     billed_yearly: "年額%{amount}€で請求"
     active_projects: "アクティブプロジェクト数"
-    monthly_optimizations_per_project: "プロジェクトごとの月間最適化回数"
+    daily_optimizations_per_project: "プロジェクトごとの1日の最適化回数"
     pdf_export: "PDFエクスポート"
     unlimited: "無制限"
     features:
@@ -166,7 +166,7 @@ ja:
       description: "大規模運用のための無制限パワー"
   limits:
     max_projects_reached: "アクティブプロジェクトの上限に達しました。プランをアップグレードしてください。"
-    monthly_optimizations_reached: "このプロジェクトの月間最適化回数の上限に達しました。プランをアップグレードしてください。"
+    daily_optimizations_reached: "このプロジェクトの1日の最適化回数の上限に達しました。プランをアップグレードしてください。"
     guest_signup_prompt: "無料登録してカットリストを最適化しましょう！"
     feature_not_available: "この機能は現在のプランではご利用いただけません。アップグレードしてご利用ください。"
   pdf:

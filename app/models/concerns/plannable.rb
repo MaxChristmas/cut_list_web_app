@@ -9,13 +9,13 @@ module Plannable
   PLANS = {
     "free" => {
       max_active_projects: 2,
-      max_monthly_optimizations_per_project: 10,
+      max_daily_optimizations_per_project: 10,
       features: %i[pdf_export label_pieces cut_direction],
       prices: nil
     },
     "worker" => {
       max_active_projects: 10,
-      max_monthly_optimizations_per_project: Float::INFINITY,
+      max_daily_optimizations_per_project: Float::INFINITY,
       features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels],
       prices: {
         monthly:  { amount: 1000, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
@@ -25,7 +25,7 @@ module Plannable
     },
     "enterprise" => {
       max_active_projects: Float::INFINITY,
-      max_monthly_optimizations_per_project: Float::INFINITY,
+      max_daily_optimizations_per_project: Float::INFINITY,
       features: FEATURES,
       prices: {
         monthly:  { amount: 2000, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
@@ -67,8 +67,8 @@ module Plannable
     plan_config[:max_active_projects]
   end
 
-  def max_monthly_optimizations_per_project
-    plan_config[:max_monthly_optimizations_per_project]
+  def max_daily_optimizations_per_project
+    plan_config[:max_daily_optimizations_per_project]
   end
 
   def active_projects_count
@@ -79,12 +79,12 @@ module Plannable
     active_projects_count < max_active_projects
   end
 
-  def monthly_optimizations_count_for(project)
+  def daily_optimizations_count_for(project)
     count = project.optimizations
-                   .where(created_at: Time.current.beginning_of_month..)
+                   .where(created_at: Time.current.beginning_of_day..)
                    .count
     # Don't count the initial creation optimization
-    if project.created_at >= Time.current.beginning_of_month
+    if project.created_at >= Time.current.beginning_of_day
       [count - 1, 0].max
     else
       count
@@ -93,7 +93,7 @@ module Plannable
 
   def can_run_optimization?(project = nil)
     return true if project.nil? # new project, no optimizations yet
-    monthly_optimizations_count_for(project) < max_monthly_optimizations_per_project
+    daily_optimizations_count_for(project) < max_daily_optimizations_per_project
   end
 
   def has_feature?(feature)

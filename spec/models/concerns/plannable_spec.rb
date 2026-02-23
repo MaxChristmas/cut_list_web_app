@@ -24,9 +24,9 @@ RSpec.describe Plannable, type: :model do
       end
     end
 
-    describe "#max_monthly_optimizations_per_project" do
-      it "allows 10 monthly optimizations per project" do
-        expect(user.max_monthly_optimizations_per_project).to eq(10)
+    describe "#max_daily_optimizations_per_project" do
+      it "allows 10 daily optimizations per project" do
+        expect(user.max_daily_optimizations_per_project).to eq(10)
       end
     end
 
@@ -60,38 +60,38 @@ RSpec.describe Plannable, type: :model do
         expect(user.can_run_optimization?(project)).to be true
       end
 
-      it "does not count the initial optimization (created with the project this month)" do
+      it "does not count the initial optimization (created with the project today)" do
         project.optimizations.create!(status: "completed", result: {})
-        expect(user.monthly_optimizations_count_for(project)).to eq(0)
+        expect(user.daily_optimizations_count_for(project)).to eq(0)
       end
 
-      it "allows up to 10 additional optimizations per month" do
+      it "allows up to 10 additional optimizations per day" do
         # The first optimization is free (created with the project)
         11.times { project.optimizations.create!(status: "completed", result: {}) }
 
-        expect(user.monthly_optimizations_count_for(project)).to eq(10)
+        expect(user.daily_optimizations_count_for(project)).to eq(10)
         expect(user.can_run_optimization?(project)).to be false
       end
 
       it "allows the 10th optimization but denies the 11th" do
         # 1 initial + 10 additional = 11 total, count = 10
         10.times { project.optimizations.create!(status: "completed", result: {}) }
-        expect(user.monthly_optimizations_count_for(project)).to eq(9)
+        expect(user.daily_optimizations_count_for(project)).to eq(9)
         expect(user.can_run_optimization?(project)).to be true
 
         project.optimizations.create!(status: "completed", result: {})
-        expect(user.monthly_optimizations_count_for(project)).to eq(10)
+        expect(user.daily_optimizations_count_for(project)).to eq(10)
         expect(user.can_run_optimization?(project)).to be false
       end
 
-      it "resets the count at the beginning of a new month" do
-        # Create optimizations in the previous month
-        travel_to 1.month.ago do
+      it "resets the count at the beginning of a new day" do
+        # Create optimizations yesterday
+        travel_to 1.day.ago do
           11.times { project.optimizations.create!(status: "completed", result: {}) }
         end
 
-        # In the current month, the count should be 0
-        expect(user.monthly_optimizations_count_for(project)).to eq(0)
+        # Today, the count should be 0
+        expect(user.daily_optimizations_count_for(project)).to eq(0)
         expect(user.can_run_optimization?(project)).to be true
       end
     end
@@ -130,7 +130,7 @@ RSpec.describe Plannable, type: :model do
 
       user.update!(plan_expires_at: 1.day.ago)
       expect(user.max_active_projects).to eq(2)
-      expect(user.max_monthly_optimizations_per_project).to eq(10)
+      expect(user.max_daily_optimizations_per_project).to eq(10)
     end
   end
 end

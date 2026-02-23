@@ -142,7 +142,7 @@ fr:
     free_price: "Gratuit"
     billed_yearly: "Facturé %{amount}€ / an"
     active_projects: "Projets actifs"
-    monthly_optimizations_per_project: "Optimisations par projet / mois"
+    daily_optimizations_per_project: "Optimisations par projet / jour"
     pdf_export: "Export PDF"
     unlimited: "Illimité"
     includes_all_from: "Tout %{plan}, plus :"
@@ -176,7 +176,7 @@ fr:
       expired: "Votre accès ponctuel a expiré"
   limits:
     max_projects_reached: "Vous avez atteint la limite de projets actifs. Passez au plan supérieur pour en créer davantage."
-    monthly_optimizations_reached: "Vous avez atteint la limite mensuelle d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."
+    daily_optimizations_reached: "Vous avez atteint la limite journalière d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."
     guest_signup_prompt: "Inscrivez-vous gratuitement pour optimiser vos découpes !"
     feature_not_available: "Cette fonctionnalité n'est pas disponible avec votre forfait actuel. Passez au plan supérieur pour y accéder."
   pdf:

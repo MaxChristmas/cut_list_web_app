@@ -5,14 +5,14 @@ module GuestLimits
     PLAN_CONFIG[:features].include?(feature.to_sym)
   end
 
-  def self.monthly_count_for(project_token)
+  def self.daily_count_for(project_token)
     project = Project.find_by(token: project_token)
     return 0 unless project
 
     count = project.optimizations
-                   .where(created_at: Time.current.beginning_of_month..)
+                   .where(created_at: Time.current.beginning_of_day..)
                    .count
-    if project.created_at >= Time.current.beginning_of_month
+    if project.created_at >= Time.current.beginning_of_day
       [count - 1, 0].max
     else
       count

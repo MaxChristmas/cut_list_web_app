@@ -95,13 +95,13 @@ class ApplicationController < ActionController::Base
 
   def usage_optimizations(project = nil)
     config = Plannable::PLANS[current_plan_name]
-    max = config[:max_monthly_optimizations_per_project]
+    max = config[:max_daily_optimizations_per_project]
     if project.nil?
       { used: 0, max: max }
     elsif user_signed_in?
-      { used: current_user.monthly_optimizations_count_for(project), max: max }
+      { used: current_user.daily_optimizations_count_for(project), max: max }
     elsif GuestLimits.guest_tokens(session).include?(project.token)
-      { used: GuestLimits.monthly_count_for(project.token), max: max }
+      { used: GuestLimits.daily_count_for(project.token), max: max }
     else
       { used: 0, max: max }
     end

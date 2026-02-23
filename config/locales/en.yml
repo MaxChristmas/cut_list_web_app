@@ -142,7 +142,7 @@ en:
     free_price: "Free"
     billed_yearly: "Billed %{amount}€ / year"
     active_projects: "Active projects"
-    monthly_optimizations_per_project: "Optimizations per project / month"
+    daily_optimizations_per_project: "Optimizations per project / day"
     pdf_export: "PDF export"
     unlimited: "Unlimited"
     includes_all_from: "Everything in %{plan}, plus:"
@@ -176,7 +176,7 @@ en:
       expired: "Your one-shot access has expired"
   limits:
     max_projects_reached: "You've reached your active project limit. Upgrade your plan to create more."
-    monthly_optimizations_reached: "You've reached the monthly optimization limit for this project. Upgrade your plan for more."
+    daily_optimizations_reached: "You've reached the daily optimization limit for this project. Upgrade your plan for more."
     guest_signup_prompt: "Sign up for free to optimize your cut list!"
     feature_not_available: "This feature is not available on your current plan. Upgrade to access it."
   pdf:

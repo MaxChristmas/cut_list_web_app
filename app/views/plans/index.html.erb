@@ -96,9 +96,9 @@
                 </svg>
                 <span>
                   <strong class="text-white">
-                    <%= config[:max_monthly_optimizations_per_project] == Float::INFINITY ? t("plans.unlimited") : config[:max_monthly_optimizations_per_project] %>
+                    <%= config[:max_daily_optimizations_per_project] == Float::INFINITY ? t("plans.unlimited") : config[:max_daily_optimizations_per_project] %>
                   </strong>
-                  <%= t("plans.monthly_optimizations_per_project") %>
+                  <%= t("plans.daily_optimizations_per_project") %>
                 </span>
               </li>
               <% if parent_plan %>
