@@ -104,6 +104,15 @@
                     class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
             </div>
 
+            <div class="flex items-start gap-2">
+              <%= f.check_box :terms_accepted, class: "mt-0.5 rounded border-gray-700 bg-gray-900 text-white focus:ring-gray-600" %>
+              <label class="text-xs text-gray-400">
+                <%= t("login.terms_html",
+                      privacy_link: link_to(t("privacy_policy.link"), privacy_policy_path, class: "text-blue-400 hover:text-blue-300 underline", target: "_blank"),
+                      legal_link: link_to(t("legal_notices.link"), legal_notices_path, class: "text-blue-400 hover:text-blue-300 underline", target: "_blank")) %>
+              </label>
+            </div>
+
             <button type="submit"
                     class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
               <%= t("login.sign_up") %>
@@ -119,7 +128,7 @@
         </div>
 
         <%# Right: Google OAuth %>
-        <div class="md:flex-2 flex items-center">
+        <div class="md:flex-2 flex flex-col items-center justify-center gap-2">
           <%= button_to user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false },
                 class: "w-full flex items-center justify-center gap-3 bg-gray-900 border border-gray-700 rounded px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors" do %>
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -130,6 +139,11 @@
             </svg>
             <%= t("login.sign_in_with_google") %>
           <% end %>
+          <p class="text-xs text-gray-500 text-center">
+            <%= t("login.google_terms_html",
+                  privacy_link: link_to(t("privacy_policy.link"), privacy_policy_path, class: "text-blue-400 hover:text-blue-300 underline", target: "_blank"),
+                  legal_link: link_to(t("legal_notices.link"), legal_notices_path, class: "text-blue-400 hover:text-blue-300 underline", target: "_blank")) %>
+          </p>
         </div>
       </div>
     </div>

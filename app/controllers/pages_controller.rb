@@ -4,4 +4,7 @@ class PagesController < ApplicationController
 
   def legal_notices
   end
+
+  def privacy_policy
+  end
 end

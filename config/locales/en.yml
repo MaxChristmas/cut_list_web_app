@@ -20,6 +20,10 @@ en:
     unlimited_optimizations: "Unlimited optimizations"
     install_app: "Install App"
     ios_install: "Tap %{share_icon} then \"Add to Home Screen\""
+    reading: "A bit of reading"
+    settings: "Settings"
+    sign_out: "Sign out"
+    manage_cookies: "Manage cookies"
   login:
     remember_me: "Remember me"
     sign_up: "Create an account"
@@ -28,6 +32,8 @@ en:
     invalid_credentials: "Invalid email or password."
     sign_in_with_google: "Continue with Google"
     or: "or"
+    terms_html: "I accept the %{privacy_link} and the %{legal_link}."
+    google_terms_html: "By continuing, you accept the %{privacy_link} and the %{legal_link}."
   projects:
     index:
       title: "New Cut List"
@@ -197,10 +203,20 @@ en:
     total: "Total: %{count}"
   cookie_consent:
     title: "Cookie Settings"
-    message: "We use cookies to enhance your experience on our site. By accepting, you consent to the use of cookies for analytics and personalization."
-    accept: "Accept"
-    decline: "Decline"
+    message: "We use cookies to ensure the proper functioning of our site and, with your consent, to analyze traffic. You can accept all cookies, decline non-essential cookies, or customize your preferences."
+    accept_all: "Accept all"
+    decline_all: "Decline all"
+    customize: "Customize"
+    save_preferences: "Save my preferences"
     learn_more: "Learn more"
+    manage_cookies: "Manage cookies"
+    always_active: "Always active"
+    essential:
+      title: "Essential cookies"
+      description: "These cookies are strictly necessary for the site to function (session, authentication, security). They cannot be disabled."
+    analytics:
+      title: "Analytics cookies"
+      description: "These cookies allow us to measure site traffic and understand how visitors use the site, in order to improve its performance. Data is collected anonymously."
   cookies_policy:
     page_title: "Cookies Policy — CutList"
     title: "Cookies Policy"
@@ -303,6 +319,131 @@ en:
     contact:
       title: "Contact"
       body: "For any questions regarding these legal notices, you may contact us:"
+  privacy_policy:
+    page_title: "Privacy Policy — CutOptima"
+    title: "Privacy Policy"
+    last_updated: "Last updated: February 22, 2026"
+    link: "Privacy Policy"
+    intro: "Noventi SARL (\"Noventi,\" \"we,\" \"us,\" or \"our\") is committed to protecting the privacy of users of the website cutoptima.com (the \"Site\"). This Privacy Policy describes how we collect, use, store, and share your personal data in accordance with the General Data Protection Regulation (GDPR — EU Regulation 2016/679) and the French Data Protection Act (Loi Informatique et Libertés)."
+    data_controller:
+      title: "Data Controller"
+      body: "The data controller responsible for the processing of your personal data is:"
+    data_collected:
+      title: "Data Collected"
+      body: "We collect the following personal data as part of the operation of the Site:"
+      table:
+        data: "Data"
+        purpose: "Purpose"
+        legal_basis: "Legal Basis"
+      rows:
+        email:
+          data: "Email address"
+          purpose: "Account creation, authentication, communication"
+          basis: "Contract performance"
+        password:
+          data: "Password (encrypted)"
+          purpose: "Secure authentication"
+          basis: "Contract performance"
+        oauth:
+          data: "Google OAuth ID"
+          purpose: "Social login authentication"
+          basis: "Consent"
+        projects:
+          data: "Projects (names, dimensions, optimization results)"
+          purpose: "Providing the cutting optimization service"
+          basis: "Contract performance"
+        payment:
+          data: "Stripe customer & subscription ID"
+          purpose: "Subscription and payment management"
+          basis: "Contract performance"
+        reports:
+          data: "Issue reports (text, page URL)"
+          purpose: "Customer support and bug resolution"
+          basis: "Legitimate interest"
+    purposes:
+      title: "Purposes of Processing"
+      items:
+        service: "Providing and operating the cutting optimization service"
+        auth: "Managing user accounts and authentication"
+        payment: "Processing payments and managing subscriptions"
+        communication: "Responding to issue reports and support requests"
+        security: "Ensuring the security and integrity of the Site"
+        improvement: "Improving the Site and user experience"
+    legal_basis:
+      title: "Legal Basis for Processing"
+      body: "We process your personal data based on the following legal grounds:"
+      items:
+        contract: "Contract performance: processing necessary to provide the service you have subscribed to"
+        consent: "Consent: for optional features such as social login (Google OAuth) and non-essential cookies"
+        legitimate: "Legitimate interest: for site security, fraud prevention, and service improvement"
+        legal: "Legal obligation: for compliance with applicable laws and regulations"
+    recipients:
+      title: "Data Recipients"
+      body: "Your personal data may be shared with the following third-party service providers, strictly for the purposes described:"
+      table:
+        provider: "Provider"
+        purpose: "Purpose"
+        location: "Location"
+      rows:
+        stripe: "Payment processing and subscription management"
+        stripe_location: "United States (EU SCCs)"
+        brevo: "Transactional email delivery"
+        brevo_location: "European Union"
+        google: "OAuth authentication"
+        google_location: "United States (EU SCCs)"
+        ovh: "Website hosting and infrastructure"
+        ovh_location: "France"
+    transfers:
+      title: "International Data Transfers"
+      body: "Some of our service providers (Stripe, Google) are based in the United States. These transfers are governed by Standard Contractual Clauses (SCCs) approved by the European Commission, ensuring an adequate level of data protection in accordance with the GDPR."
+    retention:
+      title: "Data Retention"
+      body: "We retain your personal data for the following periods:"
+      items:
+        account: "Account data (email, password): for the duration of your account, deleted upon account deletion"
+        projects: "Projects and optimizations: for the duration of your account"
+        payment: "Payment data: Stripe customer and subscription references are retained for the duration of your account; detailed payment records are retained by Stripe in accordance with legal obligations"
+        cookies: "Cookie data: see our Cookies Policy for specific durations"
+    rights:
+      title: "Your Rights"
+      body: "Under the GDPR, you have the following rights regarding your personal data:"
+      items:
+        access:
+          name: "Right of access"
+          desc: "obtain a copy of your personal data held by us"
+        rectification:
+          name: "Right of rectification"
+          desc: "correct inaccurate or incomplete data"
+        erasure:
+          name: "Right of erasure"
+          desc: "request the deletion of your personal data"
+        portability:
+          name: "Right to data portability"
+          desc: "receive your data in a structured, commonly used format"
+        restriction:
+          name: "Right to restriction"
+          desc: "request that we limit the processing of your data"
+        objection:
+          name: "Right to object"
+          desc: "object to processing based on legitimate interest"
+        withdrawal:
+          name: "Right to withdraw consent"
+          desc: "withdraw your consent at any time for consent-based processing"
+      exercise: "To exercise any of these rights, please contact us at contact@cutoptima.com. We will respond within one month of receiving your request."
+      cnil: "You also have the right to lodge a complaint with the CNIL (Commission Nationale de l'Informatique et des Libertés) at www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "The Site uses cookies and similar technologies. For full details on the cookies we use and how to manage your preferences, please see our "
+    security:
+      title: "Data Security"
+      body: "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, loss, or destruction. These measures include: HTTPS encryption for all communications, bcrypt password hashing, CSRF protection, secure session management, and access controls limiting data access to authorized personnel only."
+    updates:
+      title: "Changes to This Policy"
+      body: "We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. When we make changes, we will update the \"Last Updated\" date at the top of this page. We encourage you to review this policy periodically."
+    contact:
+      title: "Contact"
+      body: "For any questions regarding this Privacy Policy or to exercise your rights, please contact us:"
+      cnil: "You may also contact the CNIL (Commission Nationale de l'Informatique et des Libertés), the French data protection authority, at www.cnil.fr."
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"

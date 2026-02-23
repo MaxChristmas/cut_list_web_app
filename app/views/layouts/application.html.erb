@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#1a6bce">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= tag.meta name: "ga-id", content: Rails.application.credentials.dig(:google, :analytics_id) if Rails.application.credentials.dig(:google, :analytics_id) %>
 
     <%= yield :head %>
 

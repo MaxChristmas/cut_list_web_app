@@ -20,6 +20,10 @@ ja:
     unlimited_optimizations: "無制限の最適化"
     install_app: "アプリをインストール"
     ios_install: "%{share_icon}をタップして「ホーム画面に追加」"
+    reading: "読み物"
+    settings: "設定"
+    sign_out: "ログアウト"
+    manage_cookies: "Cookieを管理"
   login:
     remember_me: "ログイン状態を保持"
     sign_up: "アカウント作成"
@@ -28,6 +32,8 @@ ja:
     invalid_credentials: "メールアドレスまたはパスワードが正しくありません。"
     sign_in_with_google: "Googleで続ける"
     or: "または"
+    terms_html: "%{privacy_link}および%{legal_link}に同意します。"
+    google_terms_html: "続行すると、%{privacy_link}および%{legal_link}に同意したものとみなされます。"
   projects:
     index:
       title: "カットリストを最適化"
@@ -187,10 +193,20 @@ ja:
     total: "合計: %{count}"
   cookie_consent:
     title: "Cookieの設定"
-    message: "当サイトでは、より良い体験を提供するためにCookieを使用しています。承認すると、分析およびパーソナライズのためのCookieの使用に同意したことになります。"
-    accept: "承認する"
-    decline: "拒否する"
+    message: "当サイトでは、サイトの正常な動作を確保するためにCookieを使用し、お客様の同意を得た上でトラフィックを分析しています。すべてのCookieを受け入れるか、必須でないCookieを拒否するか、設定をカスタマイズすることができます。"
+    accept_all: "すべて承認"
+    decline_all: "すべて拒否"
+    customize: "カスタマイズ"
+    save_preferences: "設定を保存"
     learn_more: "詳しく見る"
+    manage_cookies: "Cookieを管理"
+    always_active: "常に有効"
+    essential:
+      title: "必須Cookie"
+      description: "これらのCookieは、サイトの正常な動作（セッション、認証、セキュリティ）に必要不可欠です。無効にすることはできません。"
+    analytics:
+      title: "分析Cookie"
+      description: "これらのCookieにより、サイトのトラフィックを測定し、訪問者がサイトをどのように利用しているかを把握して、パフォーマンスを向上させることができます。データは匿名で収集されます。"
   cookies_policy:
     page_title: "Cookieポリシー — CutList"
     title: "Cookieポリシー"
@@ -293,6 +309,131 @@ ja:
     contact:
       title: "お問い合わせ"
       body: "本法的通知に関するご質問は、以下までお問い合わせください："
+  privacy_policy:
+    page_title: "プライバシーポリシー — CutOptima"
+    title: "プライバシーポリシー"
+    last_updated: "最終更新日：2026年2月22日"
+    link: "プライバシーポリシー"
+    intro: "Noventi SARL（「Noventi」、「当社」）は、cutoptima.com（以下「サイト」）の利用者のプライバシー保護に努めています。本プライバシーポリシーは、一般データ保護規則（GDPR — EU規則2016/679）およびフランスデータ保護法（情報処理と自由に関する法律）に従い、当社がお客様の個人データをどのように収集、使用、保存、共有するかについて説明します。"
+    data_controller:
+      title: "データ管理者"
+      body: "お客様の個人データの処理に責任を負うデータ管理者は以下の通りです："
+    data_collected:
+      title: "収集するデータ"
+      body: "当社はサイトの運営にあたり、以下の個人データを収集します："
+      table:
+        data: "データ"
+        purpose: "目的"
+        legal_basis: "法的根拠"
+      rows:
+        email:
+          data: "メールアドレス"
+          purpose: "アカウント作成、認証、コミュニケーション"
+          basis: "契約の履行"
+        password:
+          data: "パスワード（暗号化）"
+          purpose: "安全な認証"
+          basis: "契約の履行"
+        oauth:
+          data: "Google OAuth ID"
+          purpose: "ソーシャルログイン認証"
+          basis: "同意"
+        projects:
+          data: "プロジェクト（名前、寸法、最適化結果）"
+          purpose: "カット最適化サービスの提供"
+          basis: "契約の履行"
+        payment:
+          data: "Stripe顧客・サブスクリプションID"
+          purpose: "サブスクリプションと決済の管理"
+          basis: "契約の履行"
+        reports:
+          data: "問題報告（テキスト、ページURL）"
+          purpose: "カスタマーサポートとバグ解決"
+          basis: "正当な利益"
+    purposes:
+      title: "処理の目的"
+      items:
+        service: "カット最適化サービスの提供と運営"
+        auth: "ユーザーアカウントと認証の管理"
+        payment: "支払いの処理とサブスクリプションの管理"
+        communication: "問題報告とサポートリクエストへの対応"
+        security: "サイトのセキュリティと完全性の確保"
+        improvement: "サイトとユーザー体験の向上"
+    legal_basis:
+      title: "処理の法的根拠"
+      body: "当社は以下の法的根拠に基づいてお客様の個人データを処理します："
+      items:
+        contract: "契約の履行：お客様が申し込んだサービスを提供するために必要な処理"
+        consent: "同意：ソーシャルログイン（Google OAuth）や必須でないCookieなどのオプション機能について"
+        legitimate: "正当な利益：サイトセキュリティ、不正防止、サービス改善のため"
+        legal: "法的義務：適用される法律および規制の遵守のため"
+    recipients:
+      title: "データの受領者"
+      body: "お客様の個人データは、以下に記載する目的に限り、以下のサードパーティサービスプロバイダーと共有される場合があります："
+      table:
+        provider: "プロバイダー"
+        purpose: "目的"
+        location: "所在地"
+      rows:
+        stripe: "決済処理とサブスクリプション管理"
+        stripe_location: "米国（EU SCC）"
+        brevo: "トランザクションメール配信"
+        brevo_location: "欧州連合"
+        google: "OAuth認証"
+        google_location: "米国（EU SCC）"
+        ovh: "ウェブサイトホスティングとインフラ"
+        ovh_location: "フランス"
+    transfers:
+      title: "国際データ移転"
+      body: "一部のサービスプロバイダー（Stripe、Google）は米国に拠点を置いています。これらの移転は、欧州委員会が承認した標準契約条項（SCC）によって管理されており、GDPRに従った適切なレベルのデータ保護が保証されています。"
+    retention:
+      title: "データの保存期間"
+      body: "当社はお客様の個人データを以下の期間保存します："
+      items:
+        account: "アカウントデータ（メール、パスワード）：アカウント存続期間中、アカウント削除時に削除"
+        projects: "プロジェクトと最適化：アカウント存続期間中"
+        payment: "決済データ：Stripe顧客およびサブスクリプション参照はアカウント存続期間中保持、詳細な決済記録はStripeが法的義務に従い保持"
+        cookies: "Cookieデータ：具体的な期間はCookieポリシーをご参照ください"
+    rights:
+      title: "お客様の権利"
+      body: "GDPRに基づき、お客様は個人データに関して以下の権利を有します："
+      items:
+        access:
+          name: "アクセス権"
+          desc: "当社が保有するお客様の個人データのコピーを取得する"
+        rectification:
+          name: "訂正権"
+          desc: "不正確または不完全なデータを訂正する"
+        erasure:
+          name: "消去権"
+          desc: "個人データの削除を要求する"
+        portability:
+          name: "データポータビリティ権"
+          desc: "構造化された一般的に使用される形式でデータを受け取る"
+        restriction:
+          name: "制限権"
+          desc: "データの処理を制限することを要求する"
+        objection:
+          name: "異議申立権"
+          desc: "正当な利益に基づく処理に異議を申し立てる"
+        withdrawal:
+          name: "同意撤回権"
+          desc: "同意に基づく処理について、いつでも同意を撤回する"
+      exercise: "これらの権利を行使するには、contact@cutoptima.comまでご連絡ください。ご請求の受領から1か月以内に対応いたします。"
+      cnil: "また、CNIL（情報処理と自由に関する国家委員会）に苦情を申し立てる権利もあります。www.cnil.frをご参照ください。"
+    cookies:
+      title: "Cookie"
+      body: "本サイトではCookieおよび類似技術を使用しています。使用しているCookieの詳細および設定の管理については、"
+    security:
+      title: "データセキュリティ"
+      body: "当社は、不正アクセス、改ざん、損失、破壊から個人データを保護するため、適切な技術的および組織的措置を講じています。これらの措置には、すべての通信に対するHTTPS暗号化、bcryptによるパスワードハッシュ化、CSRF保護、安全なセッション管理、および権限のある担当者のみにデータアクセスを制限するアクセス制御が含まれます。"
+    updates:
+      title: "本ポリシーの変更"
+      body: "当社の慣行または法的要件の変更を反映するため、本プライバシーポリシーを随時更新する場合があります。変更を行った場合、このページの上部にある「最終更新日」を更新します。定期的にこのポリシーを確認されることをお勧めします。"
+    contact:
+      title: "お問い合わせ"
+      body: "本プライバシーポリシーに関するご質問、またはお客様の権利を行使するには、以下までお問い合わせください："
+      cnil: "また、フランスのデータ保護機関であるCNIL（情報処理と自由に関する国家委員会）にお問い合わせいただくこともできます。www.cnil.frをご参照ください。"
   report_issue:
     button: "問題を報告"
     title: "問題を報告する"

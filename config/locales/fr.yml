@@ -20,6 +20,10 @@ fr:
     unlimited_optimizations: "Optimisations illimitées"
     install_app: "Installer l'app"
     ios_install: "Appuyez sur %{share_icon} puis \"Sur l'écran d'accueil\""
+    reading: "Un peu de lecture"
+    settings: "Paramètres"
+    sign_out: "Déconnexion"
+    manage_cookies: "Gérer les cookies"
   login:
     remember_me: "Se souvenir de moi"
     sign_up: "Créer un compte"
@@ -28,6 +32,8 @@ fr:
     invalid_credentials: "Email ou mot de passe invalide."
     sign_in_with_google: "Continuer avec Google"
     or: "ou"
+    terms_html: "J'accepte la %{privacy_link} et les %{legal_link}."
+    google_terms_html: "En continuant, vous acceptez la %{privacy_link} et les %{legal_link}."
   projects:
     index:
       title: "Optimisez vos découpes"
@@ -197,10 +203,20 @@ fr:
     total: "Total : %{count}"
   cookie_consent:
     title: "Paramètres des cookies"
-    message: "Nous utilisons des cookies pour améliorer votre expérience sur notre site. En acceptant, vous consentez à l'utilisation de cookies à des fins d'analyse et de personnalisation."
-    accept: "Accepter"
-    decline: "Refuser"
+    message: "Nous utilisons des cookies pour assurer le bon fonctionnement de notre site et, avec votre consentement, pour analyser le trafic. Vous pouvez accepter tous les cookies, refuser les cookies non essentiels ou personnaliser vos préférences."
+    accept_all: "Tout accepter"
+    decline_all: "Tout refuser"
+    customize: "Personnaliser"
+    save_preferences: "Enregistrer mes préférences"
     learn_more: "En savoir plus"
+    manage_cookies: "Gérer les cookies"
+    always_active: "Toujours actif"
+    essential:
+      title: "Cookies essentiels"
+      description: "Ces cookies sont strictement nécessaires au bon fonctionnement du site (session, authentification, sécurité). Ils ne peuvent pas être désactivés."
+    analytics:
+      title: "Cookies d'analyse"
+      description: "Ces cookies nous permettent de mesurer le trafic du site et de comprendre comment les visiteurs utilisent le site, afin d'en améliorer les performances. Les données sont collectées de manière anonyme."
   cookies_policy:
     page_title: "Politique de cookies — CutList"
     title: "Politique de cookies"
@@ -303,6 +319,131 @@ fr:
     contact:
       title: "Contact"
       body: "Pour toute question relative aux présentes mentions légales, vous pouvez nous contacter :"
+  privacy_policy:
+    page_title: "Politique de confidentialité — CutOptima"
+    title: "Politique de confidentialité"
+    last_updated: "Dernière mise à jour : 22 février 2026"
+    link: "Politique de confidentialité"
+    intro: "Noventi SARL (« Noventi », « nous », « notre ») s'engage à protéger la vie privée des utilisateurs du site cutoptima.com (le « Site »). La présente Politique de confidentialité décrit comment nous collectons, utilisons, conservons et partageons vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679) et à la loi Informatique et Libertés."
+    data_controller:
+      title: "Responsable du traitement"
+      body: "Le responsable du traitement de vos données personnelles est :"
+    data_collected:
+      title: "Données collectées"
+      body: "Nous collectons les données personnelles suivantes dans le cadre du fonctionnement du Site :"
+      table:
+        data: "Donnée"
+        purpose: "Finalité"
+        legal_basis: "Base légale"
+      rows:
+        email:
+          data: "Adresse e-mail"
+          purpose: "Création de compte, authentification, communication"
+          basis: "Exécution du contrat"
+        password:
+          data: "Mot de passe (chiffré)"
+          purpose: "Authentification sécurisée"
+          basis: "Exécution du contrat"
+        oauth:
+          data: "Identifiant Google OAuth"
+          purpose: "Connexion via réseau social"
+          basis: "Consentement"
+        projects:
+          data: "Projets (noms, dimensions, résultats d'optimisation)"
+          purpose: "Fourniture du service d'optimisation de découpe"
+          basis: "Exécution du contrat"
+        payment:
+          data: "Identifiants client et abonnement Stripe"
+          purpose: "Gestion des abonnements et paiements"
+          basis: "Exécution du contrat"
+        reports:
+          data: "Signalements (texte, URL de la page)"
+          purpose: "Support client et résolution de bugs"
+          basis: "Intérêt légitime"
+    purposes:
+      title: "Finalités du traitement"
+      items:
+        service: "Fournir et exploiter le service d'optimisation de découpe"
+        auth: "Gérer les comptes utilisateurs et l'authentification"
+        payment: "Traiter les paiements et gérer les abonnements"
+        communication: "Répondre aux signalements et demandes de support"
+        security: "Assurer la sécurité et l'intégrité du Site"
+        improvement: "Améliorer le Site et l'expérience utilisateur"
+    legal_basis:
+      title: "Base légale du traitement"
+      body: "Nous traitons vos données personnelles sur les fondements juridiques suivants :"
+      items:
+        contract: "Exécution du contrat : traitement nécessaire à la fourniture du service auquel vous avez souscrit"
+        consent: "Consentement : pour les fonctionnalités optionnelles telles que la connexion sociale (Google OAuth) et les cookies non essentiels"
+        legitimate: "Intérêt légitime : pour la sécurité du site, la prévention de la fraude et l'amélioration du service"
+        legal: "Obligation légale : pour le respect des lois et réglementations applicables"
+    recipients:
+      title: "Destinataires des données"
+      body: "Vos données personnelles peuvent être partagées avec les prestataires tiers suivants, strictement aux fins décrites :"
+      table:
+        provider: "Prestataire"
+        purpose: "Finalité"
+        location: "Localisation"
+      rows:
+        stripe: "Traitement des paiements et gestion des abonnements"
+        stripe_location: "États-Unis (CCT UE)"
+        brevo: "Envoi d'e-mails transactionnels"
+        brevo_location: "Union européenne"
+        google: "Authentification OAuth"
+        google_location: "États-Unis (CCT UE)"
+        ovh: "Hébergement et infrastructure du site"
+        ovh_location: "France"
+    transfers:
+      title: "Transferts internationaux de données"
+      body: "Certains de nos prestataires (Stripe, Google) sont basés aux États-Unis. Ces transferts sont encadrés par les Clauses Contractuelles Types (CCT) approuvées par la Commission européenne, garantissant un niveau de protection adéquat conformément au RGPD."
+    retention:
+      title: "Durée de conservation"
+      body: "Nous conservons vos données personnelles pendant les durées suivantes :"
+      items:
+        account: "Données de compte (e-mail, mot de passe) : pendant la durée de votre compte, supprimées à la suppression du compte"
+        projects: "Projets et optimisations : pendant la durée de votre compte"
+        payment: "Données de paiement : les références client et abonnement Stripe sont conservées pendant la durée de votre compte ; les détails de paiement sont conservés par Stripe conformément à ses obligations légales"
+        cookies: "Données de cookies : consultez notre Politique de cookies pour les durées spécifiques"
+    rights:
+      title: "Vos droits"
+      body: "En vertu du RGPD, vous disposez des droits suivants concernant vos données personnelles :"
+      items:
+        access:
+          name: "Droit d'accès"
+          desc: "obtenir une copie de vos données personnelles détenues par nous"
+        rectification:
+          name: "Droit de rectification"
+          desc: "corriger des données inexactes ou incomplètes"
+        erasure:
+          name: "Droit à l'effacement"
+          desc: "demander la suppression de vos données personnelles"
+        portability:
+          name: "Droit à la portabilité"
+          desc: "recevoir vos données dans un format structuré et couramment utilisé"
+        restriction:
+          name: "Droit à la limitation"
+          desc: "demander que nous limitions le traitement de vos données"
+        objection:
+          name: "Droit d'opposition"
+          desc: "vous opposer au traitement fondé sur l'intérêt légitime"
+        withdrawal:
+          name: "Droit au retrait du consentement"
+          desc: "retirer votre consentement à tout moment pour les traitements fondés sur le consentement"
+      exercise: "Pour exercer l'un de ces droits, veuillez nous contacter à contact@cutoptima.com. Nous répondrons dans un délai d'un mois suivant la réception de votre demande."
+      cnil: "Vous avez également le droit de déposer une réclamation auprès de la CNIL (Commission Nationale de l'Informatique et des Libertés) sur www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "Le Site utilise des cookies et technologies similaires. Pour connaître le détail des cookies utilisés et gérer vos préférences, veuillez consulter notre "
+    security:
+      title: "Sécurité des données"
+      body: "Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, toute altération, perte ou destruction. Ces mesures comprennent : le chiffrement HTTPS pour toutes les communications, le hachage des mots de passe via bcrypt, la protection CSRF, la gestion sécurisée des sessions et des contrôles d'accès limitant l'accès aux données au personnel autorisé uniquement."
+    updates:
+      title: "Modifications de cette politique"
+      body: "Nous pouvons mettre à jour cette Politique de confidentialité de temps à autre pour refléter les changements dans nos pratiques ou les exigences légales. Lorsque nous apportons des modifications, nous mettrons à jour la date de « Dernière mise à jour » en haut de cette page. Nous vous encourageons à consulter régulièrement cette politique."
+    contact:
+      title: "Contact"
+      body: "Pour toute question relative à cette Politique de confidentialité ou pour exercer vos droits, veuillez nous contacter :"
+      cnil: "Vous pouvez également contacter la CNIL (Commission Nationale de l'Informatique et des Libertés), l'autorité française de protection des données, sur www.cnil.fr."
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get "cookies-policy", to: "pages#cookies_policy", as: :cookies_policy
   get "legal-notices", to: "pages#legal_notices", as: :legal_notices
+  get "privacy-policy", to: "pages#privacy_policy", as: :privacy_policy
 
   get "up" => "rails/health#show", as: :rails_health_check
 

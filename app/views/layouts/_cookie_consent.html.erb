@@ -9,20 +9,60 @@
         <h2 class="text-lg font-semibold text-white"><%= t("cookie_consent.title") %></h2>
       </div>
 
-      <p class="text-sm text-gray-400 mb-2"><%= t("cookie_consent.message") %></p>
-      <p class="text-sm mb-6">
-        <%= link_to t("cookie_consent.learn_more"), cookies_policy_path, class: "text-blue-400 hover:text-blue-300 underline", data: { action: "click->cookie-consent#accept" } %>
-      </p>
+      <%# Initial view — accept/decline/customize %>
+      <div data-cookie-consent-target="initialView">
+        <p class="text-sm text-gray-400 mb-2"><%= t("cookie_consent.message") %></p>
+        <p class="text-sm mb-6">
+          <%= link_to t("cookie_consent.learn_more"), cookies_policy_path, class: "text-blue-400 hover:text-blue-300 underline" %>
+        </p>
 
-      <div class="flex flex-col sm:flex-row gap-3">
-        <button data-action="click->cookie-consent#accept"
-                class="flex-1 bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
-          <%= t("cookie_consent.accept") %>
-        </button>
-        <button data-action="click->cookie-consent#decline"
-                class="flex-1 bg-gray-800 text-gray-300 font-semibold py-2 px-4 rounded hover:bg-gray-700 transition-colors text-sm">
-          <%= t("cookie_consent.decline") %>
-        </button>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button data-action="click->cookie-consent#acceptAll"
+                  class="flex-1 bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+            <%= t("cookie_consent.accept_all") %>
+          </button>
+          <button data-action="click->cookie-consent#declineAll"
+                  class="flex-1 bg-gray-800 text-gray-300 font-semibold py-2 px-4 rounded hover:bg-gray-700 transition-colors text-sm">
+            <%= t("cookie_consent.decline_all") %>
+          </button>
+          <button data-action="click->cookie-consent#customize"
+                  class="flex-1 bg-gray-800 text-gray-300 font-semibold py-2 px-4 rounded hover:bg-gray-700 transition-colors text-sm">
+            <%= t("cookie_consent.customize") %>
+          </button>
+        </div>
+      </div>
+
+      <%# Settings view — per-category toggles %>
+      <div data-cookie-consent-target="settingsView" class="hidden">
+        <div class="space-y-4 mb-6">
+          <%# Essential cookies — always on %>
+          <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-medium text-white"><%= t("cookie_consent.essential.title") %></h3>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-medium"><%= t("cookie_consent.always_active") %></span>
+            </div>
+            <p class="text-xs text-gray-400"><%= t("cookie_consent.essential.description") %></p>
+          </div>
+
+          <%# Analytics cookies — toggle %>
+          <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-medium text-white"><%= t("cookie_consent.analytics.title") %></h3>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" data-cookie-consent-target="analyticsToggle" class="sr-only peer">
+                <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-blue-500 peer-focus:ring-2 peer-focus:ring-blue-800 after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+            </div>
+            <p class="text-xs text-gray-400"><%= t("cookie_consent.analytics.description") %></p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button data-action="click->cookie-consent#savePreferences"
+                  class="flex-1 bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+            <%= t("cookie_consent.save_preferences") %>
+          </button>
+        </div>
       </div>
     </div>
   </dialog>

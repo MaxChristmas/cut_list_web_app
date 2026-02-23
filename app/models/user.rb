@@ -11,6 +11,11 @@ class User < ApplicationRecord
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true
 
+  attribute :terms_accepted, :boolean
+  validates :terms_accepted, acceptance: true, on: :create
+
+  before_create :set_terms_accepted_at, if: :terms_accepted
+
   def self.from_omniauth(auth)
     user = find_by(provider: auth.provider, uid: auth.uid)
     return user if user
@@ -25,11 +30,18 @@ class User < ApplicationRecord
       email: auth.info.email,
       password: Devise.friendly_token(32),
       provider: auth.provider,
-      uid: auth.uid
+      uid: auth.uid,
+      terms_accepted: true
     )
   end
 
   def password_required?
     super && provider.blank?
+  end
+
+  private
+
+  def set_terms_accepted_at
+    self.terms_accepted_at = Time.current
   end
 end
