@@ -164,6 +164,9 @@ ja:
     enterprise:
       name: "エンタープライズ"
       description: "大規模運用のための無制限パワー"
+  optimizer_errors:
+    piece_does_not_fit: "ピース %{piece} はストック %{stock} に収まりません"
+    generic: "最適化に失敗しました: %{message}"
   limits:
     max_projects_reached: "アクティブプロジェクトの上限に達しました。プランをアップグレードしてください。"
     daily_optimizations_reached: "このプロジェクトの1日の最適化回数の上限に達しました。プランをアップグレードしてください。"

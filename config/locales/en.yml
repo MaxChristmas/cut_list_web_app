@@ -174,6 +174,9 @@ en:
       enterprise_name: "One-shot Enterprise"
       expires_in: "Expires in %{duration}"
       expired: "Your one-shot access has expired"
+  optimizer_errors:
+    piece_does_not_fit: "Piece %{piece} does not fit in stock %{stock}"
+    generic: "Optimization failed: %{message}"
   limits:
     max_projects_reached: "You've reached your active project limit. Upgrade your plan to create more."
     daily_optimizations_reached: "You've reached the daily optimization limit for this project. Upgrade your plan for more."
