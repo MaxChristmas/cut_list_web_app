@@ -1,4 +1,6 @@
 class CutListPdfService
+  include PdfFontSetup
+
   COLORS = %w[7DD3FC 6EE7B7 FDBA74 C4B5FD FCA5A5 5EEAD4 FDE047 F9A8D4 A5B4FC BEF264].freeze
   STOCK_BG = "f7fafc"
   STOCK_BORDER = "a0aec0"
@@ -21,6 +23,7 @@ class CutListPdfService
 
   def generate
     Prawn::Document.new(page_size: "A4", margin: [30, 30, 40, 30]) do |pdf|
+      setup_fonts(pdf)
       @color_map = build_color_map
       @piece_summary = build_piece_summary
       @label_map = build_label_map

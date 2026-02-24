@@ -1,4 +1,6 @@
 class LabelPdfService
+  include PdfFontSetup
+
   FORMATS = {
     "65" => { name: "65", cols: 5, rows: 13, label_w: 38.1, label_h: 21.2, margin_top: 10.7, margin_left: 4.7, gap_x: 0, gap_y: 0 },
     "40" => { name: "40", cols: 4, rows: 10, label_w: 52.5, label_h: 29.7, margin_top: 13.5, margin_left: 0, gap_x: 0, gap_y: 0 },
@@ -24,6 +26,7 @@ class LabelPdfService
     fmt = @format
 
     Prawn::Document.new(page_size: "A4", margin: [0, 0, 0, 0]) do |pdf|
+      setup_fonts(pdf)
       label_w = mm(fmt[:label_w])
       label_h = mm(fmt[:label_h])
       margin_top = mm(fmt[:margin_top])
