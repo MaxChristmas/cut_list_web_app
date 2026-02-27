@@ -27,6 +27,8 @@ export default class extends Controller {
     this.dragging = null
     this.workingData = null
     this.zoomLevel = 1
+    this._onContainerPointerMove = this.onContainerPointerMove.bind(this)
+    this._onContainerPointerUp = this.onContainerPointerUp.bind(this)
     this.render()
   }
 
@@ -130,12 +132,10 @@ export default class extends Controller {
       svg.setAttribute("height", actualHeight * this.zoomLevel)
       svg.setAttribute("viewBox", `${-labelMargin} ${-labelMargin} ${svgW} ${svgHTotal}`)
       svg.setAttribute("class", "rounded")
+      svg.dataset.sheetIndex = i
 
       if (this.editMode) {
         svg.style.cursor = "default"
-        svg.addEventListener("pointermove", (e) => this.onPointerMove(e, svg))
-        svg.addEventListener("pointerup", () => this.onPointerUp())
-        svg.addEventListener("pointerleave", () => this.onPointerUp())
       }
 
       // Stock background
@@ -286,6 +286,12 @@ export default class extends Controller {
       wrapper.appendChild(svg)
       container.appendChild(wrapper)
     })
+
+    // Container-level drag listeners for cross-sheet support
+    if (this.editMode) {
+      container.addEventListener("pointermove", this._onContainerPointerMove)
+      container.addEventListener("pointerup", this._onContainerPointerUp)
+    }
 
     // Broadcast color map so the pieces form can use it
     document.dispatchEvent(new CustomEvent("piece-colors:updated", { detail: { colorMap } }))
@@ -450,7 +456,7 @@ export default class extends Controller {
     this.pdfLinkTarget.href = url.toString()
   }
 
-  // --- Drag and drop ---
+  // --- Drag and drop (cross-sheet capable) ---
 
   onPointerDown(e, group, svg, sheetIndex, placementIndex) {
     e.preventDefault()
@@ -468,19 +474,36 @@ export default class extends Controller {
       placementIndex,
       offsetX: pt.x - placement.x,
       offsetY: pt.y - placement.y,
+      originX: placement.x,
+      originY: placement.y,
       stock,
+      currentX: placement.x,
+      currentY: placement.y,
+      targetSheetIndex: null,
+      ghost: null,
     }
 
     group.style.cursor = "grabbing"
     group.style.opacity = "0.6"
     // Bring to front
     svg.appendChild(group)
-
-    svg.setPointerCapture(e.pointerId)
   }
 
-  onPointerMove(e, svg) {
-    if (!this.dragging || this.dragging.svg !== svg) return
+  findSvgUnderPointer(clientX, clientY) {
+    const container = this.hasCanvasTarget ? this.canvasTarget : this.element
+    const svgs = container.querySelectorAll("svg[data-sheet-index]")
+    for (const svg of svgs) {
+      const rect = svg.getBoundingClientRect()
+      if (clientX >= rect.left && clientX <= rect.right &&
+          clientY >= rect.top && clientY <= rect.bottom) {
+        return svg
+      }
+    }
+    return null
+  }
+
+  onContainerPointerMove(e) {
+    if (!this.dragging) return
     e.preventDefault()
 
     const { sheetIndex, placementIndex, stock } = this.dragging
@@ -490,23 +513,75 @@ export default class extends Controller {
     const mh = moving.rect.h ?? moving.rect.width
     const kerf = parseFloat(this.getDisplayData()?.kerf) || 0
 
-    const pt = this.svgPoint(svg, e.clientX, e.clientY)
-    let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
-    let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
+    const targetSvg = this.findSvgUnderPointer(e.clientX, e.clientY)
 
-    // Resolve collisions by snapping to nearest edge of blocking pieces
+    if (!targetSvg) {
+      // Pointer outside all SVGs — clear ghost, keep piece at last position
+      this.clearDropGhost()
+      this.dragging.targetSheetIndex = null
+      return
+    }
+
+    const targetIdx = parseInt(targetSvg.dataset.sheetIndex, 10)
+    const pt = this.svgPoint(targetSvg, e.clientX, e.clientY)
+
+    if (targetIdx === sheetIndex) {
+      // Same sheet — normal drag with collision resolution
+      this.clearDropGhost()
+      this.dragging.targetSheetIndex = null
+
+      let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
+      let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
+
+      const resolved = this.resolveCollisionsOnSheet(newX, newY, mw, mh, kerf, sheet.placements, stock, placementIndex)
+      newX = resolved.x
+      newY = resolved.y
+
+      if (!this.hasCollision(newX, newY, mw, mh, sheet.placements, placementIndex)) {
+        this.dragging.currentX = newX
+        this.dragging.currentY = newY
+      }
+
+      this.dragging.group.setAttribute("transform", `translate(${this.dragging.currentX}, ${this.dragging.currentY})`)
+    } else {
+      // Cross-sheet — show ghost on target, fade source piece
+      this.dragging.targetSheetIndex = targetIdx
+
+      let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
+      let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
+
+      const targetSheet = this.workingData.sheets[targetIdx]
+      const resolved = this.resolveCollisionsOnSheet(newX, newY, mw, mh, kerf, targetSheet.placements, stock, -1)
+      newX = resolved.x
+      newY = resolved.y
+
+      const valid = !this.hasCollision(newX, newY, mw, mh, targetSheet.placements, -1)
+
+      this.updateDropGhost(targetSvg, newX, newY, mw, mh, valid)
+      this.dragging.crossX = newX
+      this.dragging.crossY = newY
+      this.dragging.crossValid = valid
+
+      // Fade source piece more when over another sheet
+      this.dragging.group.style.opacity = "0.3"
+    }
+  }
+
+  resolveCollisionsOnSheet(x, y, mw, mh, kerf, placements, stock, skipIndex) {
+    let newX = x
+    let newY = y
+
     for (let pass = 0; pass < 3; pass++) {
       let collided = false
-      for (let i = 0; i < sheet.placements.length; i++) {
-        if (i === placementIndex) continue
-        const o = sheet.placements[i]
+      for (let i = 0; i < placements.length; i++) {
+        if (i === skipIndex) continue
+        const o = placements[i]
         const ow = o.rect.w ?? o.rect.length
         const oh = o.rect.h ?? o.rect.width
 
         if (newX < o.x + ow + kerf && newX + mw + kerf > o.x &&
             newY < o.y + oh + kerf && newY + mh + kerf > o.y) {
           collided = true
-          // Find the smallest push to escape the collision
           const pushRight = o.x + ow + kerf - newX
           const pushLeft  = newX + mw + kerf - o.x
           const pushDown  = o.y + oh + kerf - newY
@@ -525,12 +600,7 @@ export default class extends Controller {
       if (!collided) break
     }
 
-    if (!this.hasCollision(newX, newY, mw, mh, sheet.placements, placementIndex)) {
-      this.dragging.currentX = newX
-      this.dragging.currentY = newY
-    }
-
-    this.dragging.group.setAttribute("transform", `translate(${this.dragging.currentX}, ${this.dragging.currentY})`)
+    return { x: newX, y: newY }
   }
 
   hasCollision(x, y, w, h, placements, skipIndex) {
@@ -548,24 +618,115 @@ export default class extends Controller {
     return false
   }
 
-  onPointerUp() {
+  updateDropGhost(targetSvg, x, y, w, h, valid) {
+    this.clearDropGhost()
+
+    const ghost = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+    ghost.setAttribute("x", x)
+    ghost.setAttribute("y", y)
+    ghost.setAttribute("width", w)
+    ghost.setAttribute("height", h)
+    ghost.setAttribute("fill", valid ? "rgba(59, 130, 246, 0.15)" : "rgba(239, 68, 68, 0.15)")
+    ghost.setAttribute("stroke", valid ? "#3b82f6" : "#ef4444")
+    ghost.setAttribute("stroke-width", "3")
+    ghost.setAttribute("stroke-dasharray", "8 4")
+    ghost.setAttribute("pointer-events", "none")
+    ghost.dataset.dropGhost = "true"
+    targetSvg.appendChild(ghost)
+
+    this.dragging.ghost = ghost
+  }
+
+  clearDropGhost() {
+    if (this.dragging?.ghost) {
+      this.dragging.ghost.remove()
+      this.dragging.ghost = null
+    }
+  }
+
+  onContainerPointerUp(e) {
     if (!this.dragging) return
 
-    const { sheetIndex, placementIndex, currentX, currentY, group } = this.dragging
+    const { sheetIndex, placementIndex, currentX, currentY, group, targetSheetIndex, crossX, crossY, crossValid, originX, originY } = this.dragging
+
+    this.clearDropGhost()
     group.style.cursor = "grab"
     group.style.opacity = "1"
 
-    if (currentX !== undefined && currentY !== undefined) {
-      const dropX = Math.round(currentX)
-      const dropY = Math.round(currentY)
-
-      // Update data — position is already collision-free from drag resolution
-      this.workingData.sheets[sheetIndex].placements[placementIndex].x = dropX
-      this.workingData.sheets[sheetIndex].placements[placementIndex].y = dropY
-      group.setAttribute("transform", `translate(${dropX}, ${dropY})`)
+    if (targetSheetIndex !== null && targetSheetIndex !== sheetIndex) {
+      // Cross-sheet drop
+      if (crossValid) {
+        this.transferPiece(sheetIndex, placementIndex, targetSheetIndex, Math.round(crossX), Math.round(crossY))
+      } else {
+        // Invalid drop — snap back to origin
+        group.setAttribute("transform", `translate(${originX}, ${originY})`)
+      }
+    } else {
+      // Same-sheet drop
+      if (currentX !== undefined && currentY !== undefined) {
+        const dropX = Math.round(currentX)
+        const dropY = Math.round(currentY)
+        this.workingData.sheets[sheetIndex].placements[placementIndex].x = dropX
+        this.workingData.sheets[sheetIndex].placements[placementIndex].y = dropY
+        group.setAttribute("transform", `translate(${dropX}, ${dropY})`)
+      }
     }
 
     this.dragging = null
+  }
+
+  transferPiece(sourceIdx, placementIdx, targetIdx, x, y) {
+    const sourceSheet = this.workingData.sheets[sourceIdx]
+    const targetSheet = this.workingData.sheets[targetIdx]
+
+    // Remove from source, add to target
+    const [piece] = sourceSheet.placements.splice(placementIdx, 1)
+    piece.x = x
+    piece.y = y
+    targetSheet.placements.push(piece)
+
+    // Recalculate waste for both sheets
+    this.recalcWaste(sourceSheet)
+    this.recalcWaste(targetSheet)
+
+    // Remove empty source sheet
+    if (sourceSheet.placements.length === 0) {
+      this.workingData.sheets.splice(sourceIdx, 1)
+      this.workingData.sheet_count = this.workingData.sheets.length
+    }
+
+    // Recalculate global waste
+    this.recalcGlobalWaste()
+
+    // Re-render everything
+    this.render()
+  }
+
+  recalcWaste(sheet) {
+    const data = this.getDisplayData()
+    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const stockArea = stock.w * stock.h
+    let usedArea = 0
+    sheet.placements.forEach((p) => {
+      const pw = p.rect.w ?? p.rect.length
+      const ph = p.rect.h ?? p.rect.width
+      usedArea += pw * ph
+    })
+    sheet.waste_area = stockArea - usedArea
+  }
+
+  recalcGlobalWaste() {
+    const data = this.workingData
+    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const stockArea = stock.w * stock.h
+    const totalSheets = data.sheets.length
+    data.sheet_count = totalSheets
+
+    let totalWaste = 0
+    data.sheets.forEach((s) => {
+      totalWaste += s.waste_area
+    })
+    data.waste_percent = ((totalWaste / (stockArea * totalSheets)) * 100).toFixed(1)
   }
 
   svgPoint(svg, clientX, clientY) {
