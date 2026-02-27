@@ -449,6 +449,37 @@ fr:
       title: "Contact"
       body: "Pour toute question relative à cette Politique de confidentialité ou pour exercer vos droits, veuillez nous contacter :"
       cnil: "Vous pouvez également contacter la CNIL (Commission Nationale de l'Informatique et des Libertés), l'autorité française de protection des données, sur www.cnil.fr."
+  faq:
+    page_title: "FAQ — CutList"
+    title: "Questions fréquentes"
+    link: "FAQ"
+    q1:
+      question: "Comment créer une liste de découpe ?"
+      answer: "Saisissez les dimensions de votre panneau de base (longueur × largeur) dans la section \"Panneau de base\", puis ajoutez les pièces à découper avec leurs dimensions et quantités. Donnez un nom à votre projet si vous le souhaitez, puis cliquez sur \"Optimiser\" pour générer le plan de découpe optimal."
+    q2:
+      question: "Comment fonctionne l'optimisation ?"
+      answer: "L'optimiseur calcule la disposition la plus efficace de vos pièces sur les panneaux de base afin de minimiser les chutes. Il utilise un algorithme avancé qui prend en compte les dimensions des pièces, les quantités, et les contraintes optionnelles comme l'épaisseur de lame, le sens du fil du bois et la rotation. Le résultat indique le nombre de panneaux nécessaires et le placement de chaque pièce."
+    q3:
+      question: "Qu'est-ce que l'épaisseur de lame (kerf) ?"
+      answer: "L'épaisseur de lame correspond à la largeur de matière enlevée par la lame de scie à chaque coupe. En renseignant cette valeur (en mm), l'optimiseur tient compte de cette perte de matière pour des plans de découpe plus précis. Ce réglage se trouve dans la section Options. Disponible à partir du plan Worker."
+    q4:
+      question: "Comment fonctionne le sens du fil du bois ?"
+      answer: "Vous pouvez définir un sens de fil sur votre panneau de base (sur la longueur ou la largeur) dans les Options. Chaque pièce peut ensuite indiquer quelle dimension doit suivre le fil. Cela garantit que les pièces sont découpées en respectant le veinage du bois, essentiel pour les surfaces visibles."
+    q5:
+      question: "Puis-je importer des pièces depuis un fichier CSV ?"
+      answer: "Oui, à partir du plan Worker. Cliquez sur \"Importer CSV\" dans la section des pièces. Votre fichier CSV doit contenir des colonnes pour la longueur, la largeur, et optionnellement la quantité et le libellé. Les pièces seront ajoutées à votre liste en cours."
+    q6:
+      question: "Comment exporter mes résultats ?"
+      answer: "Vous pouvez exporter votre plan de découpe en PDF avec les mesures précises et les détails de chaque pièce via le bouton \"Exporter PDF\". Vous pouvez également imprimer des étiquettes adhésives aux formats standards (24 ou 30 étiquettes par page) via le bouton \"Étiquettes\". Ces fonctionnalités sont disponibles selon votre abonnement."
+    q7:
+      question: "Puis-je modifier manuellement la disposition ?"
+      answer: "Oui. Cliquez sur \"Modifier la disposition\" pour passer en mode édition. Vous pouvez déplacer les pièces au sein d'un panneau ou les transférer vers un autre panneau. La détection de collision avec le kerf empêche le chevauchement. Cliquez sur \"Enregistrer\" pour sauvegarder, ou \"Rétablir l'original\" pour revenir à la disposition optimisée."
+    q8:
+      question: "Quels sont les abonnements disponibles ?"
+      answer: "CutList propose trois plans : Gratuit (2 projets actifs, 10 optimisations par projet par jour, export PDF, étiquettes, sens de coupe), Worker (10 projets, optimisations illimitées, épaisseur de lame, import CSV, impression d'étiquettes), et Entreprise (projets et optimisations illimités, marge sur panneaux, archivage, déplacement de pièces). Un accès ponctuel de 3 jours est également disponible."
+    q9:
+      question: "Comment gérer mon compte ?"
+      answer: "Cliquez sur votre email dans la barre latérale pour accéder aux paramètres. Vous pouvez modifier votre mot de passe, changer de langue et gérer votre abonnement. Vous pouvez aussi vous connecter avec Google. Vos projets et données sont stockés de manière sécurisée et accessibles depuis n'importe quel appareil."
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

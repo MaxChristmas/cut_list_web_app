@@ -1,4 +1,7 @@
 class PagesController < ApplicationController
+  def faq
+  end
+
   def cookies_policy
   end
 

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   patch "locale", to: "application#set_locale", as: :locale
 
+  get "faq", to: "pages#faq", as: :faq
   get "cookies-policy", to: "pages#cookies_policy", as: :cookies_policy
   get "legal-notices", to: "pages#legal_notices", as: :legal_notices
   get "privacy-policy", to: "pages#privacy_policy", as: :privacy_policy

@@ -278,7 +278,11 @@ export default class extends Controller {
       const wrapper = document.createElement("div")
       wrapper.style.overflow = "auto"
       wrapper.style.maxHeight = "80vh"
-      wrapper.addEventListener("wheel", (e) => this.onWheel(e), { passive: false })
+      wrapper.style.scrollbarWidth = "none"          // Firefox
+      wrapper.style.msOverflowStyle = "none"          // IE/Edge
+      wrapper.style.webkitOverflowScrolling = "touch" // smooth scroll iOS
+      wrapper.classList.add("hide-scrollbar")
+      wrapper.addEventListener("wheel", (e) => this.onWheel(e, wrapper), { passive: false })
       if (this.zoomLevel > 1) {
         wrapper.style.cursor = "grab"
         wrapper.addEventListener("pointerdown", (e) => this.onPanStart(e, wrapper))
@@ -404,15 +408,41 @@ export default class extends Controller {
     this.render()
   }
 
-  onWheel(e) {
+  onWheel(e, wrapper) {
     if (!e.ctrlKey && !e.metaKey) return
     e.preventDefault()
+
+    const oldZoom = this.zoomLevel
+    const svg = wrapper.querySelector("svg[data-sheet-index]")
+    if (!svg) return
+    const sheetIdx = svg.dataset.sheetIndex
+
     if (e.deltaY < 0) {
       this.zoomLevel = Math.min(this.zoomLevel + 0.1, 3)
     } else {
       this.zoomLevel = Math.max(this.zoomLevel - 0.1, 0.5)
     }
+
+    // Cursor position relative to wrapper viewport
+    const rect = wrapper.getBoundingClientRect()
+    const cursorX = e.clientX - rect.left
+    const cursorY = e.clientY - rect.top
+
+    // Point in content the cursor is over
+    const contentX = wrapper.scrollLeft + cursorX
+    const contentY = wrapper.scrollTop + cursorY
+
+    const ratio = this.zoomLevel / oldZoom
+
     this.render()
+
+    // Find the rebuilt wrapper and restore scroll anchored to cursor
+    const container = this.hasCanvasTarget ? this.canvasTarget : this.element
+    const newSvg = container.querySelector(`svg[data-sheet-index="${sheetIdx}"]`)
+    if (newSvg?.parentElement) {
+      newSvg.parentElement.scrollLeft = contentX * ratio - cursorX
+      newSvg.parentElement.scrollTop = contentY * ratio - cursorY
+    }
   }
 
   onPanStart(e, wrapper) {

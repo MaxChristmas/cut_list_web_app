@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+/* Hide scrollbars on zoom wrappers while keeping scroll functional */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
