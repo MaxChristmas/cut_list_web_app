@@ -14,9 +14,11 @@
        data-sheet-visualizer-no-colors-label-value="<%= t('projects.index.no_colors') %>"
        data-sheet-visualizer-readonly-value="<%= @project&.template? || false %>"
        data-sheet-visualizer-grain-direction-value="<%= @project&.grain_direction || 'none' %>"
-       data-sheet-visualizer-grain-image-value="<%= image_path('patterns/wood_grain_transparent.png') %>">
+       data-sheet-visualizer-grain-image-value="<%= image_path('patterns/wood_grain_transparent.png') %>"
+       class="flex flex-col h-full">
 
-    <div class="flex flex-wrap items-center gap-2 mb-4" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">
+    <%# Fixed toolbar — never scrolls %>
+    <div class="shrink-0 flex flex-wrap items-center gap-2 px-6 py-3" data-controller="label-modal" data-label-modal-base-url-value="<%= export_labels_project_path(@project.token) %>">
       <%# Desktop: panel toggle button %>
       <button data-action="click->form-panel#toggleDesktop"
               data-form-panel-target="desktopToggle"
@@ -56,15 +58,18 @@
       <% end %>
     </div>
 
-    <div data-sheet-visualizer-target="canvas"></div>
-  </div>
+    <%# Scrollable content area %>
+    <div class="flex-1 overflow-y-auto px-6 pb-6">
+      <div data-sheet-visualizer-target="canvas"></div>
 
-  <details class="mt-6">
-    <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700"><%= t("projects.index.raw_json") %></summary>
-    <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
-  </details>
+      <details class="mt-6">
+        <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700"><%= t("projects.index.raw_json") %></summary>
+        <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
+      </details>
+    </div>
+  </div>
 <% else %>
-  <div class="h-full">
+  <div class="h-full p-6">
     <button data-action="click->form-panel#toggleDesktop"
             data-form-panel-target="desktopToggle"
             class="max-md:hidden p-1.5 bg-slate-800 hover:bg-slate-700 text-gray-300 rounded-md border border-gray-700 transition-colors"

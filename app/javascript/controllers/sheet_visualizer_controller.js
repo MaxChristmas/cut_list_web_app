@@ -26,6 +26,7 @@ export default class extends Controller {
     this.colorsEnabled = true
     this.dragging = null
     this.workingData = null
+    this.zoomLevel = 1
     this.render()
   }
 
@@ -125,8 +126,8 @@ export default class extends Controller {
       const actualHeight = svgHTotal * scale
 
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      svg.setAttribute("width", actualWidth)
-      svg.setAttribute("height", actualHeight)
+      svg.setAttribute("width", actualWidth * this.zoomLevel)
+      svg.setAttribute("height", actualHeight * this.zoomLevel)
       svg.setAttribute("viewBox", `${-labelMargin} ${-labelMargin} ${svgW} ${svgHTotal}`)
       svg.setAttribute("class", "rounded")
 
@@ -274,7 +275,16 @@ export default class extends Controller {
         svg.appendChild(grainRect)
       }
 
-      container.appendChild(svg)
+      const wrapper = document.createElement("div")
+      wrapper.style.overflow = "auto"
+      wrapper.style.maxHeight = "80vh"
+      wrapper.addEventListener("wheel", (e) => this.onWheel(e), { passive: false })
+      if (this.zoomLevel > 1) {
+        wrapper.style.cursor = "grab"
+        wrapper.addEventListener("pointerdown", (e) => this.onPanStart(e, wrapper))
+      }
+      wrapper.appendChild(svg)
+      container.appendChild(wrapper)
     })
 
     // Broadcast color map so the pieces form can use it
@@ -341,9 +351,86 @@ export default class extends Controller {
     colorsBtn.addEventListener("click", () => this.toggleColors())
     toolbar.appendChild(colorsBtn)
 
+    // Zoom controls
+    const ctrlKey = navigator.platform.includes("Mac") ? "\u2318" : "Ctrl"
+    const zoomGroup = document.createElement("div")
+    zoomGroup.className = "inline-flex items-center rounded-lg border border-gray-300 shadow-sm overflow-hidden ml-auto"
+    zoomGroup.title = `${ctrlKey} + Scroll`
+
+    const zoomOutBtn = document.createElement("button")
+    zoomOutBtn.className = "px-2.5 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border-r border-gray-300"
+    zoomOutBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" /></svg>`
+    zoomOutBtn.addEventListener("click", () => this.zoomOut())
+    zoomGroup.appendChild(zoomOutBtn)
+
+    const zoomLabel = document.createElement("button")
+    zoomLabel.className = "px-2.5 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border-r border-gray-300 tabular-nums"
+    zoomLabel.textContent = `${Math.round(this.zoomLevel * 100)}%`
+    zoomLabel.title = "Reset zoom"
+    zoomLabel.addEventListener("click", () => this.zoomReset())
+    zoomGroup.appendChild(zoomLabel)
+
+    const zoomInBtn = document.createElement("button")
+    zoomInBtn.className = "px-2.5 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+    zoomInBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>`
+    zoomInBtn.addEventListener("click", () => this.zoomIn())
+    zoomGroup.appendChild(zoomInBtn)
+
+    toolbar.appendChild(zoomGroup)
+
     if (!this.hasToolbarTarget) {
       container.appendChild(toolbar)
     }
+  }
+
+  zoomIn() {
+    this.zoomLevel = Math.min(this.zoomLevel + 0.25, 3)
+    this.render()
+  }
+
+  zoomOut() {
+    this.zoomLevel = Math.max(this.zoomLevel - 0.25, 0.5)
+    this.render()
+  }
+
+  zoomReset() {
+    this.zoomLevel = 1
+    this.render()
+  }
+
+  onWheel(e) {
+    if (!e.ctrlKey && !e.metaKey) return
+    e.preventDefault()
+    if (e.deltaY < 0) {
+      this.zoomLevel = Math.min(this.zoomLevel + 0.1, 3)
+    } else {
+      this.zoomLevel = Math.max(this.zoomLevel - 0.1, 0.5)
+    }
+    this.render()
+  }
+
+  onPanStart(e, wrapper) {
+    if (e.target.closest("g[data-sheet-index]")) return
+    e.preventDefault()
+    wrapper.style.cursor = "grabbing"
+    const startX = e.clientX
+    const startY = e.clientY
+    const scrollLeft = wrapper.scrollLeft
+    const scrollTop = wrapper.scrollTop
+
+    const onMove = (me) => {
+      wrapper.scrollLeft = scrollLeft - (me.clientX - startX)
+      wrapper.scrollTop = scrollTop - (me.clientY - startY)
+    }
+
+    const onUp = () => {
+      wrapper.style.cursor = "grab"
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("pointerup", onUp)
+    }
+
+    window.addEventListener("pointermove", onMove)
+    window.addEventListener("pointerup", onUp)
   }
 
   toggleColors() {
