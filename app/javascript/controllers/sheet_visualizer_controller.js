@@ -488,46 +488,60 @@ export default class extends Controller {
     const moving = sheet.placements[placementIndex]
     const mw = moving.rect.w ?? moving.rect.length
     const mh = moving.rect.h ?? moving.rect.width
+    const kerf = parseFloat(this.getDisplayData()?.kerf) || 0
 
     const pt = this.svgPoint(svg, e.clientX, e.clientY)
-    let newX = pt.x - this.dragging.offsetX
-    let newY = pt.y - this.dragging.offsetY
+    let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
+    let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
 
-    // Clamp to stock panel boundaries
-    newX = Math.max(0, Math.min(newX, stock.w - mw))
-    newY = Math.max(0, Math.min(newY, stock.h - mh))
+    // Resolve collisions by snapping to nearest edge of blocking pieces
+    for (let pass = 0; pass < 3; pass++) {
+      let collided = false
+      for (let i = 0; i < sheet.placements.length; i++) {
+        if (i === placementIndex) continue
+        const o = sheet.placements[i]
+        const ow = o.rect.w ?? o.rect.length
+        const oh = o.rect.h ?? o.rect.width
 
-    const prevX = this.dragging.currentX ?? moving.x
-    const prevY = this.dragging.currentY ?? moving.y
+        if (newX < o.x + ow + kerf && newX + mw + kerf > o.x &&
+            newY < o.y + oh + kerf && newY + mh + kerf > o.y) {
+          collided = true
+          // Find the smallest push to escape the collision
+          const pushRight = o.x + ow + kerf - newX
+          const pushLeft  = newX + mw + kerf - o.x
+          const pushDown  = o.y + oh + kerf - newY
+          const pushUp    = newY + mh + kerf - o.y
+          const min = Math.min(pushRight, pushLeft, pushDown, pushUp)
 
-    // Try full move first
+          if (min === pushRight) newX = o.x + ow + kerf
+          else if (min === pushLeft) newX = o.x - mw - kerf
+          else if (min === pushDown) newY = o.y + oh + kerf
+          else newY = o.y - mh - kerf
+
+          newX = Math.max(0, Math.min(newX, stock.w - mw))
+          newY = Math.max(0, Math.min(newY, stock.h - mh))
+        }
+      }
+      if (!collided) break
+    }
+
     if (!this.hasCollision(newX, newY, mw, mh, sheet.placements, placementIndex)) {
       this.dragging.currentX = newX
       this.dragging.currentY = newY
     }
-    // Try X only (slide horizontally along a piece edge)
-    else if (!this.hasCollision(newX, prevY, mw, mh, sheet.placements, placementIndex)) {
-      this.dragging.currentX = newX
-      this.dragging.currentY = prevY
-    }
-    // Try Y only (slide vertically along a piece edge)
-    else if (!this.hasCollision(prevX, newY, mw, mh, sheet.placements, placementIndex)) {
-      this.dragging.currentX = prevX
-      this.dragging.currentY = newY
-    }
-    // Both axes blocked — don't move
 
     this.dragging.group.setAttribute("transform", `translate(${this.dragging.currentX}, ${this.dragging.currentY})`)
   }
 
   hasCollision(x, y, w, h, placements, skipIndex) {
+    const kerf = parseFloat(this.getDisplayData()?.kerf) || 0
     for (let i = 0; i < placements.length; i++) {
       if (i === skipIndex) continue
       const other = placements[i]
       const ow = other.rect.w ?? other.rect.length
       const oh = other.rect.h ?? other.rect.width
 
-      if (x < other.x + ow && x + w > other.x && y < other.y + oh && y + h > other.y) {
+      if (x < other.x + ow + kerf && x + w + kerf > other.x && y < other.y + oh + kerf && y + h + kerf > other.y) {
         return true
       }
     }
