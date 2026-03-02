@@ -92,6 +92,11 @@
         <%# Left: manual form %>
         <div class="md:flex-3">
           <%= form_for(User.new, as: :user, url: user_registration_path, html: { class: "space-y-4", data: { action: "submit->modal#submitForm", turbo: false } }) do |f| %>
+            <%# Honeypot field — invisible to humans, bots will fill it %>
+            <div aria-hidden="true" style="position:absolute;left:-9999px">
+              <%= text_field_tag :website, nil, tabindex: "-1", autocomplete: "off" %>
+            </div>
+
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
               <%= f.email_field :email, autocomplete: "email",

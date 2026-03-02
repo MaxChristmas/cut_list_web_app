@@ -35,6 +35,7 @@ fr:
       updated: "Votre mot de passe a été modifié avec succès. Vous êtes maintenant connecté(e)."
       updated_not_active: "Votre mot de passe a été modifié avec succès."
     registrations:
+      rate_limited: "Trop de tentatives d'inscription. Veuillez réessayer plus tard."
       destroyed: "Votre compte a été supprimé avec succès. Nous espérons vous revoir bientôt."
       signed_up: "Bienvenue ! Vous vous êtes inscrit(e) avec succès."
       signed_up_but_inactive: "Vous vous êtes inscrit(e) avec succès. Cependant, nous n'avons pas pu vous connecter car votre compte n'est pas encore activé."
@@ -44,6 +45,7 @@ fr:
       updated: "Votre compte a été mis à jour avec succès."
       updated_but_not_signed_in: "Votre compte a été mis à jour avec succès, mais comme votre mot de passe a changé, vous devez vous reconnecter."
     sessions:
+      rate_limited: "Trop de tentatives de connexion. Veuillez réessayer plus tard."
       signed_in: "Connecté(e) avec succès."
       signed_out: "Déconnecté(e) avec succès."
       already_signed_out: "Déconnecté(e) avec succès."

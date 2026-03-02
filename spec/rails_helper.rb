@@ -67,6 +67,8 @@ RSpec.configure do |config|
 
   config.before(:each, type: :request) do
     ProjectsController::RATE_LIMIT_STORE.clear
+    Users::RegistrationsController::RATE_LIMIT_STORE.clear
+    Users::SessionsController::RATE_LIMIT_STORE.clear
   end
 
   # Filter lines from Rails gems in backtraces.
