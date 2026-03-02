@@ -131,6 +131,7 @@ jobs:
           SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
           SENTRY_DSN=${{ secrets.SENTRY_DSN }}
           EOF
+          sed -i 's/^[[:space:]]*//' .env.production
 
       - name: Write master key
         run: echo "${{ secrets.RAILS_MASTER_KEY }}" > config/master.key
