@@ -16,7 +16,7 @@ module Plannable
     "worker" => {
       max_active_projects: 10,
       max_daily_optimizations_per_project: Float::INFINITY,
-      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels],
+      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces],
       prices: {
         monthly:  { amount: 1000, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
         yearly:   { amount: 10000, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },

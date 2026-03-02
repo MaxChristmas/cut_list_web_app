@@ -476,7 +476,7 @@ fr:
       answer: "Oui. Cliquez sur \"Modifier la disposition\" pour passer en mode édition. Vous pouvez déplacer les pièces au sein d'un panneau ou les transférer vers un autre panneau. La détection de collision avec le kerf empêche le chevauchement. Cliquez sur \"Enregistrer\" pour sauvegarder, ou \"Rétablir l'original\" pour revenir à la disposition optimisée."
     q8:
       question: "Quels sont les abonnements disponibles ?"
-      answer: "CutList propose trois plans : Gratuit (2 projets actifs, 10 optimisations par projet par jour, export PDF, étiquettes, sens de coupe, épaisseur de lame), Worker (10 projets, optimisations illimitées, import CSV, impression d'étiquettes), et Entreprise (projets et optimisations illimités, marge sur panneaux, archivage, déplacement de pièces). Un accès ponctuel de 3 jours est également disponible."
+      answer: "CutList propose trois plans : Gratuit (2 projets actifs, 10 optimisations par projet par jour, export PDF, étiquettes, sens de coupe, épaisseur de lame), Worker (10 projets, optimisations illimitées, import CSV, impression d'étiquettes, déplacement de pièces), et Entreprise (projets et optimisations illimités, marge sur panneaux, archivage). Un accès ponctuel de 3 jours est également disponible."
     q9:
       question: "Comment gérer mon compte ?"
       answer: "Cliquez sur votre email dans la barre latérale pour accéder aux paramètres. Vous pouvez modifier votre mot de passe, changer de langue et gérer votre abonnement. Vous pouvez aussi vous connecter avec Google. Vos projets et données sont stockés de manière sécurisée et accessibles depuis n'importe quel appareil."
