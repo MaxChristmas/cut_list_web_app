@@ -20,7 +20,7 @@ RSpec.describe "Optimization rate limiting", type: :request do
   let(:update_params) do
     {
       name: "Test", stock_l: 2440, stock_w: 1220,
-      pieces: [{ length: 500, width: 300, quantity: 1 }]
+      pieces: [ { length: 500, width: 300, quantity: 1 } ]
     }
   end
 

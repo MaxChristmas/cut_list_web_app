@@ -85,7 +85,7 @@ module Plannable
                    .count
     # Don't count the initial creation optimization
     if project.created_at >= Time.current.beginning_of_day
-      [count - 1, 0].max
+      [ count - 1, 0 ].max
     else
       count
     end

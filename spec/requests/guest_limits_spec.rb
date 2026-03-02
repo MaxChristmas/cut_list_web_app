@@ -17,7 +17,7 @@ RSpec.describe "Guest user limits", type: :request do
     it "redirects logged-out users to root with signup prompt" do
       post projects_path, params: {
         name: "Test", stock_l: 2440, stock_w: 1220,
-        pieces: [{ length: 500, width: 300, quantity: 1 }]
+        pieces: [ { length: 500, width: 300, quantity: 1 } ]
       }
 
       expect(response).to redirect_to(root_path)
@@ -31,7 +31,7 @@ RSpec.describe "Guest user limits", type: :request do
     it "redirects logged-out users with signup prompt" do
       patch project_path(project.token), params: {
         name: "Updated", stock_l: 2440, stock_w: 1220,
-        pieces: [{ length: 500, width: 300, quantity: 1 }]
+        pieces: [ { length: 500, width: 300, quantity: 1 } ]
       }
 
       expect(response).to redirect_to(project_path(project.token))
@@ -62,7 +62,7 @@ RSpec.describe "Guest user limits", type: :request do
       it "allows creating a first project" do
         post projects_path, params: {
           name: "Project 1", stock_l: 2440, stock_w: 1220,
-          pieces: [{ length: 500, width: 300, quantity: 1 }]
+          pieces: [ { length: 500, width: 300, quantity: 1 } ]
         }
 
         expect(response).to redirect_to(project_path(Project.last.token))
@@ -74,7 +74,7 @@ RSpec.describe "Guest user limits", type: :request do
 
         post projects_path, params: {
           name: "Project 2", stock_l: 2440, stock_w: 1220,
-          pieces: [{ length: 500, width: 300, quantity: 1 }]
+          pieces: [ { length: 500, width: 300, quantity: 1 } ]
         }
 
         expect(response).to redirect_to(project_path(Project.last.token))
@@ -86,7 +86,7 @@ RSpec.describe "Guest user limits", type: :request do
 
         post projects_path, params: {
           name: "Project 3", stock_l: 2440, stock_w: 1220,
-          pieces: [{ length: 500, width: 300, quantity: 1 }]
+          pieces: [ { length: 500, width: 300, quantity: 1 } ]
         }
 
         expect(response).to redirect_to(plans_path)
@@ -107,7 +107,7 @@ RSpec.describe "Guest user limits", type: :request do
 
         patch project_path(project.token), params: {
           name: project.name, stock_l: 2440, stock_w: 1220,
-          pieces: [{ length: 500, width: 300, quantity: 1 }]
+          pieces: [ { length: 500, width: 300, quantity: 1 } ]
         }
 
         expect(response).to redirect_to(project_path(project.token))
@@ -118,7 +118,7 @@ RSpec.describe "Guest user limits", type: :request do
 
         patch project_path(project.token), params: {
           name: project.name, stock_l: 2440, stock_w: 1220,
-          pieces: [{ length: 500, width: 300, quantity: 1 }]
+          pieces: [ { length: 500, width: 300, quantity: 1 } ]
         }
 
         expect(response).to redirect_to(plans_path)

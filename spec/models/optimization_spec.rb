@@ -39,7 +39,7 @@ RSpec.describe Optimization, type: :model do
   describe "attributes" do
     it "stores JSONB result" do
       project = create_project
-      result_data = { "sheets" => [{ "cuts" => [] }] }
+      result_data = { "sheets" => [ { "cuts" => [] } ] }
       optimization = Optimization.create!(project: project, result: result_data)
       optimization.reload
       expect(optimization.result).to eq(result_data)

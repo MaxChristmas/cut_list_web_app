@@ -70,8 +70,8 @@ RSpec.describe GuestLimits do
     end
 
     it "returns tokens from session" do
-      session = { guest_project_tokens: ["abc123", "def456"] }
-      expect(described_class.guest_tokens(session)).to eq(["abc123", "def456"])
+      session = { guest_project_tokens: [ "abc123", "def456" ] }
+      expect(described_class.guest_tokens(session)).to eq([ "abc123", "def456" ])
     end
   end
 end

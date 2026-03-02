@@ -13,7 +13,7 @@ module GuestLimits
                    .where(created_at: Time.current.beginning_of_day..)
                    .count
     if project.created_at >= Time.current.beginning_of_day
-      [count - 1, 0].max
+      [ count - 1, 0 ].max
     else
       count
     end

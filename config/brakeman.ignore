@@ -1,0 +1,10 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "3f38caa53869f420f77e2b094f6bf2476584566d1d9f52f013157e5af8efbf22",
+      "note": "URL is validated with regex to only allow http/https schemes before being used in link_to href"
+    }
+  ],
+  "updated": "2026-03-02",
+  "brakeman_version": "8.0.4"
+}

@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
   RATE_LIMIT_STORE = ActiveSupport::Cache::MemoryStore.new
-  rate_limit to: 3, within: 1.second, only: [:create, :update],
+  rate_limit to: 3, within: 1.second, only: [ :create, :update ],
              store: RATE_LIMIT_STORE, with: -> { head :too_many_requests }
 
-  before_action :reject_template_project, only: [:update, :save_layout, :reset_layout, :archive, :unarchive]
-  before_action :require_archive_feature!, only: [:archive, :unarchive]
+  before_action :reject_template_project, only: [ :update, :save_layout, :reset_layout, :archive, :unarchive ]
+  before_action :require_archive_feature!, only: [ :archive, :unarchive ]
 
   def index
   end
@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
 
     # Collect all project tokens (current + extras)
-    tokens = [params[:token]]
+    tokens = [ params[:token] ]
     tokens.concat(Array(params[:tokens])) if params[:tokens].present?
     tokens.uniq!
 

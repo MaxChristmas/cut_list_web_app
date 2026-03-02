@@ -22,11 +22,11 @@ class ApplicationController < ActionController::Base
   def switch_locale(&action)
     locale = if user_signed_in? && current_user.locale.present?
                current_user.locale.to_sym
-             elsif session[:locale].present?
+    elsif session[:locale].present?
                session[:locale].to_sym
-             else
+    else
                locale_from_browser || I18n.default_locale
-             end
+    end
     I18n.with_locale(locale, &action)
   end
 
@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
       tokens = session[:guest_project_tokens] || []
       guest_projects = Project.where(token: tokens).active.order(created_at: :desc).limit(20)
       template = Project.templates.first
-      @recent_projects = template ? [template] + guest_projects.to_a : guest_projects.to_a
+      @recent_projects = template ? [ template ] + guest_projects.to_a : guest_projects.to_a
     end
   end
 

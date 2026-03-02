@@ -64,13 +64,13 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
-gem 'devise'
+gem "devise"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "prawn"
 gem "prawn-table"
 gem "stripe"
-gem "dotenv-rails", groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 gem "prawn-svg", "~> 0.38.1"
 gem "geocoder"

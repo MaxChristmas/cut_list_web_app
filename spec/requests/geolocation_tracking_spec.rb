@@ -7,7 +7,7 @@ RSpec.describe "Geolocation tracking on authentication", type: :request do
   end
 
   before do
-    allow(Geocoder).to receive(:search).and_return([geo_result])
+    allow(Geocoder).to receive(:search).and_return([ geo_result ])
   end
 
   describe "sign in via email/password" do

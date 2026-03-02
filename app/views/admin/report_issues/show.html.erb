@@ -29,7 +29,14 @@
     <% if @report_issue.page_url.present? %>
       <div>
         <dt class="text-sm font-medium text-gray-500">Page URL</dt>
-        <dd class="mt-1 text-sm text-gray-900"><%= link_to @report_issue.page_url, @report_issue.page_url, class: "text-blue-600 hover:text-blue-800 break-all" %></dd>
+        <dd class="mt-1 text-sm text-gray-900">
+          <% safe_url = @report_issue.page_url.match?(%r{\Ahttps?://}) %>
+          <% if safe_url %>
+            <%= link_to @report_issue.page_url, @report_issue.page_url, class: "text-blue-600 hover:text-blue-800 break-all" %>
+          <% else %>
+            <span class="break-all"><%= @report_issue.page_url %></span>
+          <% end %>
+        </dd>
       </div>
     <% end %>
     <div>

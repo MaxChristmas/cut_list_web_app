@@ -8,7 +8,7 @@ RSpec.describe RustCuttingService do
       { l: 150, w: 75, qty: 2, grain: "auto" }
     ]
   end
-  let(:success_body) { { "sheets" => [{ "cuts" => [] }] }.to_json }
+  let(:success_body) { { "sheets" => [ { "cuts" => [] } ] }.to_json }
 
   def stub_optimizer(status: 200, body: success_body)
     http_double = instance_double(Net::HTTP)
@@ -34,7 +34,7 @@ RSpec.describe RustCuttingService do
     it "returns parsed JSON on success" do
       stub_optimizer
       result = described_class.optimize(stock: stock, cuts: cuts)
-      expect(result).to eq("sheets" => [{ "cuts" => [] }])
+      expect(result).to eq("sheets" => [ { "cuts" => [] } ])
     end
 
     it "sends correct payload structure with per-cut grain" do

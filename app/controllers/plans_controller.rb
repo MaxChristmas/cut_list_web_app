@@ -39,7 +39,7 @@ class PlansController < ApplicationController
       customer: customer_id,
       mode: is_one_shot ? "payment" : "subscription",
       locale: I18n.locale.to_s,
-      line_items: [{ price: price_id, quantity: 1 }],
+      line_items: [ { price: price_id, quantity: 1 } ],
       billing_address_collection: "required",
       tax_id_collection: { enabled: true },
       customer_update: { name: "auto", address: "auto" },

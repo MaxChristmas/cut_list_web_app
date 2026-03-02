@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :plans, only: [:index]
+  resources :plans, only: [ :index ]
   post "plans/checkout", to: "plans#checkout", as: :plan_checkout
   get "plans/success", to: "plans#success", as: :plan_success
   post "plans/portal", to: "plans#portal", as: :plan_portal
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions" }
 
-  resources :report_issues, only: [:create]
+  resources :report_issues, only: [ :create ]
 
   patch "locale", to: "application#set_locale", as: :locale
 

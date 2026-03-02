@@ -40,7 +40,7 @@ RSpec.describe "Stripe webhooks – subscription lifecycle", type: :request do
           customer: "cus_test123",
           cancel_at_period_end: cancel_at_period_end,
           current_period_end: current_period_end.to_i,
-          items: { data: [{ price: { id: "price_worker_monthly" } }] }
+          items: { data: [ { price: { id: "price_worker_monthly" } } ] }
         }
       }
     }

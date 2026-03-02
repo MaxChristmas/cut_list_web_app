@@ -25,7 +25,7 @@ class LabelPdfService
     labels = build_labels
     fmt = @format
 
-    Prawn::Document.new(page_size: "A4", margin: [0, 0, 0, 0]) do |pdf|
+    Prawn::Document.new(page_size: "A4", margin: [ 0, 0, 0, 0 ]) do |pdf|
       setup_fonts(pdf)
       label_w = mm(fmt[:label_w])
       label_h = mm(fmt[:label_h])
@@ -49,7 +49,7 @@ class LabelPdfService
           pdf.stroke_color BORDER_COLOR
           pdf.line_width 0.25
           pdf.dash(2, space: 2)
-          pdf.stroke_rectangle [x, y], label_w, label_h
+          pdf.stroke_rectangle [ x, y ], label_w, label_h
           pdf.undash
 
           # Content centered in label
@@ -82,7 +82,7 @@ class LabelPdfService
 
     lines.each_with_index do |line, i|
       pdf.text_box line,
-        at: [cx, cy - row_h * i], width: w, height: row_h,
+        at: [ cx, cy - row_h * i ], width: w, height: row_h,
         align: :center, valign: :center,
         size: 14, style: :bold,
         overflow: :shrink_to_fit, min_font_size: 7
@@ -96,7 +96,7 @@ class LabelPdfService
 
     lines.each_with_index do |line, i|
       pdf.text_box line,
-        at: [cx, cy - row_h * i], width: w, height: row_h,
+        at: [ cx, cy - row_h * i ], width: w, height: row_h,
         align: :center, valign: :center,
         size: 11, style: :bold,
         overflow: :shrink_to_fit, min_font_size: 5
@@ -110,7 +110,7 @@ class LabelPdfService
 
     lines.each_with_index do |line, i|
       pdf.text_box line,
-        at: [cx, cy - row_h * i], width: w, height: row_h,
+        at: [ cx, cy - row_h * i ], width: w, height: row_h,
         align: :center, valign: :center,
         size: 8, style: :bold,
         overflow: :shrink_to_fit, min_font_size: 3
