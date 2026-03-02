@@ -85,7 +85,7 @@ RSpec.describe RustCuttingService do
       stub_optimizer(status: 500, body: "Internal Server Error")
       expect {
         described_class.optimize(stock: stock, cuts: cuts)
-      }.to raise_error(RuntimeError, /Optimizer returned 500/)
+      }.to raise_error(RuntimeError, /Optimization failed: Internal Server Error/)
     end
 
     it "sets Content-Type to application/json" do

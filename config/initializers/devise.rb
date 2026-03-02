@@ -317,3 +317,25 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+
+# Track user IP and geolocation on sign-in
+Warden::Manager.after_set_user except: :fetch do |user, warden, options|
+  next unless user.is_a?(User)
+
+  request = warden.request
+  ip = request.remote_ip
+
+  next if ip.blank? || ip == user.last_sign_in_ip
+
+  begin
+    geo = Geocoder.search(ip).first
+    user.update_columns(
+      last_sign_in_ip: ip,
+      last_sign_in_country: geo&.country,
+      last_sign_in_city: geo&.city
+    )
+  rescue StandardError => e
+    Rails.logger.warn("Geolocation failed for IP #{ip}: #{e.message}")
+    user.update_columns(last_sign_in_ip: ip)
+  end
+end
