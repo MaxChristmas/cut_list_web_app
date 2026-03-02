@@ -27,7 +27,7 @@
             <td class="px-5 py-3 text-sm text-gray-500"><%= report.created_at.strftime("%b %d, %Y") %></td>
             <td class="px-5 py-3 text-right flex gap-3 justify-end">
               <%= link_to "View", admin_report_issue_path(report), class: "text-sm text-blue-600 hover:text-blue-800" %>
-              <%= link_to "Delete", admin_report_issue_path(report), data: { turbo_method: :delete, turbo_confirm: "Delete this report?" }, class: "text-sm text-red-600 hover:text-red-800" %>
+              <%= button_to "Delete", admin_report_issue_path(report), method: :delete, data: { turbo_confirm: "Delete this report?" }, class: "text-sm text-red-600 hover:text-red-800" %>
             </td>
           </tr>
         <% end %>
