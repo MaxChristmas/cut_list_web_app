@@ -109,8 +109,8 @@ RSpec.describe Plannable, type: :model do
         expect(user.has_feature?(:cut_direction)).to be true
       end
 
-      it "excludes blade_kerf" do
-        expect(user.has_feature?(:blade_kerf)).to be false
+      it "includes blade_kerf" do
+        expect(user.has_feature?(:blade_kerf)).to be true
       end
 
       it "excludes import_csv" do

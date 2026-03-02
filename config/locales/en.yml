@@ -461,7 +461,7 @@ en:
       answer: "The optimizer calculates the most efficient way to arrange your pieces on raw sheets to minimize waste. It uses an advanced algorithm that considers piece dimensions, quantities, and optional constraints like blade kerf, grain direction, and rotation. The result shows you how many sheets you need and where to place each piece."
     q3:
       question: "What is blade kerf and how do I set it?"
-      answer: "Blade kerf is the width of material removed by the saw blade during each cut. Setting the kerf value (in mm) ensures the optimizer accounts for this material loss, resulting in more accurate layouts. You can set it in the Options section. This feature is available on the Worker plan and above."
+      answer: "Blade kerf is the width of material removed by the saw blade during each cut. Setting the kerf value (in mm) ensures the optimizer accounts for this material loss, resulting in more accurate layouts. You can set it in the Options section."
     q4:
       question: "How does wood grain direction work?"
       answer: "You can set a grain direction on your raw sheet (along length or along width) in the Options section. Each piece can then specify which of its dimensions should follow the grain. This ensures pieces are cut respecting the wood grain pattern, which is essential for visible surfaces."
@@ -476,7 +476,7 @@ en:
       answer: "Yes. Click \"Edit Layout\" to enter edit mode. You can drag pieces to reposition them within a sheet, or drag them to another sheet. Collision detection with kerf ensures pieces don't overlap. Click \"Save Layout\" to save your changes, or \"Reset to Original\" to go back to the optimized layout."
     q8:
       question: "What are the subscription plans?"
-      answer: "CutList offers three plans: Free (2 active projects, 10 optimizations per project per day, PDF export, labels, cut direction), Worker (10 projects, unlimited optimizations, blade kerf, CSV import, print labels), and Enterprise (unlimited projects and optimizations, margin on panels, archive projects, move pieces). One-shot 3-day access is also available."
+      answer: "CutList offers three plans: Free (2 active projects, 10 optimizations per project per day, PDF export, labels, cut direction, blade kerf), Worker (10 projects, unlimited optimizations, CSV import, print labels), and Enterprise (unlimited projects and optimizations, margin on panels, archive projects, move pieces). One-shot 3-day access is also available."
     q9:
       question: "How do I manage my account?"
       answer: "Click your email in the sidebar to access settings. You can change your password, switch language, and manage your subscription. You can also sign in with Google for quick access. Your projects and data are securely stored and accessible from any device."

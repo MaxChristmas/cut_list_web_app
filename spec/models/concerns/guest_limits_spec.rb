@@ -19,8 +19,8 @@ RSpec.describe GuestLimits do
       expect(described_class.has_feature?(:cut_direction)).to be true
     end
 
-    it "denies blade_kerf" do
-      expect(described_class.has_feature?(:blade_kerf)).to be false
+    it "allows blade_kerf" do
+      expect(described_class.has_feature?(:blade_kerf)).to be true
     end
 
     it "denies import_csv" do

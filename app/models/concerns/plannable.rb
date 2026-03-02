@@ -10,7 +10,7 @@ module Plannable
     "free" => {
       max_active_projects: 2,
       max_daily_optimizations_per_project: 10,
-      features: %i[pdf_export label_pieces cut_direction],
+      features: %i[pdf_export label_pieces cut_direction blade_kerf],
       prices: nil
     },
     "worker" => {
