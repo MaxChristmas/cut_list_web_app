@@ -63,7 +63,7 @@
             <td class="px-5 py-3 text-sm text-gray-500"><%= opt.efficiency ? number_to_percentage(opt.efficiency, precision: 1) : "—" %></td>
             <td class="px-5 py-3 text-sm text-gray-500"><%= opt.sheets_count || "—" %></td>
             <td class="px-5 py-3 text-sm text-gray-500"><%= opt.cut_direction %></td>
-            <td class="px-5 py-3 text-sm text-gray-500"><%= opt.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= opt.created_at.strftime("%b %d, %Y at %H:%M") %></td>
             <td class="px-5 py-3 text-right">
               <%= link_to "View", admin_project_optimization_path(@project, opt), class: "text-sm text-blue-600 hover:text-blue-800" %>
             </td>

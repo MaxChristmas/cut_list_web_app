@@ -83,7 +83,7 @@
                 <span class="text-green-600">Active</span>
               <% end %>
             </td>
-            <td class="px-5 py-3 text-sm text-gray-500"><%= project.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= project.created_at.strftime("%b %d, %Y at %H:%M") %></td>
             <td class="px-5 py-3 text-right">
               <%= link_to "View", admin_project_path(project), class: "text-sm text-blue-600 hover:text-blue-800" %>
             </td>

@@ -25,7 +25,7 @@
             </span>
           </td>
           <td class="px-5 py-3 text-sm text-gray-500"><%= user.projects.size %></td>
-          <td class="px-5 py-3 text-sm text-gray-500"><%= user.created_at.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-3 text-sm text-gray-500"><%= user.created_at.strftime("%b %d, %Y at %H:%M") %></td>
           <td class="px-5 py-3 text-right">
             <%= link_to "View", admin_user_path(user), class: "text-sm text-blue-600 hover:text-blue-800" %>
           </td>
