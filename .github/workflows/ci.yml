@@ -92,6 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [ scan_ruby, lint, rspec ]
+    environment: production
 
     env:
       DOCKER_BUILDKIT: 1
