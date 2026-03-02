@@ -24,11 +24,35 @@
            maxlength="100">
   </section>
 
-  <%# Step 1 — Pieces to cut %>
+  <%# Step 1 — Stock Sheet %>
+  <div>
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">1</div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.stock_sheet") %></h2>
+    </div>
+    <section class="w-full pb-6">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
+          <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
+                 value="<%= @stock_l %>"
+                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
+          <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
+                 value="<%= @stock_w %>"
+                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <%# Step 2 — Pieces to cut %>
   <div>
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">1</div>
+        <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">2</div>
         <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
       </div>
       <div class="flex items-center gap-4">
@@ -142,30 +166,6 @@
               class="mt-2 text-sm text-white hover:text-gray-300 font-medium">
         <%= t("projects.index.add_piece") %>
       </button>
-    </section>
-  </div>
-
-  <%# Step 2 — Stock Sheet %>
-  <div>
-    <div class="flex items-center gap-3 mb-3">
-      <div class="w-7 h-7 rounded-full border-2 border-blue-500 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">2</div>
-      <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.stock_sheet") %></h2>
-    </div>
-    <section class="w-full pb-6">
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
-          <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
-                 value="<%= @stock_l %>"
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div>
-          <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
-          <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
-                 value="<%= @stock_w %>"
-                 class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-      </div>
     </section>
   </div>
 

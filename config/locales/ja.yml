@@ -38,7 +38,7 @@ ja:
     index:
       title: "カットリストを最適化"
       project_name: "プロジェクト名（任意）"
-      pieces_to_cut: "カットするパネル"
+      pieces_to_cut: "カットピース"
       length_short: "長さ (mm)"
       width_short: "幅 (mm)"
       quantity_short: "数量"
@@ -51,7 +51,7 @@ ja:
         manual: "手動"
       import_csv: "CSVインポート"
       add_piece: "+ パネルを追加"
-      stock_sheet: "ベースパネル"
+      stock_sheet: "原板"
       mobile_form_toggle: "ピースを設定"
       length: "長さ(mm)"
       width: "幅(mm)"
@@ -62,7 +62,7 @@ ja:
         along_length: "長さ方向"
         along_width: "幅方向"
       grain_direction: "木目の方向"
-      grain_direction_hint: "ベースパネルの木目方向を設定します。各ピースで木目に沿う寸法を選択できます。"
+      grain_direction_hint: "原板の木目方向を設定します。各ピースで木目に沿う寸法を選択できます。"
       grain_directions:
         none: "木目なし"
         along_length: "長さ方向"
@@ -152,7 +152,7 @@ ja:
       blade_kerf: "刃の切りしろ (mm)"
       import_csv: "CSVインポート"
       print_labels: "ラベル印刷"
-      margin: "ベースパネルのマージン"
+      margin: "原板のマージン"
       archive: "プロジェクトのアーカイブ"
       move_pieces: "ピースの移動"
     free:
@@ -180,7 +180,7 @@ ja:
     total_pieces: "ピース合計"
     blade_kerf: "刃の切りしろ (mm)"
     pieces: "ピース"
-    stock_sheet: "ベースパネル"
+    stock_sheet: "原板"
     sheet: "シート %{number}"
     area_used: "使用面積"
     waste_area: "端材面積"
@@ -445,7 +445,7 @@ ja:
     link: "FAQ"
     q1:
       question: "カットリストはどうやって作成しますか？"
-      answer: "「元のシート」セクションで原板の寸法（長さ×幅）を入力し、必要なカットピースの寸法と数量を追加します。必要に応じてプロジェクト名を入力し、「最適化」をクリックすると最適なカットレイアウトが生成されます。"
+      answer: "「原板」セクションで原板の寸法（長さ×幅）を入力し、必要なカットピースの寸法と数量を追加します。必要に応じてプロジェクト名を入力し、「最適化」をクリックすると最適なカットレイアウトが生成されます。"
     q2:
       question: "最適化はどのように機能しますか？"
       answer: "オプティマイザーは、廃棄物を最小限に抑えるようにピースを原板に最も効率的に配置する方法を計算します。ピースの寸法、数量、刃の厚み、木目の方向、回転などのオプション制約を考慮した高度なアルゴリズムを使用します。結果には必要なシート数と各ピースの配置位置が表示されます。"

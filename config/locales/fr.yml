@@ -38,7 +38,7 @@ fr:
     index:
       title: "Optimisez vos découpes"
       project_name: "Nom du projet (optionnel)"
-      pieces_to_cut: "Panneaux à découper"
+      pieces_to_cut: "Découpes"
       length_short: "Longueur (mm)"
       width_short: "Largeur (mm)"
       quantity_short: "Qté"
@@ -51,7 +51,7 @@ fr:
         manual: "Manuel"
       import_csv: "Importer CSV"
       add_piece: "+ Ajouter un panneau"
-      stock_sheet: "Panneau de base"
+      stock_sheet: "Panneau brut"
       mobile_form_toggle: "Définir vos pièces"
       length: "Longueur(mm)"
       width: "Largeur(mm)"
@@ -62,7 +62,7 @@ fr:
         along_length: "Sur la longueur"
         along_width: "Sur la largeur"
       grain_direction: "Direction du fil du bois"
-      grain_direction_hint: "Définissez le sens du fil de votre panneau de base. Chaque pièce peut indiquer quelle dimension suit le fil."
+      grain_direction_hint: "Définissez le sens du fil de votre panneau brut. Chaque pièce peut indiquer quelle dimension suit le fil."
       grain_directions:
         none: "Pas de fil"
         along_length: "Sur la longueur"
@@ -153,7 +153,7 @@ fr:
       blade_kerf: "Epaisseur de la lame (mm)"
       import_csv: "Import CSV"
       print_labels: "Impression d'étiquettes"
-      margin: "Marge sur panneau de base"
+      margin: "Marge sur panneau brut"
       archive: "Archiver les projets"
       move_pieces: "Déplacer les pièces"
     free:
@@ -190,7 +190,7 @@ fr:
     total_pieces: "Nombre de pièces"
     blade_kerf: "Epaisseur de la lame (mm)"
     pieces: "Panneaux"
-    stock_sheet: "Panneau de base"
+    stock_sheet: "Panneau brut"
     sheet: "Panneau %{number}"
     area_used: "Surface utilisée"
     waste_area: "Surface de chute"
@@ -455,16 +455,16 @@ fr:
     link: "FAQ"
     q1:
       question: "Comment créer une liste de découpe ?"
-      answer: "Saisissez les dimensions de votre panneau de base (longueur × largeur) dans la section \"Panneau de base\", puis ajoutez les pièces à découper avec leurs dimensions et quantités. Donnez un nom à votre projet si vous le souhaitez, puis cliquez sur \"Optimiser\" pour générer le plan de découpe optimal."
+      answer: "Saisissez les dimensions de votre panneau brut (longueur × largeur) dans la section \"Panneau brut\", puis ajoutez les pièces à découper avec leurs dimensions et quantités. Donnez un nom à votre projet si vous le souhaitez, puis cliquez sur \"Optimiser\" pour générer le plan de découpe optimal."
     q2:
       question: "Comment fonctionne l'optimisation ?"
-      answer: "L'optimiseur calcule la disposition la plus efficace de vos pièces sur les panneaux de base afin de minimiser les chutes. Il utilise un algorithme avancé qui prend en compte les dimensions des pièces, les quantités, et les contraintes optionnelles comme l'épaisseur de lame, le sens du fil du bois et la rotation. Le résultat indique le nombre de panneaux nécessaires et le placement de chaque pièce."
+      answer: "L'optimiseur calcule la disposition la plus efficace de vos pièces sur les panneaux bruts afin de minimiser les chutes. Il utilise un algorithme avancé qui prend en compte les dimensions des pièces, les quantités, et les contraintes optionnelles comme l'épaisseur de lame, le sens du fil du bois et la rotation. Le résultat indique le nombre de panneaux nécessaires et le placement de chaque pièce."
     q3:
       question: "Qu'est-ce que l'épaisseur de lame (kerf) ?"
       answer: "L'épaisseur de lame correspond à la largeur de matière enlevée par la lame de scie à chaque coupe. En renseignant cette valeur (en mm), l'optimiseur tient compte de cette perte de matière pour des plans de découpe plus précis. Ce réglage se trouve dans la section Options. Disponible à partir du plan Worker."
     q4:
       question: "Comment fonctionne le sens du fil du bois ?"
-      answer: "Vous pouvez définir un sens de fil sur votre panneau de base (sur la longueur ou la largeur) dans les Options. Chaque pièce peut ensuite indiquer quelle dimension doit suivre le fil. Cela garantit que les pièces sont découpées en respectant le veinage du bois, essentiel pour les surfaces visibles."
+      answer: "Vous pouvez définir un sens de fil sur votre panneau brut (sur la longueur ou la largeur) dans les Options. Chaque pièce peut ensuite indiquer quelle dimension doit suivre le fil. Cela garantit que les pièces sont découpées en respectant le veinage du bois, essentiel pour les surfaces visibles."
     q5:
       question: "Puis-je importer des pièces depuis un fichier CSV ?"
       answer: "Oui, à partir du plan Worker. Cliquez sur \"Importer CSV\" dans la section des pièces. Votre fichier CSV doit contenir des colonnes pour la longueur, la largeur, et optionnellement la quantité et le libellé. Les pièces seront ajoutées à votre liste en cours."
