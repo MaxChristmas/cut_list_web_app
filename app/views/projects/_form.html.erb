@@ -56,7 +56,12 @@
         <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
       </div>
       <div class="flex items-center gap-4">
-        <% if has_feature?(:import_csv) %>
+        <% if feature_locked?(:import_csv) %>
+          <span class="inline-flex items-center opacity-50 cursor-not-allowed">
+            <span class="text-sm text-white font-medium"><%= t("projects.index.import_csv") %></span>
+            <%= plan_badge_for(:import_csv) %>
+          </span>
+        <% else %>
           <input type="file" accept=".csv,.tsv,.txt" class="hidden" data-pieces-target="csvInput" data-action="change->pieces#importCsv">
           <button type="button" data-action="pieces#openCsvDialog"
                   class="text-sm text-white hover:text-blue-300 font-medium">
@@ -185,9 +190,11 @@
       <div data-collapsible-target="body" class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200">
         <div class="overflow-hidden">
           <div class="space-y-6">
-            <% if has_feature?(:label_pieces) %>
-              <div>
-                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.labels") %></h3>
+              <div class="<%= 'opacity-50 pointer-events-none' if feature_locked?(:label_pieces) %>">
+                <div class="flex items-center gap-1">
+                  <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.labels") %></h3>
+                  <%= plan_badge_for(:label_pieces) %>
+                </div>
                 <select data-pieces-target="labelsSelect" data-action="pieces#toggleLabels"
                         class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <% %w[none auto manual].each do |mode| %>
@@ -197,7 +204,6 @@
                   <% end %>
                 </select>
               </div>
-            <% end %>
 
             <div>
               <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.grain_direction") %></h3>
@@ -214,9 +220,11 @@
               <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.grain_direction_hint") %></p>
             </div>
 
-            <% if has_feature?(:cut_direction) %>
-              <div>
-                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.cut_direction") %></h3>
+              <div class="<%= 'opacity-50 pointer-events-none' if feature_locked?(:cut_direction) %>">
+                <div class="flex items-center gap-1">
+                  <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.cut_direction") %></h3>
+                  <%= plan_badge_for(:cut_direction) %>
+                </div>
                 <select name="cut_direction"
                         class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <% %w[auto along_length along_width].each do |dir| %>
@@ -227,16 +235,16 @@
                 </select>
                 <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.cut_direction_hint") %></p>
               </div>
-            <% end %>
 
-            <% if has_feature?(:blade_kerf) %>
-              <div>
-                <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.blade_kerf") %></h3>
+              <div class="<%= 'opacity-50 pointer-events-none' if feature_locked?(:blade_kerf) %>">
+                <div class="flex items-center gap-1">
+                  <h3 class="text-xs font-semibold mb-2 uppercase tracking-wide text-gray-400"><%= t("projects.index.blade_kerf") %></h3>
+                  <%= plan_badge_for(:blade_kerf) %>
+                </div>
                 <input type="number" name="kerf" min="0" step="any" value="<%= @kerf || 0 %>"
                        class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <p class="text-xs text-gray-500 mt-1"><%= t("projects.index.kerf_hint") %></p>
               </div>
-            <% end %>
           </div>
         </div>
       </div>

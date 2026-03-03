@@ -146,6 +146,8 @@ en:
     pdf_export: "PDF export"
     unlimited: "Unlimited"
     includes_all_from: "Everything in %{plan}, plus:"
+    includes_all_features: "All features included"
+    most_popular: "Most popular"
     features:
       pdf_export: "PDF export"
       label_pieces: "Label pieces"

@@ -145,6 +145,9 @@ ja:
     daily_optimizations_per_project: "プロジェクトごとの1日の最適化回数"
     pdf_export: "PDFエクスポート"
     unlimited: "無制限"
+    includes_all_from: "%{plan}の全機能に加えて："
+    includes_all_features: "すべての機能が含まれています"
+    most_popular: "一番人気"
     features:
       pdf_export: "PDFエクスポート"
       label_pieces: "ピースにラベル付け"
