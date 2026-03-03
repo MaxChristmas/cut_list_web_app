@@ -5,6 +5,15 @@ export default class extends Controller {
   static values = { index: { type: Number, default: 0 } }
 
   connect() {
+    const params = new URLSearchParams(window.location.search)
+    const tab = params.get("tab")
+    if (tab !== null) {
+      const index = parseInt(tab, 10)
+      if (!isNaN(index) && index >= 0 && index < this.tabTargets.length) {
+        this.select(index)
+        return
+      }
+    }
     this.select(this.indexValue)
   }
 

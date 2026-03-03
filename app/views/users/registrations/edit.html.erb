@@ -25,6 +25,10 @@
                 class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
           <%= t("settings.tabs.subscription") %>
         </button>
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
+          <%= t("settings.tabs.coupon") %>
+        </button>
       </div>
 
       <%# Language panel %>
@@ -164,10 +168,26 @@
         </div>
       </div>
 
-    </div>
+      <%# Coupon panel %>
+      <div data-tabs-target="panel" class="hidden">
+        <div class="space-y-6">
+          <p class="text-sm text-gray-400"><%= t("coupons.form_description") %></p>
 
-    <div class="mt-6">
-      <%= link_to t("settings.back"), root_path, class: "text-sm text-gray-500 hover:text-gray-300 transition-colors" %>
+          <%= form_with url: coupons_path, method: :post, class: "space-y-4" do |f| %>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("coupons.form_title") %></label>
+              <%= f.text_field :code, maxlength: 6, placeholder: t("coupons.placeholder"),
+                    class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm font-mono uppercase tracking-widest focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+              <%= t("coupons.submit") %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

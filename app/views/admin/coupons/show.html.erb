@@ -1,0 +1,82 @@
+<div class="mb-6">
+  <%= link_to "&larr; Back to Coupons".html_safe, admin_coupons_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
+</div>
+
+<div class="flex justify-between items-start mb-6">
+  <div class="flex items-center gap-3">
+    <h2 class="text-2xl font-semibold text-gray-900 font-mono"><%= @coupon.code %></h2>
+    <% if @coupon.redeemable? %>
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">Active</span>
+    <% else %>
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Inactive</span>
+    <% end %>
+  </div>
+  <div class="flex gap-2">
+    <%= link_to "Edit", edit_admin_coupon_path(@coupon), class: "bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" %>
+    <%= link_to "Delete", admin_coupon_path(@coupon), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this coupon?" }, class: "bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-red-700" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <dl class="grid grid-cols-2 gap-4">
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Plan</dt>
+      <dd class="mt-1 text-sm text-gray-900 capitalize"><%= @coupon.plan %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Duration</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= pluralize(@coupon.duration_days, "day") %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Uses</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <%= @coupon.uses_count %><%= @coupon.max_uses ? " / #{@coupon.max_uses}" : " (unlimited)" %>
+      </dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Expires At</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <% if @coupon.expires_at.present? %>
+          <%= @coupon.expires_at.strftime("%b %d, %Y at %H:%M") %>
+          <% if @coupon.expired? %>
+            <span class="ml-1 text-xs text-red-600 font-medium">Expired</span>
+          <% end %>
+        <% else %>
+          <span class="text-gray-400">No expiration</span>
+        <% end %>
+      </dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Created</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @coupon.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
+    </div>
+  </dl>
+</div>
+
+<h3 class="text-lg font-medium text-gray-900 mb-3">Redemptions (<%= @redemptions.size %>)</h3>
+<% if @redemptions.any? %>
+  <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Redeemed At</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @redemptions.each do |redemption| %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-5 py-3 text-sm text-gray-900"><%= redemption.user.email %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= redemption.created_at.strftime("%b %d, %Y at %H:%M") %></td>
+            <td class="px-5 py-3 text-right">
+              <%= link_to "View user", admin_user_path(redemption.user), class: "text-sm text-blue-600 hover:text-blue-800" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-500">No redemptions yet.</div>
+<% end %>

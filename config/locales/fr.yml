@@ -22,6 +22,7 @@ fr:
     ios_install: "Appuyez sur %{share_icon} puis \"Sur l'écran d'accueil\""
     reading: "Un peu de lecture"
     settings: "Paramètres"
+    coupon: "Coupon"
     sign_out: "Déconnexion"
     manage_cookies: "Gérer les cookies"
   login:
@@ -109,6 +110,7 @@ fr:
       language: "Langue"
       security: "Sécurité"
       subscription: "Abonnement"
+      coupon: "Coupon"
     subscription:
       current_plan: "Plan actuel"
       active: "Actif"
@@ -482,6 +484,15 @@ fr:
     q9:
       question: "Comment gérer mon compte ?"
       answer: "Cliquez sur votre email dans la barre latérale pour accéder aux paramètres. Vous pouvez modifier votre mot de passe, changer de langue et gérer votre abonnement. Vous pouvez aussi vous connecter avec Google. Vos projets et données sont stockés de manière sécurisée et accessibles depuis n'importe quel appareil."
+  coupons:
+    form_title: "Code coupon"
+    form_description: "Entrez votre code coupon pour bénéficier d'un plan supérieur pendant une durée limitée."
+    placeholder: "Entrez le code"
+    submit: "Appliquer"
+    success: "Votre plan a été mis à jour vers %{plan} pour %{days} jours !"
+    invalid: "Code coupon invalide ou expiré."
+    already_used: "Vous avez déjà utilisé ce coupon."
+    rate_limited: "Trop de tentatives. Veuillez réessayer plus tard."
   report_issue:
     button: "Signaler un problème"
     title: "Signaler un problème"

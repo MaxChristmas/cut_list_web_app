@@ -9,6 +9,7 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
   has_many :projects, dependent: :nullify
+  has_many :coupon_redemptions, dependent: :destroy
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true
 

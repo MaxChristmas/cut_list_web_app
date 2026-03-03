@@ -22,6 +22,7 @@ ja:
     ios_install: "%{share_icon}をタップして「ホーム画面に追加」"
     reading: "読み物"
     settings: "設定"
+    coupon: "クーポン"
     sign_out: "ログアウト"
     manage_cookies: "Cookieを管理"
   login:
@@ -109,6 +110,7 @@ ja:
       language: "言語"
       security: "セキュリティ"
       subscription: "サブスクリプション"
+      coupon: "クーポン"
     subscription:
       current_plan: "現在のプラン"
       active: "有効"
@@ -473,6 +475,15 @@ ja:
     q9:
       question: "アカウントはどのように管理しますか？"
       answer: "サイドバーでメールアドレスをクリックして設定にアクセスします。パスワードの変更、言語の切り替え、サブスクリプションの管理ができます。Googleアカウントでのログインも可能です。プロジェクトとデータは安全に保存され、どのデバイスからもアクセスできます。"
+  coupons:
+    form_title: "クーポンコード"
+    form_description: "クーポンコードを入力して、期間限定でプランをアップグレードしましょう。"
+    placeholder: "コードを入力"
+    submit: "適用"
+    success: "%{plan}プランに%{days}日間アップグレードされました！"
+    invalid: "無効または期限切れのクーポンコードです。"
+    already_used: "このクーポンは既に使用済みです。"
+    rate_limited: "試行回数が多すぎます。しばらくしてからもう一度お試しください。"
   report_issue:
     button: "問題を報告"
     title: "問題を報告する"

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :report_issues, except: [ :new, :create ] do
       post :reply, on: :member
     end
+    resources :coupons
   end
 
   resources :projects, param: :token do
@@ -36,6 +37,7 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions" }
 
+  resources :coupons, only: [ :create ]
   resources :report_issues, only: [ :create ]
 
   patch "locale", to: "application#set_locale", as: :locale

@@ -22,6 +22,7 @@ en:
     ios_install: "Tap %{share_icon} then \"Add to Home Screen\""
     reading: "A bit of reading"
     settings: "Settings"
+    coupon: "Coupon"
     sign_out: "Sign out"
     manage_cookies: "Manage cookies"
   login:
@@ -109,6 +110,7 @@ en:
       language: "Language"
       security: "Security"
       subscription: "Subscription"
+      coupon: "Coupon"
     subscription:
       current_plan: "Current Plan"
       active: "Active"
@@ -482,6 +484,15 @@ en:
     q9:
       question: "How do I manage my account?"
       answer: "Click your email in the sidebar to access settings. You can change your password, switch language, and manage your subscription. You can also sign in with Google for quick access. Your projects and data are securely stored and accessible from any device."
+  coupons:
+    form_title: "Coupon code"
+    form_description: "Enter your coupon code to upgrade your plan for a limited time."
+    placeholder: "Enter code"
+    submit: "Apply"
+    success: "Your plan has been upgraded to %{plan} for %{days} days!"
+    invalid: "Invalid or expired coupon code."
+    already_used: "You have already used this coupon."
+    rate_limited: "Too many attempts. Please try again later."
   report_issue:
     button: "Report Issue"
     title: "Report an Issue"
