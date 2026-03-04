@@ -1,6 +1,6 @@
 module Admin
   class UsersController < BaseController
-    before_action :set_user, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_user, only: [ :show, :edit, :update, :destroy, :soft_delete ]
 
     def index
       @users = paginate(User.order(created_at: :desc))
@@ -36,9 +36,14 @@ module Admin
       end
     end
 
+    def soft_delete
+      @user.soft_delete!
+      redirect_to admin_user_path(@user), notice: "User has been soft deleted and anonymized."
+    end
+
     def destroy
       @user.destroy
-      redirect_to admin_users_path, notice: "User deleted successfully."
+      redirect_to admin_users_path, notice: "User permanently deleted."
     end
 
     private

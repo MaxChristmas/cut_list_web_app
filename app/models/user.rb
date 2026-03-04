@@ -11,6 +11,29 @@ class User < ApplicationRecord
   has_many :projects, dependent: :nullify
   has_many :coupon_redemptions, dependent: :destroy
 
+  scope :kept, -> { where(discarded_at: nil) }
+  scope :discarded, -> { where.not(discarded_at: nil) }
+
+  def discarded?
+    discarded_at.present?
+  end
+
+  def soft_delete!
+    update!(
+      discarded_at: Time.current,
+      email: "deleted-#{id}@anonymized.local",
+      provider: nil,
+      uid: nil,
+      stripe_customer_id: nil,
+      stripe_subscription_id: nil,
+      locked_at: Time.current,
+      last_sign_in_ip: nil,
+      last_sign_in_city: nil,
+      last_sign_in_country: nil,
+      last_sign_in_device: nil
+    )
+  end
+
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true
 
   attribute :terms_accepted, :boolean

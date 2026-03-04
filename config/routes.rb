@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "dashboard#index"
-    resources :users
+    resources :users do
+      patch :soft_delete, on: :member
+    end
     resources :projects, only: [ :index, :show ] do
       resources :optimizations, only: [ :index, :show ]
     end
