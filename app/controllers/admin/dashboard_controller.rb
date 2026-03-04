@@ -4,7 +4,9 @@ module Admin
       @total_users = User.count
       @new_users_30d = User.where("created_at >= ?", 30.days.ago).count
       @total_projects = Project.count
+      @avg_projects_per_user = @total_users.zero? ? 0 : (@total_projects.to_f / @total_users).round(1)
       @total_optimizations = Optimization.count
+      @avg_optimizations_per_project_per_user = @total_users.zero? ? 0 : (@total_optimizations.to_f / @total_users).round(1)
       @users_by_plan = User.group(:plan).count
       @recent_reports = ReportIssue.order(created_at: :desc).limit(5).includes(:user)
 
