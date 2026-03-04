@@ -51,7 +51,7 @@ env:
 
     GOOGLE_ANALYTICS_ID: G-M83WH5P1YY
 
-    NTFY_TOPIC: GAbxvJtLqmexbrej-cutoptima-develop
+    NTFY_TOPIC: dWPtSywf0tYwQrdl-cutoptima-production
 
 # SSH user (not root).
 ssh:
