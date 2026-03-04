@@ -88,16 +88,14 @@ class StripeWebhooksController < ApplicationController
     location = [ user.last_sign_in_city, user.last_sign_in_country ].compact.join(", ")
     location = "Unknown" if location.blank?
 
-    NtfyJob.perform_later(
-      title: "New #{billing_type}: #{plan.capitalize}",
-      tags: "credit_card",
-      message: [
-        "Email: #{user.email}",
-        "Plan: #{plan.capitalize} (#{billing_type})",
-        "Time: #{Time.current.strftime('%b %d, %Y at %H:%M UTC')}",
-        "Location: #{location}"
-      ].join("\n")
-    ) rescue nil
+    message = [
+      "Email: #{user.email}",
+      "Plan: #{plan.capitalize} (#{billing_type})",
+      "Time: #{Time.current.strftime('%b %d, %Y at %H:%M UTC')}",
+      "Location: #{location}"
+    ].join("\n")
+
+    NtfyJob.perform_later("New #{billing_type}: #{plan.capitalize}", message, "credit_card") rescue nil
   end
 
   def plan_for_price_id(price_id)

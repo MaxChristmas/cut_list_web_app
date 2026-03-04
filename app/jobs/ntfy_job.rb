@@ -1,7 +1,7 @@
 class NtfyJob < ApplicationJob
   discard_on StandardError
 
-  def perform(title:, message:, tags: "bell")
+  def perform(title, message, tags = "bell")
     topic = ENV.fetch("NTFY_TOPIC") { return }
 
     uri = URI("https://ntfy.sh/#{topic}")

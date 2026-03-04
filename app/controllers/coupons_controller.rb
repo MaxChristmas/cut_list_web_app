@@ -23,17 +23,15 @@ class CouponsController < ApplicationController
 
     location = [ current_user.last_sign_in_city, current_user.last_sign_in_country ].compact.join(", ")
     location = "Unknown" if location.blank?
-    NtfyJob.perform_later(
-      title: "Coupon redeemed: #{coupon.plan.capitalize}",
-      tags: "ticket",
-      message: [
-        "Email: #{current_user.email}",
-        "Coupon: #{coupon.code} (#{coupon.duration_days} days)",
-        "Plan: #{coupon.plan.capitalize}",
-        "Time: #{Time.current.strftime('%b %d, %Y at %H:%M UTC')}",
-        "Location: #{location}"
-      ].join("\n")
-    ) rescue nil
+    message = [
+      "Email: #{current_user.email}",
+      "Coupon: #{coupon.code} (#{coupon.duration_days} days)",
+      "Plan: #{coupon.plan.capitalize}",
+      "Time: #{Time.current.strftime('%b %d, %Y at %H:%M UTC')}",
+      "Location: #{location}"
+    ].join("\n")
+
+    NtfyJob.perform_later("Coupon redeemed: #{coupon.plan.capitalize}", message, "ticket") rescue nil
 
     redirect_to edit_user_registration_path(tab: 3), notice: I18n.t("coupons.success", plan: coupon.plan.capitalize, days: coupon.duration_days)
   end

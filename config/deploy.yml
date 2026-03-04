@@ -51,6 +51,8 @@ env:
 
     GOOGLE_ANALYTICS_ID: G-M83WH5P1YY
 
+    NTFY_TOPIC: GAbxvJtLqmexbrej-cutoptima-develop
+
 # SSH user (not root).
 ssh:
   user: debian
