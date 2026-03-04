@@ -39,12 +39,14 @@ class StripeWebhooksController < ApplicationController
         plan_expires_at: 3.days.from_now,
         stripe_subscription_id: nil
       )
+      notify_plan_change(user, plan, "one-shot")
     else
       user.update!(
         plan: plan,
         plan_expires_at: nil,
         stripe_subscription_id: session.subscription
       )
+      notify_plan_change(user, plan, "subscription")
     end
   end
 
@@ -80,6 +82,22 @@ class StripeWebhooksController < ApplicationController
 
     # Subscription fully ended — downgrade to free
     user.update!(plan: "free", stripe_subscription_id: nil, plan_expires_at: nil)
+  end
+
+  def notify_plan_change(user, plan, billing_type)
+    location = [ user.last_sign_in_city, user.last_sign_in_country ].compact.join(", ")
+    location = "Unknown" if location.blank?
+
+    NtfyJob.perform_later(
+      title: "New #{billing_type}: #{plan.capitalize}",
+      tags: "credit_card",
+      message: [
+        "Email: #{user.email}",
+        "Plan: #{plan.capitalize} (#{billing_type})",
+        "Time: #{Time.current.strftime('%b %d, %Y at %H:%M UTC')}",
+        "Location: #{location}"
+      ].join("\n")
+    ) rescue nil
   end
 
   def plan_for_price_id(price_id)
