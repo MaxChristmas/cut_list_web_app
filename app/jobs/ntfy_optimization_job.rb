@@ -4,7 +4,7 @@ class NtfyOptimizationJob < ApplicationJob
   def perform(user, optimization)
     topic = ENV.fetch("NTFY_TOPIC") { return }
 
-    location = [user.last_sign_in_city, user.last_sign_in_country].compact.join(", ")
+    location = [ user.last_sign_in_city, user.last_sign_in_country ].compact.join(", ")
     location = "Unknown" if location.blank?
 
     title = "New optimization"
