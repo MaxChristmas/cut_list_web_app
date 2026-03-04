@@ -36,7 +36,7 @@ User -has_many-> Project -has_many-> Optimization
 ```
 
 - **User**: Devise auth (email/password)
-- **Project**: `name`, `sheet_width`, `sheet_height`, `allow_rotation` — belongs to User
+- **Project**: `name`, `sheet_width`, `sheet_height` — belongs to User
 - **Optimization**: `result` (JSONB), `efficiency` (decimal), `sheets_count`, `status` — belongs to Project
 
 ## Database

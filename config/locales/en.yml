@@ -73,8 +73,6 @@ en:
         auto: "Auto"
         length: "Length"
         width: "Width"
-      allow_rotation: "Allow Rotation"
-      allow_rotation_hint: "Allow pieces to be rotated for better optimization. Be careful with grain direction."
       blade_kerf: "Blade Kerf (mm)"
       kerf_hint: "Width removed by the blade"
       options: "Options"

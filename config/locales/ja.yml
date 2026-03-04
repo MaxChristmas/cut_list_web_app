@@ -73,8 +73,6 @@ ja:
         auto: "自動"
         length: "長さ"
         width: "幅"
-      allow_rotation: "回転を許可"
-      allow_rotation_hint: "最適化のためにパネルの回転を許可する"
       blade_kerf: "刃の切りしろ (mm)"
       kerf_hint: "刃によって除去される幅"
       options: "オプション"

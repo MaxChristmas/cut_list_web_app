@@ -65,14 +65,6 @@ RSpec.describe RustCuttingService do
       expect(payload["stock"]["grain"]).to eq("none")
     end
 
-    it "does not send a global allow_rotate" do
-      stub_optimizer
-      described_class.optimize(stock: stock, cuts: cuts)
-
-      payload = JSON.parse(@captured_request.body)
-      expect(payload).not_to have_key("allow_rotate")
-    end
-
     it "defaults kerf to 0.0" do
       stub_optimizer
       described_class.optimize(stock: stock, cuts: cuts)

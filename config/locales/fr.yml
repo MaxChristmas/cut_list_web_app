@@ -73,8 +73,6 @@ fr:
         auto: "Auto"
         length: "Longueur"
         width: "Largeur"
-      allow_rotation: "Autoriser la rotation"
-      allow_rotation_hint: "Permet de tourner les pièces pour une meilleure optimisation"
       blade_kerf: "Epaisseur de la lame (mm)"
       kerf_hint: "Largeur enlevée par la lame"
       options: "Options"
