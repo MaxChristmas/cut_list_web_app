@@ -31,15 +31,29 @@
   </div>
 </div>
 
-<!-- New users chart (last 15 days) -->
-<div class="w-1/2 bg-white rounded-lg border border-gray-200 p-5 mb-8">
-  <h3 class="text-base font-medium text-gray-900 mb-4">Nouveaux utilisateurs (15 derniers jours)</h3>
-  <div style="height: 280px;">
-    <canvas
-      data-controller="bar-chart"
-      data-bar-chart-labels-value="<%= @new_users_labels.to_json %>"
-      data-bar-chart-data-value="<%= @new_users_data.to_json %>"
-    ></canvas>
+<!-- Charts -->
+<div class="flex gap-4 mb-8">
+  <div class="w-1/2 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Nouveaux utilisateurs (15 derniers jours)</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="bar-chart"
+        data-bar-chart-labels-value="<%= @new_users_labels.to_json %>"
+        data-bar-chart-data-value="<%= @new_users_data.to_json %>"
+      ></canvas>
+    </div>
+  </div>
+
+  <div class="w-1/4 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Desktop vs Mobile</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="doughnut-chart"
+        data-doughnut-chart-labels-value='["Desktop", "Mobile"]'
+        data-doughnut-chart-data-value="<%= [@device_counts["desktop"] || 0, @device_counts["mobile"] || 0].to_json %>"
+        data-doughnut-chart-colors-value='["rgba(59, 130, 246, 0.7)", "rgba(249, 115, 22, 0.7)"]'
+      ></canvas>
+    </div>
   </div>
 </div>
 

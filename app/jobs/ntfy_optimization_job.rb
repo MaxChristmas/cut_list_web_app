@@ -5,10 +5,12 @@ class NtfyOptimizationJob < ApplicationJob
     location = [ user.last_sign_in_city, user.last_sign_in_country ].compact.join(", ")
     location = "Unknown" if location.blank?
 
+    device = user.last_sign_in_device || "unknown"
+
     message = [
       "Email: #{user.email}",
       "Time: #{optimization.created_at.strftime('%b %d, %Y at %H:%M UTC')}",
-      "Location: #{location}",
+      "Location: #{location} (#{device})",
       "Sheets: #{optimization.sheets_count} | Efficiency: #{optimization.efficiency&.round(1)}%"
     ].join("\n")
 

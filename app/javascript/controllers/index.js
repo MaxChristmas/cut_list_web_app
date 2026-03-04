@@ -16,6 +16,9 @@ application.register("collapsible", CollapsibleController)
 import CookieConsentController from "./cookie_consent_controller"
 application.register("cookie-consent", CookieConsentController)
 
+import DoughnutChartController from "./doughnut_chart_controller"
+application.register("doughnut-chart", DoughnutChartController)
+
 import FormPanelController from "./form_panel_controller"
 application.register("form-panel", FormPanelController)
 

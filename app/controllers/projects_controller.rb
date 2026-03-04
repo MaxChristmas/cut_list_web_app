@@ -116,7 +116,9 @@ class ProjectsController < ApplicationController
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
 
-    NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
+    if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
+      NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
+    end
 
     redirect_to project_path(@project.token)
   rescue => e
@@ -171,7 +173,9 @@ class ProjectsController < ApplicationController
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
 
-    NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
+    if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
+      NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
+    end
 
     redirect_to project_path(@project.token)
   rescue => e

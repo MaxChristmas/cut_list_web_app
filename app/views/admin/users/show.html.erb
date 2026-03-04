@@ -46,6 +46,10 @@
       <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_ip.presence || "—" %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Device</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_device&.capitalize || "—" %></dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Location</dt>
       <dd class="mt-1 text-sm text-gray-900">
         <% if @user.last_sign_in_city.present? || @user.last_sign_in_country.present? %>

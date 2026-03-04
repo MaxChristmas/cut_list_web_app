@@ -8,6 +8,9 @@ module Admin
       @users_by_plan = User.group(:plan).count
       @recent_reports = ReportIssue.order(created_at: :desc).limit(5).includes(:user)
 
+      # Device breakdown
+      @device_counts = User.where.not(last_sign_in_device: nil).group(:last_sign_in_device).count
+
       # New users per day over the last 15 days
       start_date = 14.days.ago.to_date
       counts = User.where("created_at >= ?", start_date.beginning_of_day)
