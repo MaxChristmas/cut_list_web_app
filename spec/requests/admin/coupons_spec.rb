@@ -124,7 +124,7 @@ RSpec.describe "Admin::Coupons", type: :request do
           coupon: { plan: "invalid", duration_days: 30 }
         }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(Coupon.count).to eq(0)
       end
     end
@@ -168,7 +168,7 @@ RSpec.describe "Admin::Coupons", type: :request do
           coupon: { code: "CHANGE" }
         }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(coupon.reload.code).to eq("USED01")
       end
 
@@ -178,7 +178,7 @@ RSpec.describe "Admin::Coupons", type: :request do
           coupon: { plan: "invalid" }
         }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 

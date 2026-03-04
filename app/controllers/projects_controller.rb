@@ -111,7 +111,9 @@ class ProjectsController < ApplicationController
     @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
       status: "completed",
-      cut_direction: cut_direction
+      cut_direction: cut_direction,
+      sheets_count: result["sheet_count"],
+      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
 
     redirect_to project_path(@project.token)
@@ -162,7 +164,9 @@ class ProjectsController < ApplicationController
     @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
       status: "completed",
-      cut_direction: cut_direction
+      cut_direction: cut_direction,
+      sheets_count: result["sheet_count"],
+      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
 
     redirect_to project_path(@project.token)

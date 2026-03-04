@@ -10,6 +10,10 @@ class Project < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
   scope :templates, -> { where(template: true) }
 
+  def display_name
+    name.presence || "#{sheet_length}×#{sheet_width}"
+  end
+
   def archived?
     archived_at.present?
   end

@@ -2,7 +2,7 @@
   <%= link_to "&larr; Back to Projects".html_safe, admin_projects_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
 </div>
 
-<h2 class="text-2xl font-semibold text-gray-900 mb-6"><%= @project.name.presence || "Untitled Project" %></h2>
+<h2 class="text-2xl font-semibold text-gray-900 mb-6"><%= @project.display_name %></h2>
 
 <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
   <dl class="grid grid-cols-2 gap-4">
@@ -19,6 +19,10 @@
     <div>
       <dt class="text-sm font-medium text-gray-500">Sheet Size</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @project.sheet_width %> x <%= @project.sheet_length %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Optimizations</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @project.optimizations_count %></dd>
     </div>
 <div>
       <dt class="text-sm font-medium text-gray-500">Status</dt>

@@ -15,7 +15,7 @@
     <tbody class="divide-y divide-gray-100">
       <% @projects.each do |project| %>
         <tr class="hover:bg-gray-50">
-          <td class="px-5 py-3 text-sm text-gray-900"><%= project.name.presence || "Untitled" %></td>
+          <td class="px-5 py-3 text-sm text-gray-900"><%= project.display_name %></td>
           <td class="px-5 py-3 text-sm text-gray-500">
             <% if project.user %>
               <%= link_to project.user.email, admin_user_path(project.user), class: "text-blue-600 hover:text-blue-800" %>

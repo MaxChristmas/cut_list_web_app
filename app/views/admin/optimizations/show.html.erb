@@ -9,7 +9,7 @@
     <div>
       <dt class="text-sm font-medium text-gray-500">Project</dt>
       <dd class="mt-1 text-sm">
-        <%= link_to @project.name.presence || "Untitled", admin_project_path(@project), class: "text-blue-600 hover:text-blue-800" %>
+        <%= link_to @project.display_name, admin_project_path(@project), class: "text-blue-600 hover:text-blue-800" %>
       </dd>
     </div>
     <div>
@@ -25,8 +25,21 @@
       <dd class="mt-1 text-sm text-gray-900"><%= @optimization.sheets_count || "—" %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Blade Kerf</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @optimization.result&.dig("kerf") || "—" %> mm</dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Grain Direction</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @project.grain_direction %></dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Cut Direction</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @optimization.cut_direction %></dd>
+    </div>
+    <div>
+      <% pieces = @optimization.result&.dig("pieces") || [] %>
+      <dt class="text-sm font-medium text-gray-500">Cuts</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= pieces.sum { |p| (p["quantity"] || 1).to_i } %></dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Created</dt>
