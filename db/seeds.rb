@@ -95,7 +95,7 @@ piece_templates = [
 project_index = 0
 users.each_with_index do |user, user_idx|
   # Each user gets 5-7 projects
-  count = [5, 6, 7, 6][user_idx]
+  count = [ 5, 6, 7, 6 ][user_idx]
   count.times do
     name = project_names[project_index % project_names.size]
     config = sheet_configs[project_index % sheet_configs.size]
@@ -121,7 +121,7 @@ users.each_with_index do |user, user_idx|
             "x" => rand(0..500),
             "y" => rand(0..300),
             "rect" => { "width" => piece[:width], "length" => piece[:length] },
-            "rotated" => [true, false].sample
+            "rotated" => [ true, false ].sample
           }
         end
       end

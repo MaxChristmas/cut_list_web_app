@@ -120,12 +120,13 @@ RSpec.describe "Admin::Coupons", type: :request do
       end
 
       it "re-renders form on invalid params" do
-        post admin_coupons_path, params: {
-          coupon: { plan: "invalid", duration_days: 30 }
-        }
+        expect {
+          post admin_coupons_path, params: {
+            coupon: { plan: "invalid", duration_days: 30 }
+          }
+        }.not_to change(Coupon, :count)
 
         expect(response).to have_http_status(:unprocessable_content)
-        expect(Coupon.count).to eq(0)
       end
     end
 
