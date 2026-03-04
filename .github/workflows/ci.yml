@@ -44,20 +44,20 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:17-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="pg_isready" --health-interval=5s --health-timeout=3s --health-retries=3
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev node-gyp
-
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -73,8 +73,17 @@ jobs:
       - name: Install JS dependencies
         run: npm install
 
+      - name: Cache built assets
+        uses: actions/cache@v4
+        with:
+          path: app/assets/builds
+          key: assets-${{ hashFiles('app/javascript/**', 'app/assets/stylesheets/**', 'package.json') }}
+
       - name: Build assets
-        run: npm run build && npm run build:css
+        run: |
+          if [ ! -f app/assets/builds/application.js ]; then
+            npm run build && npm run build:css
+          fi
 
       - name: Prepare database
         env:
