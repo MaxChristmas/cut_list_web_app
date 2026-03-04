@@ -13,6 +13,7 @@ class User < ApplicationRecord
 
   scope :kept, -> { where(discarded_at: nil) }
   scope :discarded, -> { where.not(discarded_at: nil) }
+  scope :public_users, -> { where(internal: false) }
 
   def discarded?
     discarded_at.present?

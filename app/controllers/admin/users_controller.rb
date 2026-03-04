@@ -53,7 +53,7 @@ module Admin
     end
 
     def user_params
-      params.expect(user: [ :email, :password, :password_confirmation, :plan, :plan_expires_at ])
+      params.expect(user: [ :email, :password, :password_confirmation, :plan, :plan_expires_at, :internal ])
     end
   end
 end

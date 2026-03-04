@@ -5,6 +5,9 @@
 <div class="flex justify-between items-start mb-6">
   <div class="flex items-center gap-3">
     <h2 class="text-2xl font-semibold text-gray-900"><%= @user.email %></h2>
+    <% if @user.internal? %>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">Internal</span>
+    <% end %>
     <% if @user.discarded? %>
       <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Soft Deleted</span>
     <% end %>
