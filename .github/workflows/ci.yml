@@ -132,6 +132,7 @@ jobs:
           SMTP_USER_NAME=${{ vars.SMTP_USER_NAME }}
           SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
           SENTRY_DSN=${{ vars.SENTRY_DSN }}
+          NTFY_TOPIC=${{ vars.NTFY_TOPIC }}
           EOF
           sed -i 's/^[[:space:]]*//' .env.production
 

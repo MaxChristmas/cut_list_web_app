@@ -108,13 +108,15 @@ class ProjectsController < ApplicationController
       user: current_user
     )
 
-    @project.optimizations.create!(
+    optimization = @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
+
+    NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
 
     redirect_to project_path(@project.token)
   rescue => e
@@ -161,13 +163,15 @@ class ProjectsController < ApplicationController
       grain_direction: grain_direction
     )
 
-    @project.optimizations.create!(
+    optimization = @project.optimizations.create!(
       result: result.merge("pieces" => pieces, "kerf" => kerf),
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
     )
+
+    NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
 
     redirect_to project_path(@project.token)
   rescue => e
