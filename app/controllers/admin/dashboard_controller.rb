@@ -7,6 +7,14 @@ module Admin
       @total_optimizations = Optimization.count
       @users_by_plan = User.group(:plan).count
       @recent_reports = ReportIssue.order(created_at: :desc).limit(5).includes(:user)
+
+      # New users per day over the last 15 days
+      start_date = 14.days.ago.to_date
+      counts = User.where("created_at >= ?", start_date.beginning_of_day)
+                    .group("DATE(created_at)")
+                    .count
+      @new_users_labels = (start_date..Date.current).map { |d| d.strftime("%d/%m") }
+      @new_users_data = (start_date..Date.current).map { |d| counts[d] || 0 }
     end
   end
 end

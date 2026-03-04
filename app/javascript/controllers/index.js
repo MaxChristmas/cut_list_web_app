@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import BarChartController from "./bar_chart_controller"
+application.register("bar-chart", BarChartController)
+
 import BillingToggleController from "./billing_toggle_controller"
 application.register("billing-toggle", BillingToggleController)
 
