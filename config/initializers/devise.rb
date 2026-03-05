@@ -323,12 +323,9 @@ Warden::Manager.after_set_user except: :fetch do |user, warden, options|
   ua = request.user_agent.to_s
   device = ua.match?(/Mobile|Android|iPhone|iPad|iPod|webOS|Opera Mini/i) ? "mobile" : "desktop"
 
-  changes = { last_sign_in_device: device }
+  user.update_columns(last_sign_in_device: device)
 
   if ip.present? && ip != user.last_sign_in_ip
-    changes[:last_sign_in_ip] = ip
     GeocodeSignInJob.perform_later(user, ip)
   end
-
-  user.update_columns(changes)
 end

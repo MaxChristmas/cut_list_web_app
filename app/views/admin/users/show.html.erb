@@ -49,6 +49,14 @@
       <dd class="mt-1 text-sm text-gray-900"><%= @user.stripe_customer_id.presence || "—" %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Sign-in Count</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.sign_in_count %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Last Sign-in At</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_at&.strftime("%b %d, %Y at %H:%M") || "—" %></dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Created</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @user.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
     </div>

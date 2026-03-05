@@ -14,15 +14,16 @@ Cut List Web App — a Rails 8.1 application for optimizing material cutting lay
 - jsbundling-rails + cssbundling-rails
 - Devise for authentication
 - Kamal for deployment
+- Rspec for tests
 
 ## Common Commands
 
 ```bash
 bin/setup              # Install deps, prepare DB, start server
 bin/dev                # Start development server
-bin/rails test         # Run all tests
-bin/rails test test/models/project_test.rb        # Run a single test file
-bin/rails test test/models/project_test.rb:10     # Run a single test at line
+bundle exec rspec spec/                            # Run all tests
+bundle exec rspec spec/model/project_spec.rb       # Run a single test file
+bundle exec rspec spec/model/project_spec.rb:10    # Run a single test at line
 bin/rubocop            # Lint Ruby (rubocop-rails-omakase style)
 bin/brakeman --quiet --no-pager  # Security static analysis
 bin/bundler-audit      # Gem vulnerability audit

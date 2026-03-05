@@ -2,10 +2,10 @@ class User < ApplicationRecord
   include Plannable
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable
+  # :confirmable, :timeoutable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :lockable,
+         :lockable, :trackable,
          :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
   has_many :projects, dependent: :nullify
@@ -28,6 +28,10 @@ class User < ApplicationRecord
       stripe_customer_id: nil,
       stripe_subscription_id: nil,
       locked_at: Time.current,
+      sign_in_count: 0,
+      current_sign_in_at: nil,
+      last_sign_in_at: nil,
+      current_sign_in_ip: nil,
       last_sign_in_ip: nil,
       last_sign_in_city: nil,
       last_sign_in_country: nil,
