@@ -1,0 +1,507 @@
+es:
+  time:
+    formats:
+      short: "%d/%m/%Y %H:%M"
+  app_name: "CutList"
+  locale_selector:
+    en: "Inglés"
+    fr: "Francés"
+    ja: "Japonés"
+    es: "Español"
+  header:
+    options: "Opciones"
+  sidebar:
+    new_cut_list: "Nueva lista de corte"
+    recent_projects: "Recientes"
+    sign_in: "Iniciar sesión"
+    upgrade: "Mejorar plan"
+    projects_usage: "Proyectos"
+    optimizations_usage: "Optimizaciones"
+    optimizations_per_project: "%{count} optimizaciones / proyecto / mes"
+    unlimited_optimizations: "Optimizaciones ilimitadas"
+    install_app: "Instalar app"
+    ios_install: "Pulse %{share_icon} y luego \"Añadir a pantalla de inicio\""
+    reading: "Un poco de lectura"
+    settings: "Ajustes"
+    coupon: "Cupón"
+    sign_out: "Cerrar sesión"
+    manage_cookies: "Gestionar cookies"
+  login:
+    remember_me: "Recordarme"
+    sign_up: "Crear una cuenta"
+    forgot_password: "¿Olvidó su contraseña?"
+    password: "Contraseña"
+    invalid_credentials: "Email o contraseña inválidos."
+    sign_in_with_google: "Continuar con Google"
+    or: "o"
+    terms_html: "Acepto la %{privacy_link} y el %{legal_link}."
+    google_terms_html: "Al continuar, acepta la %{privacy_link} y el %{legal_link}."
+  projects:
+    index:
+      title: "Optimice sus cortes"
+      project_name: "Nombre del proyecto (opcional)"
+      pieces_to_cut: "Cortes"
+      length_short: "Largo (mm)"
+      width_short: "Ancho (mm)"
+      quantity_short: "Cant."
+      label_short: "Etiqueta"
+      show_labels: "Mostrar etiquetas"
+      labels: "Etiquetas"
+      label_modes:
+        none: "Sin etiqueta"
+        auto: "Automático"
+        manual: "Manual"
+      import_csv: "Importar CSV"
+      add_piece: "+ Añadir pieza"
+      stock_sheet: "Panel base"
+      mobile_form_toggle: "Definir sus piezas"
+      length: "Largo (mm)"
+      width: "Ancho (mm)"
+      cut_direction: "Dirección de corte"
+      cut_direction_hint: "Dirección en la que se realizan los cortes en el panel"
+      cut_directions:
+        auto: "Automático"
+        along_length: "A lo largo"
+        along_width: "A lo ancho"
+      grain_direction: "Dirección de la veta"
+      grain_direction_hint: "Defina la dirección de la veta de su panel base. Cada pieza puede indicar qué dimensión sigue la veta."
+      grain_directions:
+        none: "Sin veta"
+        along_length: "A lo largo"
+        along_width: "A lo ancho"
+      piece_grain_short: "Dirección de la veta"
+      piece_grains:
+        auto: "Auto"
+        length: "Largo"
+        width: "Ancho"
+      blade_kerf: "Grosor de la hoja (mm)"
+      kerf_hint: "Ancho eliminado por la hoja de sierra"
+      options: "Opciones"
+      optimize: "Optimizar"
+      raw_json: "JSON bruto"
+      export_pdf: "Exportar PDF"
+      colors: "Colores"
+      no_colors: "Sin colores"
+      edit_layout: "Editar disposición"
+      save_layout: "Guardar"
+      reset_layout: "Restablecer original"
+      editing_layout: "Editando..."
+      sheet_heading: "Panel %{number} — Desperdicio: %{waste}%"
+      summary: "%{count} panel(es) — Desperdicio total: %{waste}%"
+      empty_state: "Añada piezas y haga clic en Optimizar para ver los resultados"
+    archive: "Archivar"
+    unarchive: "Desarchivar"
+    archived: "Proyecto archivado."
+    unarchived: "Proyecto desarchivado."
+    archive_confirm: "¿Archivar este proyecto? Podrá desarchivarlo más tarde."
+    unarchive_limit_reached: "No se puede desarchivar: límite de proyectos activos alcanzado. Archive otro proyecto o mejore su plan."
+    template_read_only: "Este es un proyecto de ejemplo de solo lectura. ¡Cree el suyo para comenzar!"
+    template_badge: "Ejemplo"
+  settings:
+    title: "Ajustes de la cuenta"
+    email: "Email"
+    new_password: "Nueva contraseña"
+    leave_blank: "Dejar en blanco para no cambiar"
+    password_confirmation: "Confirmar nueva contraseña"
+    current_password: "Contraseña actual"
+    current_password_hint: "Requerida para confirmar los cambios"
+    tabs:
+      language: "Idioma"
+      security: "Seguridad"
+      subscription: "Suscripción"
+      coupon: "Cupón"
+    subscription:
+      current_plan: "Plan actual"
+      active: "Activo"
+      one_shot: "Puntual"
+      expired: "Expirado"
+      expires: "Expira el"
+      ends_on: "Finaliza el"
+    language: "Idioma"
+    save: "Guardar cambios"
+    back: "Volver"
+    sign_out: "Cerrar sesión"
+    sign_out_confirmation: "¿Está seguro de que desea cerrar sesión?"
+  plans:
+    title: "Elija su plan"
+    subtitle: "Seleccione el plan que mejor se adapte a sus necesidades"
+    current_plan: "Plan actual"
+    select_plan: "Elegir este plan"
+    subscribe: "Suscribirse"
+    manage_subscription: "Gestionar suscripción"
+    updated: "Plan actualizado a %{plan}"
+    invalid: "Plan seleccionado inválido"
+    checkout_success: "¡Bienvenido! Su suscripción se está activando."
+    no_subscription: "No hay suscripción activa que gestionar."
+    use_portal_to_downgrade: "Use 'Gestionar suscripción' para cambiar o cancelar su plan."
+    monthly: "Mensual"
+    yearly: "Anual"
+    yearly_save: "-17%"
+    tax_label: "sin IVA"
+    month: "mes"
+    year: "año"
+    free_price: "Gratis"
+    billed_yearly: "Facturado %{amount}€ / año"
+    active_projects: "Proyectos activos"
+    daily_optimizations_per_project: "Optimizaciones por proyecto / día"
+    pdf_export: "Exportar PDF"
+    unlimited: "Ilimitado"
+    includes_all_from: "Todo de %{plan}, más:"
+    includes_all_features: "Todas las funciones incluidas"
+    most_popular: "Más popular"
+    features:
+      pdf_export: "Exportar PDF"
+      label_pieces: "Etiquetar piezas"
+      cut_direction: "Dirección de corte (largo / ancho)"
+      blade_kerf: "Grosor de la hoja (mm)"
+      import_csv: "Importar CSV"
+      print_labels: "Imprimir etiquetas"
+      margin: "Margen en panel base"
+      archive: "Archivar proyectos"
+      move_pieces: "Mover piezas"
+    free:
+      name: "Gratis"
+      description: "Comience con las funciones básicas"
+    worker:
+      name: "Worker"
+      description: "Para profesionales y pequeños equipos"
+    enterprise:
+      name: "Empresa"
+      description: "Potencia ilimitada para grandes operaciones"
+    one_shot:
+      title: "Acceso puntual"
+      subtitle: "¿Lo necesita solo una vez? Acceda a todas las funciones durante 3 días."
+      duration: "Acceso 3 días"
+      buy: "Comprar"
+      worker_name: "Puntual Worker"
+      enterprise_name: "Puntual Empresa"
+      expires_in: "Expira en %{duration}"
+      expired: "Su acceso puntual ha expirado"
+  optimizer_errors:
+    piece_does_not_fit: "La pieza %{piece} no cabe en el panel %{stock}"
+    generic: "La optimización falló: %{message}"
+    missing_stock: "Las dimensiones del panel base son obligatorias"
+    missing_pieces: "Se requiere al menos un corte"
+    length_less_than_width: "El largo debe ser mayor o igual que el ancho"
+    piece_length_less_than_width: "Pieza %{piece}: el largo debe ser mayor o igual que el ancho"
+  limits:
+    max_projects_reached: "Ha alcanzado el límite de proyectos activos. Mejore su plan para crear más."
+    daily_optimizations_reached: "Ha alcanzado el límite diario de optimizaciones para este proyecto. Mejore su plan para hacer más."
+    guest_signup_prompt: "¡Regístrese gratis para optimizar sus cortes!"
+    feature_not_available: "Esta función no está disponible en su plan actual. Mejore su plan para acceder."
+  pdf:
+    measurements_in_mm: "Todas las medidas en milímetros (mm)"
+    sheets_used: "Paneles utilizados"
+    total_area_used: "Área total utilizada"
+    total_waste_area: "Área total de desperdicio"
+    total_pieces: "Total de piezas"
+    blade_kerf: "Grosor de la hoja (mm)"
+    pieces: "Piezas"
+    stock_sheet: "Panel base"
+    sheet: "Panel %{number}"
+    area_used: "Área utilizada"
+    waste_area: "Área de desperdicio"
+    unique_sizes: "Tamaños únicos"
+    piece: "Pieza"
+    qty: "Cant."
+  labels:
+    export_labels: "Etiquetas"
+    modal_title: "Elegir tamaño de etiqueta"
+    modal_description: "Seleccione un formato que corresponda a sus hojas de etiquetas adhesivas."
+    format_name: "%{count} etiquetas / página"
+    combine_projects: "Combinar con otros proyectos"
+    current: "actual"
+    dimension: "L: %{length}  ×  A: %{width}"
+    total: "Total: %{count}"
+  cookie_consent:
+    title: "Configuración de cookies"
+    message: "Utilizamos cookies para garantizar el correcto funcionamiento de nuestro sitio y, con su consentimiento, para analizar el tráfico. Puede aceptar todas las cookies, rechazar las no esenciales o personalizar sus preferencias."
+    accept_all: "Aceptar todas"
+    decline_all: "Rechazar todas"
+    customize: "Personalizar"
+    save_preferences: "Guardar mis preferencias"
+    learn_more: "Más información"
+    manage_cookies: "Gestionar cookies"
+    always_active: "Siempre activo"
+    essential:
+      title: "Cookies esenciales"
+      description: "Estas cookies son estrictamente necesarias para el funcionamiento del sitio (sesión, autenticación, seguridad). No pueden desactivarse."
+    analytics:
+      title: "Cookies de análisis"
+      description: "Estas cookies nos permiten medir el tráfico del sitio y comprender cómo los visitantes utilizan el sitio, para mejorar su rendimiento. Los datos se recopilan de forma anónima."
+  cookies_policy:
+    page_title: "Política de cookies — CutList"
+    title: "Política de cookies"
+    last_updated: "Última actualización: 16 de febrero de 2026"
+    intro: "Bienvenido a la Política de cookies de CutList. Esta política explica cómo Noventi SARL («Noventi», «nosotros», «nuestro») utiliza cookies y tecnologías similares cuando visita o utiliza nuestro sitio web cutoptima.com y los servicios asociados (colectivamente, el «Sitio»)."
+    link: "Política de cookies"
+    what_are_cookies:
+      title: "¿Qué son las cookies?"
+      body: "Las cookies son pequeños archivos de texto que se colocan en su navegador o dispositivo cuando visita un sitio web. Ayudan al sitio a reconocer su dispositivo y a recordar cierta información sobre su visita, como sus preferencias, su estado de conexión o cómo utiliza el sitio. Además de las cookies, podemos utilizar tecnologías similares como balizas web, almacenamiento local y almacenamiento de sesión. Por simplicidad, nos referimos a todas estas tecnologías colectivamente como «Cookies» en esta política."
+    how_we_use:
+      title: "¿Cómo utilizamos las cookies?"
+      body: "Utilizamos las Cookies para diversos fines: garantizar la seguridad y el correcto funcionamiento del Sitio, recordar sus preferencias, comprender cómo utiliza el Sitio y mejorar su experiencia general. Las Cookies nos ayudan a determinar si ya ha visitado el Sitio, le permiten permanecer conectado y nos permiten adaptar el servicio a sus necesidades."
+    types:
+      title: "Tipos de cookies que utilizamos"
+      essential:
+        title: "Cookies esenciales"
+        body: "Estas Cookies son estrictamente necesarias para el correcto funcionamiento del Sitio. Sin ellas, las funcionalidades básicas como la autenticación, la gestión de sesiones y las protecciones de seguridad no funcionarían. Estas Cookies no pueden desactivarse."
+        session: "Mantiene su sesión de usuario y su estado de conexión"
+        remember: "Le mantiene conectado si selecciona «Recordarme»"
+        csrf: "Protege contra ataques de falsificación de solicitudes entre sitios"
+        consent: "Almacena sus preferencias de cookies"
+      functionality:
+        title: "Cookies de funcionalidad"
+        body: "Las Cookies de funcionalidad nos permiten recordar las elecciones que realiza en el Sitio, como su preferencia de idioma o configuración de interfaz. Mejoran la usabilidad personalizando su experiencia."
+        locale: "Recuerda su preferencia de idioma"
+        cut_direction: "Guarda su dirección de corte preferida"
+      analytics:
+        title: "Cookies de rendimiento y análisis"
+        body: "Las Cookies de rendimiento recopilan información agregada y anónima sobre cómo los visitantes utilizan el Sitio, como las páginas más visitadas. Utilizamos esta información para mejorar el funcionamiento del Sitio."
+        ga: "Distingue usuarios únicos asignando un identificador generado aleatoriamente"
+        gid: "Distingue usuarios con fines analíticos"
+      third_party:
+        title: "Cookies de terceros y de pago"
+        body: "Cuando interactúa con ciertas funcionalidades del Sitio, proveedores terceros pueden colocar sus propias Cookies. Nuestro procesador de pagos Stripe puede colocar Cookies cuando accede a páginas relacionadas con el pago. También utilizamos Google OAuth para la autenticación."
+        stripe_mid: "Prevención de fraude y procesamiento de pagos"
+        stripe_sid: "Prevención de fraude y gestión de sesión de pago"
+    table:
+      cookie: "Cookie"
+      provider: "Proveedor"
+      purpose: "Finalidad"
+      duration: "Duración"
+    duration:
+      session: "1 día"
+      two_weeks: "2 semanas"
+      one_year: "1 año"
+      two_years: "2 años"
+      twenty_four_hours: "24 horas"
+      thirty_minutes: "30 minutos"
+    your_choices:
+      title: "Sus opciones sobre cookies"
+      body: "Al visitar nuestro Sitio por primera vez, verá un banner de consentimiento de cookies que le permite aceptar o rechazar las Cookies no esenciales. La mayoría de los navegadores web también le permiten controlar las Cookies a través de su configuración. Tenga en cuenta que bloquear o eliminar ciertas Cookies puede afectar la funcionalidad del Sitio. Las Cookies esenciales no pueden desactivarse."
+    gdpr:
+      title: "Cookies y el RGPD"
+      body: "Como empresa establecida en Francia (Nantes), cumplimos con el Reglamento General de Protección de Datos (RGPD) y la Directiva ePrivacy transpuesta al derecho francés, así como las directrices de la CNIL. Las Cookies esenciales se colocan sin consentimiento previo, ya que son estrictamente necesarias. Las Cookies no esenciales solo se colocan después de que haya dado su consentimiento informado. Puede retirar su consentimiento en cualquier momento. No utilizamos Cookies con fines publicitarios o de perfilado."
+    how_long:
+      title: "¿Cuánto tiempo permanecen las cookies en mi dispositivo?"
+      body: "Las Cookies de sesión son temporales y se eliminan al cerrar el navegador. Las Cookies persistentes permanecen en su dispositivo durante un período determinado o hasta que las elimine manualmente. La duración de cada Cookie se especifica en las tablas anteriores."
+    advertising:
+      title: "¿Utilizamos cookies publicitarias?"
+      body: "No. CutList no utiliza Cookies publicitarias y no muestra anuncios de terceros en el Sitio. No realizamos publicidad comportamental ni seguimiento entre sitios con fines de marketing."
+    updates:
+      title: "Actualizaciones de esta política"
+      body: "Podemos actualizar esta Política de cookies periódicamente para reflejar cambios en nuestras prácticas, tecnologías o requisitos legales. Cuando realicemos cambios, actualizaremos la fecha de «Última actualización» en la parte superior de esta página."
+    contact:
+      title: "Contáctenos"
+      body: "Si tiene alguna pregunta sobre esta Política de cookies, contáctenos:"
+  legal_notices:
+    page_title: "Aviso legal — CutOptima"
+    title: "Aviso legal"
+    last_updated: "Última actualización: 22 de febrero de 2026"
+    link: "Aviso legal"
+    intro: "De conformidad con las disposiciones de la Ley francesa n.º 2004-575 del 21 de junio de 2004 para la Confianza en la Economía Digital (LCEN), se proporciona la siguiente información a los usuarios del sitio cutoptima.com."
+    editor:
+      title: "Editor del sitio"
+      legal_form: "Sociedad de responsabilidad limitada (SARL)"
+      vat: "Número de IVA"
+      address: "Domicilio social"
+      website: "Sitio web"
+    publication_director:
+      title: "Director de publicación"
+      body: "El director de publicación es Noventi SARL, en calidad de persona jurídica y operador del sitio cutoptima.com."
+    hosting:
+      title: "Proveedor de alojamiento"
+      website: "Sitio web"
+    intellectual_property:
+      title: "Propiedad intelectual"
+      body: "Todo el contenido del sitio cutoptima.com — incluyendo, entre otros, textos, gráficos, logotipos, iconos, imágenes, software y el código fuente subyacente — es propiedad exclusiva de Noventi SARL o de sus licenciantes y está protegido por las leyes francesas e internacionales de propiedad intelectual. Queda estrictamente prohibida cualquier reproducción, representación, modificación, distribución o explotación de todo o parte de este sitio sin la autorización previa por escrito de Noventi SARL."
+    personal_data:
+      title: "Protección de datos personales"
+      body: "De conformidad con el Reglamento General de Protección de Datos (RGPD — Reglamento UE 2016/679) y la Ley francesa de Protección de Datos (Loi Informatique et Libertés), Noventi SARL recopila y trata los datos personales necesarios para el funcionamiento del servicio. Los datos recopilados incluyen: dirección de correo electrónico e información de autenticación. Los usuarios tienen derecho de acceso, rectificación, supresión y portabilidad de sus datos personales, así como derecho a limitar u oponerse al tratamiento. Para ejercer estos derechos, contáctenos en contact@cutoptima.com. Para más información, puede contactar a la CNIL (Commission Nationale de l'Informatique et des Libertés) en www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "El sitio cutoptima.com utiliza cookies. Para conocer el detalle de las cookies utilizadas y gestionar sus preferencias, consulte nuestra "
+    liability:
+      title: "Limitación de responsabilidad"
+      body: "Noventi SARL se esfuerza por garantizar la exactitud y actualización de la información publicada en cutoptima.com. Sin embargo, Noventi SARL no puede garantizar que la información sea completa, exacta o esté actualizada en todo momento. Noventi SARL no será responsable de ningún daño directo o indirecto derivado del acceso o uso del sitio, incluyendo cualquier pérdida de datos, daño a equipos o interrupciones del servicio."
+    applicable_law:
+      title: "Ley aplicable y jurisdicción"
+      body: "El presente aviso legal se rige por la legislación francesa. Cualquier litigio derivado del uso del sitio cutoptima.com estará sujeto a la jurisdicción exclusiva de los tribunales competentes de Nantes, Francia, salvo disposición imperativa en contrario."
+    contact:
+      title: "Contacto"
+      body: "Para cualquier pregunta relativa al presente aviso legal, puede contactarnos:"
+  privacy_policy:
+    page_title: "Política de privacidad — CutOptima"
+    title: "Política de privacidad"
+    last_updated: "Última actualización: 22 de febrero de 2026"
+    link: "Política de privacidad"
+    intro: "Noventi SARL («Noventi», «nosotros», «nuestro») se compromete a proteger la privacidad de los usuarios del sitio cutoptima.com (el «Sitio»). La presente Política de privacidad describe cómo recopilamos, utilizamos, conservamos y compartimos sus datos personales de conformidad con el Reglamento General de Protección de Datos (RGPD — Reglamento UE 2016/679) y la Ley francesa de Protección de Datos (Loi Informatique et Libertés)."
+    data_controller:
+      title: "Responsable del tratamiento"
+      body: "El responsable del tratamiento de sus datos personales es:"
+    data_collected:
+      title: "Datos recopilados"
+      body: "Recopilamos los siguientes datos personales en el marco del funcionamiento del Sitio:"
+      table:
+        data: "Dato"
+        purpose: "Finalidad"
+        legal_basis: "Base legal"
+      rows:
+        email:
+          data: "Dirección de correo electrónico"
+          purpose: "Creación de cuenta, autenticación, comunicación"
+          basis: "Ejecución del contrato"
+        password:
+          data: "Contraseña (cifrada)"
+          purpose: "Autenticación segura"
+          basis: "Ejecución del contrato"
+        oauth:
+          data: "Identificador Google OAuth"
+          purpose: "Inicio de sesión mediante red social"
+          basis: "Consentimiento"
+        projects:
+          data: "Proyectos (nombres, dimensiones, resultados de optimización)"
+          purpose: "Prestación del servicio de optimización de corte"
+          basis: "Ejecución del contrato"
+        payment:
+          data: "Identificadores de cliente y suscripción de Stripe"
+          purpose: "Gestión de suscripciones y pagos"
+          basis: "Ejecución del contrato"
+        reports:
+          data: "Informes de problemas (texto, URL de la página)"
+          purpose: "Soporte al cliente y resolución de errores"
+          basis: "Interés legítimo"
+    purposes:
+      title: "Finalidades del tratamiento"
+      items:
+        service: "Prestar y operar el servicio de optimización de corte"
+        auth: "Gestionar las cuentas de usuario y la autenticación"
+        payment: "Procesar pagos y gestionar suscripciones"
+        communication: "Responder a informes de problemas y solicitudes de soporte"
+        security: "Garantizar la seguridad e integridad del Sitio"
+        improvement: "Mejorar el Sitio y la experiencia del usuario"
+    legal_basis:
+      title: "Base legal del tratamiento"
+      body: "Tratamos sus datos personales sobre las siguientes bases jurídicas:"
+      items:
+        contract: "Ejecución del contrato: tratamiento necesario para prestar el servicio al que se ha suscrito"
+        consent: "Consentimiento: para funcionalidades opcionales como el inicio de sesión social (Google OAuth) y cookies no esenciales"
+        legitimate: "Interés legítimo: para la seguridad del sitio, prevención de fraude y mejora del servicio"
+        legal: "Obligación legal: para el cumplimiento de las leyes y normativas aplicables"
+    recipients:
+      title: "Destinatarios de los datos"
+      body: "Sus datos personales pueden compartirse con los siguientes proveedores terceros, estrictamente para los fines descritos:"
+      table:
+        provider: "Proveedor"
+        purpose: "Finalidad"
+        location: "Ubicación"
+      rows:
+        stripe: "Procesamiento de pagos y gestión de suscripciones"
+        stripe_location: "Estados Unidos (CCT UE)"
+        brevo: "Envío de correos transaccionales"
+        brevo_location: "Unión Europea"
+        google: "Autenticación OAuth"
+        google_location: "Estados Unidos (CCT UE)"
+        ovh: "Alojamiento e infraestructura del sitio"
+        ovh_location: "Francia"
+    transfers:
+      title: "Transferencias internacionales de datos"
+      body: "Algunos de nuestros proveedores (Stripe, Google) están ubicados en Estados Unidos. Estas transferencias están reguladas por las Cláusulas Contractuales Tipo (CCT) aprobadas por la Comisión Europea, garantizando un nivel de protección adecuado conforme al RGPD."
+    retention:
+      title: "Período de conservación"
+      body: "Conservamos sus datos personales durante los siguientes períodos:"
+      items:
+        account: "Datos de cuenta (correo electrónico, contraseña): durante la vigencia de su cuenta, eliminados al eliminar la cuenta"
+        projects: "Proyectos y optimizaciones: durante la vigencia de su cuenta"
+        payment: "Datos de pago: las referencias de cliente y suscripción de Stripe se conservan durante la vigencia de su cuenta; los detalles de pago son conservados por Stripe conforme a sus obligaciones legales"
+        cookies: "Datos de cookies: consulte nuestra Política de cookies para las duraciones específicas"
+    rights:
+      title: "Sus derechos"
+      body: "En virtud del RGPD, usted tiene los siguientes derechos sobre sus datos personales:"
+      items:
+        access:
+          name: "Derecho de acceso"
+          desc: "obtener una copia de sus datos personales en nuestro poder"
+        rectification:
+          name: "Derecho de rectificación"
+          desc: "corregir datos inexactos o incompletos"
+        erasure:
+          name: "Derecho de supresión"
+          desc: "solicitar la eliminación de sus datos personales"
+        portability:
+          name: "Derecho a la portabilidad"
+          desc: "recibir sus datos en un formato estructurado y de uso común"
+        restriction:
+          name: "Derecho a la limitación"
+          desc: "solicitar que limitemos el tratamiento de sus datos"
+        objection:
+          name: "Derecho de oposición"
+          desc: "oponerse al tratamiento basado en el interés legítimo"
+        withdrawal:
+          name: "Derecho a retirar el consentimiento"
+          desc: "retirar su consentimiento en cualquier momento para los tratamientos basados en el consentimiento"
+      exercise: "Para ejercer cualquiera de estos derechos, contáctenos en contact@cutoptima.com. Responderemos en el plazo de un mes desde la recepción de su solicitud."
+      cnil: "También tiene derecho a presentar una reclamación ante la CNIL (Commission Nationale de l'Informatique et des Libertés) en www.cnil.fr."
+    cookies:
+      title: "Cookies"
+      body: "El Sitio utiliza cookies y tecnologías similares. Para conocer el detalle de las cookies utilizadas y gestionar sus preferencias, consulte nuestra "
+    security:
+      title: "Seguridad de los datos"
+      body: "Implementamos medidas técnicas y organizativas apropiadas para proteger sus datos personales contra el acceso no autorizado, la alteración, la pérdida o la destrucción. Estas medidas incluyen: cifrado HTTPS para todas las comunicaciones, hash de contraseñas mediante bcrypt, protección CSRF, gestión segura de sesiones y controles de acceso que limitan el acceso a los datos al personal autorizado únicamente."
+    updates:
+      title: "Modificaciones de esta política"
+      body: "Podemos actualizar esta Política de privacidad periódicamente para reflejar cambios en nuestras prácticas o requisitos legales. Cuando realicemos cambios, actualizaremos la fecha de «Última actualización» en la parte superior de esta página. Le recomendamos revisar esta política periódicamente."
+    contact:
+      title: "Contacto"
+      body: "Para cualquier pregunta relativa a esta Política de privacidad o para ejercer sus derechos, contáctenos:"
+      cnil: "También puede contactar a la CNIL (Commission Nationale de l'Informatique et des Libertés), la autoridad francesa de protección de datos, en www.cnil.fr."
+  faq:
+    page_title: "FAQ — CutList"
+    title: "Preguntas frecuentes"
+    link: "FAQ"
+    q1:
+      question: "¿Cómo creo una lista de corte?"
+      answer: "Introduzca las dimensiones de su panel base (largo × ancho) en la sección \"Panel base\", luego añada las piezas a cortar con sus dimensiones y cantidades. Dé un nombre a su proyecto si lo desea, y haga clic en \"Optimizar\" para generar el plan de corte óptimo."
+    q2:
+      question: "¿Cómo funciona la optimización?"
+      answer: "El optimizador calcula la disposición más eficiente de sus piezas en los paneles base para minimizar el desperdicio. Utiliza un algoritmo avanzado que tiene en cuenta las dimensiones de las piezas, las cantidades y las restricciones opcionales como el grosor de la hoja, la dirección de la veta y la rotación. El resultado muestra cuántos paneles necesita y dónde colocar cada pieza."
+    q3:
+      question: "¿Qué es el grosor de la hoja (kerf)?"
+      answer: "El grosor de la hoja corresponde al ancho de material eliminado por la sierra en cada corte. Al indicar este valor (en mm), el optimizador tiene en cuenta esta pérdida de material para obtener planes de corte más precisos. Este ajuste se encuentra en la sección Opciones."
+    q4:
+      question: "¿Cómo funciona la dirección de la veta?"
+      answer: "Puede definir una dirección de veta en su panel base (a lo largo o a lo ancho) en las Opciones. Cada pieza puede indicar qué dimensión debe seguir la veta. Esto garantiza que las piezas se corten respetando el patrón de la veta de la madera, esencial para las superficies visibles."
+    q5:
+      question: "¿Puedo importar piezas desde un archivo CSV?"
+      answer: "Sí, a partir del plan Worker. Haga clic en \"Importar CSV\" en la sección de piezas. Su archivo CSV debe contener columnas para largo, ancho y opcionalmente cantidad y etiqueta. Las piezas se añadirán a su lista actual."
+    q6:
+      question: "¿Cómo exporto mis resultados?"
+      answer: "Puede exportar su plan de corte en PDF con medidas precisas y detalles de cada pieza mediante el botón \"Exportar PDF\". También puede imprimir etiquetas adhesivas en formatos estándar (24 o 30 etiquetas por página) mediante el botón \"Etiquetas\". Estas funciones están disponibles según su suscripción."
+    q7:
+      question: "¿Puedo editar manualmente la disposición?"
+      answer: "Sí. Haga clic en \"Editar disposición\" para entrar en modo de edición. Puede arrastrar piezas para reposicionarlas dentro de un panel o transferirlas a otro panel. La detección de colisiones con el kerf evita la superposición. Haga clic en \"Guardar\" para guardar, o \"Restablecer original\" para volver a la disposición optimizada."
+    q8:
+      question: "¿Cuáles son los planes de suscripción?"
+      answer: "CutList ofrece tres planes: Gratis (2 proyectos activos, 10 optimizaciones por proyecto por día, exportar PDF, etiquetas, dirección de corte, grosor de la hoja), Worker (10 proyectos, optimizaciones ilimitadas, importar CSV, imprimir etiquetas, mover piezas), y Empresa (proyectos y optimizaciones ilimitados, margen en paneles, archivar). También está disponible un acceso puntual de 3 días."
+    q9:
+      question: "¿Cómo gestiono mi cuenta?"
+      answer: "Haga clic en su email en la barra lateral para acceder a los ajustes. Puede cambiar su contraseña, cambiar el idioma y gestionar su suscripción. También puede iniciar sesión con Google. Sus proyectos y datos se almacenan de forma segura y son accesibles desde cualquier dispositivo."
+  coupons:
+    form_title: "Código de cupón"
+    form_description: "Introduzca su código de cupón para mejorar su plan durante un tiempo limitado."
+    placeholder: "Introduzca el código"
+    submit: "Aplicar"
+    success: "¡Su plan ha sido actualizado a %{plan} durante %{days} días!"
+    invalid: "Código de cupón inválido o expirado."
+    already_used: "Ya ha utilizado este cupón."
+    rate_limited: "Demasiados intentos. Por favor, inténtelo de nuevo más tarde."
+  report_issue:
+    button: "Reportar un problema"
+    title: "Reportar un problema"
+    description: "Describa el problema encontrado. Lo revisaremos lo antes posible."
+    placeholder: "¿Qué salió mal?"
+    submit: "Enviar informe"
+    thanks_title: "¡Gracias!"
+    thanks_message: "Su informe ha sido enviado. Lo revisaremos en breve."
+    close: "Cerrar"

@@ -16,7 +16,7 @@ module CutListWebApp
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    config.i18n.available_locales = [ :en, :fr, :ja ]
+    config.i18n.available_locales = [ :en, :fr, :ja, :es ]
     config.i18n.default_locale = :en
 
     config.session_store :cookie_store, expire_after: 1.day
