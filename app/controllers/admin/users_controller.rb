@@ -83,7 +83,7 @@ module Admin
       if @sort == "projects_count"
         scope.left_joins(:projects)
              .group(:id)
-             .order(Arel.sql("COUNT(projects.id) #{@sort_direction}"))
+             .order(Arel.sql("COUNT(projects.id)").send(@sort_direction.to_sym))
       else
         scope.order(created_at: @sort_direction.to_sym)
       end
