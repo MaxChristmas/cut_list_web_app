@@ -266,27 +266,34 @@ class CutListPdfService
       pdf.fill_color TEXT_COLOR
 
       # Bottom label (horizontal dimension)
-      pdf.text_box fmt(h_dim),
-        at: [ rect_x + 1, rect_y - ph + dim_font + 1 ],
-        width: pw - 2,
-        height: dim_font + 2,
-        align: :center,
-        size: dim_font,
-        overflow: :shrink_to_fit,
-        min_font_size: 2
-
-      # Right side label (vertical dimension, rotated)
-      mid_x = rect_x + pw - dim_font / 2 - 1
-      mid_y = rect_y - ph / 2
-      pdf.rotate(90, origin: [ mid_x, mid_y ]) do
-        pdf.text_box fmt(v_dim),
-          at: [ mid_x - (ph - 2) / 2, mid_y + (dim_font + 2) / 2 ],
-          width: ph - 2,
-          height: dim_font + 2,
+      label_w = pw - 2
+      label_h = dim_font + 2
+      if label_w > 2 && label_h > 2
+        pdf.text_box fmt(h_dim),
+          at: [ rect_x + 1, rect_y - ph + dim_font + 1 ],
+          width: label_w,
+          height: label_h,
           align: :center,
           size: dim_font,
           overflow: :shrink_to_fit,
           min_font_size: 2
+      end
+
+      # Right side label (vertical dimension, rotated)
+      vlabel_w = ph - 2
+      if vlabel_w > 2 && label_h > 2
+        mid_x = rect_x + pw - dim_font / 2 - 1
+        mid_y = rect_y - ph / 2
+        pdf.rotate(90, origin: [ mid_x, mid_y ]) do
+          pdf.text_box fmt(v_dim),
+            at: [ mid_x - vlabel_w / 2, mid_y + label_h / 2 ],
+            width: vlabel_w,
+            height: label_h,
+            align: :center,
+            size: dim_font,
+            overflow: :shrink_to_fit,
+            min_font_size: 2
+        end
       end
 
       # Piece label centered, oriented along the length direction
@@ -297,32 +304,40 @@ class CutListPdfService
 
         if length_is_vertical
           label_font = [ [ ph * 0.22, pw * 0.22, 8 ].min, 3 ].max
-          mid_x = rect_x + pw / 2
-          mid_y = rect_y - ph / 2
-          pdf.fill_color TEXT_COLOR
-          pdf.rotate(90, origin: [ mid_x, mid_y ]) do
+          lbl_w = ph - 2
+          lbl_h = label_font + 2
+          if lbl_w > 2 && lbl_h > 2
+            mid_x = rect_x + pw / 2
+            mid_y = rect_y - ph / 2
+            pdf.fill_color TEXT_COLOR
+            pdf.rotate(90, origin: [ mid_x, mid_y ]) do
+              pdf.text_box label,
+                at: [ mid_x - lbl_w / 2, mid_y + lbl_h / 2 ],
+                width: lbl_w,
+                height: lbl_h,
+                align: :center,
+                size: label_font,
+                overflow: :shrink_to_fit,
+                min_font_size: 2,
+                style: :bold
+            end
+          end
+        else
+          label_font = [ [ pw * 0.22, ph * 0.22, 8 ].min, 3 ].max
+          lbl_w = pw - 2
+          lbl_h = label_font + 2
+          if lbl_w > 2 && lbl_h > 2
+            pdf.fill_color TEXT_COLOR
             pdf.text_box label,
-              at: [ mid_x - (ph - 2) / 2, mid_y + (label_font + 2) / 2 ],
-              width: ph - 2,
-              height: label_font + 2,
+              at: [ rect_x + 1, rect_y - ph / 2 + label_font / 2 + 1 ],
+              width: lbl_w,
+              height: lbl_h,
               align: :center,
               size: label_font,
               overflow: :shrink_to_fit,
               min_font_size: 2,
               style: :bold
           end
-        else
-          label_font = [ [ pw * 0.22, ph * 0.22, 8 ].min, 3 ].max
-          pdf.fill_color TEXT_COLOR
-          pdf.text_box label,
-            at: [ rect_x + 1, rect_y - ph / 2 + label_font / 2 + 1 ],
-            width: pw - 2,
-            height: label_font + 2,
-            align: :center,
-            size: label_font,
-            overflow: :shrink_to_fit,
-            min_font_size: 2,
-            style: :bold
         end
       end
     end
@@ -356,6 +371,7 @@ class CutListPdfService
   def draw_footer(pdf)
     locale_suffix = I18n.locale == :ja ? "jp" : I18n.locale.to_s
     logo_path = Rails.root.join("app/assets/images/cutoptima-logo-#{locale_suffix}.svg")
+    logo_path = Rails.root.join("app/assets/images/cutoptima-logo-en.svg") unless logo_path.exist?
     logo_h = 19
     logo_w = logo_h * (400.0 / 120)
     footer_y = -30 + logo_h + 5
