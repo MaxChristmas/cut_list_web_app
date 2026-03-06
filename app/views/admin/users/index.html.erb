@@ -3,6 +3,28 @@
   <%= link_to "New User", new_admin_user_path, class: "bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-blue-700" %>
 </div>
 
+<%= form_tag admin_users_path, method: :get, class: "mb-4 flex justify-end items-center gap-3" do %>
+  <div class="flex items-center gap-2">
+    <label for="plan" class="text-sm font-medium text-gray-700">Plan:</label>
+    <select name="plan" id="plan" onchange="this.form.submit()"
+      class="rounded-lg border-gray-300 text-sm py-1.5 pl-3 pr-8 focus:border-blue-500 focus:ring-blue-500">
+      <option value="all" <%= "selected" if @plan_filter == "all" %>>All plans</option>
+      <% Plannable::PLANS.each_key do |plan| %>
+        <option value="<%= plan %>" <%= "selected" if @plan_filter == plan %>><%= plan.capitalize %></option>
+      <% end %>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <label for="score" class="text-sm font-medium text-gray-700">Score:</label>
+    <select name="score" id="score" onchange="this.form.submit()"
+      class="rounded-lg border-gray-300 text-sm py-1.5 pl-3 pr-8 focus:border-blue-500 focus:ring-blue-500">
+      <% Admin::UsersController::SCORE_RANGES.each do |key, label, _| %>
+        <option value="<%= key %>" <%= "selected" if @score_filter == key %>><%= label %></option>
+      <% end %>
+    </select>
+  </div>
+<% end %>
+
 <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
@@ -20,7 +42,7 @@
       <% @users.each do |user| %>
         <tr class="hover:bg-gray-50">
           <td class="px-5 py-3 text-sm text-gray-900">
-            <%= user.email %>
+            <%= link_to user.email, admin_user_path(user), class: "text-blue-600 hover:text-blue-800" %>
             <% if user.internal? %>
               <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">Internal</span>
             <% end %>

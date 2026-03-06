@@ -2,8 +2,33 @@ module Admin
   class UsersController < BaseController
     before_action :set_user, only: [ :show, :edit, :update, :destroy, :soft_delete ]
 
+    SCORE_RANGES = [
+      [ "all", "All scores", 0..100 ],
+      [ "0-10", "0 - 10", 0..10 ],
+      [ "10-20", "10 - 20", 11..20 ],
+      [ "20-30", "20 - 30", 21..30 ],
+      [ "30-50", "30 - 50", 31..50 ],
+      [ "50-70", "50 - 70", 51..70 ],
+      [ "70-100", "70 - 100", 71..100 ]
+    ].freeze
+
     def index
-      @users = paginate(User.order(created_at: :desc))
+      @score_filter = params[:score] || "all"
+      @plan_filter = params[:plan] || "all"
+
+      scope = User.order(created_at: :desc)
+      scope = scope.where(plan: @plan_filter) if @plan_filter != "all"
+
+      score_range = SCORE_RANGES.find { |key, _, _| key == @score_filter }&.last
+
+      if score_range && @score_filter != "all"
+        users = scope.includes(:projects, :coupon_redemptions)
+        filtered = users.select { |u| score_range.cover?(u.engagement_score) }
+        @users = paginate_array(filtered)
+      else
+        @score_filter = "all"
+        @users = paginate(scope)
+      end
     end
 
     def show
