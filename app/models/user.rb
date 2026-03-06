@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Plannable
+  include Scorable
 
   # Include default devise modules. Others available are:
   # :confirmable, :timeoutable

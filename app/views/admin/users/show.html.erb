@@ -81,6 +81,38 @@
   </dl>
 </div>
 
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <h3 class="text-lg font-medium text-gray-900 mb-3">Engagement Score</h3>
+  <% breakdown = @user.engagement_score_breakdown %>
+  <% total = @user.engagement_score %>
+  <div class="mb-4">
+    <div class="flex items-center gap-3">
+      <div class="flex-1 bg-gray-200 rounded-full h-4 overflow-hidden">
+        <div class="h-4 rounded-full <%= total >= 60 ? 'bg-green-500' : total >= 30 ? 'bg-yellow-500' : 'bg-gray-400' %>" style="width: <%= total %>%"></div>
+      </div>
+      <span class="text-lg font-semibold text-gray-900 w-16 text-right"><%= total %>/100</span>
+    </div>
+  </div>
+  <dl class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Plan (<%= Scorable::SCORE_WEIGHTS[:plan] %> max)</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= breakdown[:plan] %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Sign-ins (<%= Scorable::SCORE_WEIGHTS[:sign_ins] %> max)</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= breakdown[:sign_ins] %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Projects (<%= Scorable::SCORE_WEIGHTS[:projects] %> max)</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= breakdown[:projects] %></dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Optimizations (<%= Scorable::SCORE_WEIGHTS[:optimizations] %> max)</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= breakdown[:optimizations] %></dd>
+    </div>
+  </dl>
+</div>
+
 <h3 class="text-lg font-medium text-gray-900 mb-3">Projects (<%= @projects.size %>)</h3>
 <% if @projects.any? %>
   <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">

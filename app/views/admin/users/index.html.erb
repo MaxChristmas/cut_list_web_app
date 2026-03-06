@@ -11,6 +11,7 @@
         <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
         <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Projects</th>
         <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Optimizations</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
         <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
         <th class="px-5 py-3"></th>
       </tr>
@@ -35,6 +36,13 @@
           </td>
           <td class="px-5 py-3 text-sm text-gray-500"><%= user.projects.size %></td>
           <td class="px-5 py-3 text-sm text-gray-500"><%= user.projects.sum(:optimizations_count) %></td>
+          <td class="px-5 py-3 text-sm">
+            <% score = user.engagement_score %>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+              <%= score >= 60 ? 'bg-green-100 text-green-700' : score >= 30 ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600' %>">
+              <%= score %>/100
+            </span>
+          </td>
           <td class="px-5 py-3 text-sm text-gray-500"><%= user.created_at.strftime("%b %d, %Y at %H:%M") %></td>
           <td class="px-5 py-3 text-right">
             <%= link_to "View", admin_user_path(user), class: "text-sm text-blue-600 hover:text-blue-800" %>
