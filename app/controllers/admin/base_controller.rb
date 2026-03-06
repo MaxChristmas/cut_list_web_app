@@ -9,7 +9,8 @@ module Admin
 
     def paginate(scope)
       page = [ params[:page].to_i, 1 ].max
-      @total_count = scope.count
+      total = scope.count
+      @total_count = total.is_a?(Hash) ? total.size : total
       @current_page = page
       @total_pages = (@total_count.to_f / PER_PAGE).ceil
       @total_pages = 1 if @total_pages < 1

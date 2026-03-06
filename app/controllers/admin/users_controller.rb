@@ -12,12 +12,18 @@ module Admin
       [ "70-100", "70 - 100", 71..100 ]
     ].freeze
 
+    SORT_OPTIONS = %w[created_at projects_count].freeze
+
     def index
       @score_filter = params[:score] || "all"
       @plan_filter = params[:plan] || "all"
+      @sort = SORT_OPTIONS.include?(params[:sort]) ? params[:sort] : "created_at"
+      @sort_direction = params[:direction] == "asc" ? "asc" : "desc"
 
-      scope = User.order(created_at: :desc)
+      scope = User.all
       scope = scope.where(plan: @plan_filter) if @plan_filter != "all"
+
+      scope = apply_sort(scope)
 
       score_range = SCORE_RANGES.find { |key, _, _| key == @score_filter }&.last
 
@@ -72,6 +78,16 @@ module Admin
     end
 
     private
+
+    def apply_sort(scope)
+      if @sort == "projects_count"
+        scope.left_joins(:projects)
+             .group(:id)
+             .order(Arel.sql("COUNT(projects.id) #{@sort_direction}"))
+      else
+        scope.order(created_at: @sort_direction.to_sym)
+      end
+    end
 
     def set_user
       @user = User.find(params[:id])
