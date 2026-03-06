@@ -179,6 +179,10 @@ fr:
   optimizer_errors:
     piece_does_not_fit: "La pièce %{piece} ne rentre pas dans le panneau %{stock}"
     generic: "L'optimisation a échoué : %{message}"
+    missing_stock: "Les dimensions du panneau brut sont requises"
+    missing_pieces: "Au moins une découpe est requise"
+    length_less_than_width: "La longueur doit être supérieure ou égale à la largeur"
+    piece_length_less_than_width: "Pièce %{piece} : la longueur doit être supérieure ou égale à la largeur"
   limits:
     max_projects_reached: "Vous avez atteint la limite de projets actifs. Passez au plan supérieur pour en créer davantage."
     daily_optimizations_reached: "Vous avez atteint la limite journalière d'optimisations pour ce projet. Passez au plan supérieur pour en faire plus."

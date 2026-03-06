@@ -14,7 +14,7 @@
 <% has_grain = (@grain_direction || "none") != "none" %>
 
 <%= form_with url: form_url, method: form_method, class: "space-y-10",
-    data: { controller: "pending-project", "pending-project-create-url-value": projects_path } do |f| %>
+    data: { controller: "pending-project form-validation", "pending-project-create-url-value": projects_path } do |f| %>
   <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10"
              data-controller="pieces" data-pieces-labels-mode-value="<%= labels_mode %>" data-pieces-grain-visible-value="<%= has_grain %>">
   <section>
@@ -36,15 +36,20 @@
           <label for="stock_l" class="block text-xs font-light mb-1"><%= t("projects.index.length") %></label>
           <input type="number" id="stock_l" name="stock_l" min="1" step="any" required
                  value="<%= @stock_l %>"
+                 data-form-validation-target="stockLength" data-action="input->form-validation#validate"
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div>
           <label for="stock_w" class="block text-xs font-light mb-1"><%= t("projects.index.width") %></label>
           <input type="number" id="stock_w" name="stock_w" min="1" step="any" required
                  value="<%= @stock_w %>"
+                 data-form-validation-target="stockWidth" data-action="input->form-validation#validate"
                  class="w-full bg-gray-700 border border-gray-700 rounded px-1.5 py-1 text-sm text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
       </div>
+      <p hidden data-form-validation-target="stockError"
+         data-length-width-message="<%= t("optimizer_errors.length_less_than_width") %>"
+         class="text-red-400 text-xs mt-1"></p>
     </section>
   </div>
 
@@ -83,7 +88,7 @@
             <th class="py-1 w-8 font-light"></th>
           </tr>
         </thead>
-        <tbody data-pieces-target="body">
+        <tbody data-pieces-target="body" data-form-validation-target="piecesBody" data-action="input->form-validation#validate">
           <% pieces = @pieces.presence || [{ length: nil, width: nil, quantity: 1 }] %>
           <% pieces.each do |piece| %>
             <tr class="border-b border-gray-800">
@@ -167,7 +172,11 @@
         </tr>
       </template>
 
-      <button type="button" data-action="pieces#add"
+      <p hidden data-form-validation-target="pieceError"
+         data-length-width-message="<%= t("optimizer_errors.piece_length_less_than_width", piece: "") %>"
+         class="text-red-400 text-xs mt-1"></p>
+
+      <button type="button" data-action="pieces#add form-validation#validate"
               class="mt-2 text-sm text-white hover:text-gray-300 font-medium">
         <%= t("projects.index.add_piece") %>
       </button>
@@ -262,6 +271,7 @@
     </button>
   <% else %>
     <button type="submit" data-action="click->form-panel#submitAndCollapse"
+            data-form-validation-target="submitButton"
             class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
             <%= "disabled" if template_project %>>
       <%= t("projects.index.optimize") %>

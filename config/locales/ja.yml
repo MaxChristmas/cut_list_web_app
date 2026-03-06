@@ -170,6 +170,10 @@ ja:
   optimizer_errors:
     piece_does_not_fit: "ピース %{piece} はストック %{stock} に収まりません"
     generic: "最適化に失敗しました: %{message}"
+    missing_stock: "原板の寸法は必須です"
+    missing_pieces: "少なくとも1つのカットが必要です"
+    length_less_than_width: "長さは幅以上である必要があります"
+    piece_length_less_than_width: "ピース %{piece}: 長さは幅以上である必要があります"
   limits:
     max_projects_reached: "アクティブプロジェクトの上限に達しました。プランをアップグレードしてください。"
     daily_optimizations_reached: "このプロジェクトの1日の最適化回数の上限に達しました。プランをアップグレードしてください。"

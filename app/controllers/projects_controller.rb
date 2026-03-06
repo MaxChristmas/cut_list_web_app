@@ -95,6 +95,8 @@ class ProjectsController < ApplicationController
     grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
 
+    validate_project_params!(stock_l, stock_w, pieces)
+
     stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces, grain_direction: grain_direction)
 
@@ -152,6 +154,8 @@ class ProjectsController < ApplicationController
     cut_direction = params[:cut_direction] || "auto"
     grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
+
+    validate_project_params!(stock_l, stock_w, pieces)
 
     stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces, grain_direction: grain_direction)
@@ -261,6 +265,23 @@ class ProjectsController < ApplicationController
       h[:label] = piece[:label].strip if piece[:label].present?
       h[:grain] = piece[:grain] if piece[:grain].present? && piece[:grain] != "auto"
       h
+    end
+  end
+
+  def validate_project_params!(stock_l, stock_w, pieces)
+    if stock_l.blank? || stock_w.blank?
+      raise t("optimizer_errors.missing_stock")
+    end
+    if stock_l.to_f < stock_w.to_f
+      raise t("optimizer_errors.length_less_than_width")
+    end
+    if pieces.empty?
+      raise t("optimizer_errors.missing_pieces")
+    end
+    pieces.each do |piece|
+      if piece[:length].to_f < piece[:width].to_f
+        raise t("optimizer_errors.piece_length_less_than_width", piece: piece[:label] || "#{piece[:length]}×#{piece[:width]}")
+      end
     end
   end
 

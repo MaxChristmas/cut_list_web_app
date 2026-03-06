@@ -179,6 +179,10 @@ en:
   optimizer_errors:
     piece_does_not_fit: "Piece %{piece} does not fit in stock %{stock}"
     generic: "Optimization failed: %{message}"
+    missing_stock: "Raw sheet dimensions are required"
+    missing_pieces: "At least one cut is required"
+    length_less_than_width: "Length must be greater than or equal to width"
+    piece_length_less_than_width: "Piece %{piece}: length must be greater than or equal to width"
   limits:
     max_projects_reached: "You've reached your active project limit. Upgrade your plan to create more."
     daily_optimizations_reached: "You've reached the daily optimization limit for this project. Upgrade your plan for more."

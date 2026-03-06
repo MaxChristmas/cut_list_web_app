@@ -22,6 +22,9 @@ application.register("doughnut-chart", DoughnutChartController)
 import FormPanelController from "./form_panel_controller"
 application.register("form-panel", FormPanelController)
 
+import FormValidationController from "./form_validation_controller"
+application.register("form-validation", FormValidationController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
