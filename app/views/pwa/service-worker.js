@@ -1,4 +1,4 @@
-const CACHE_NAME = "cutoptima-v1"
+const CACHE_NAME = "cutoptima-v2"
 const OFFLINE_URL = "/"
 
 // Assets to precache on install
@@ -32,6 +32,9 @@ self.addEventListener("fetch", (event) => {
 
   // Skip cross-origin requests
   if (!request.url.startsWith(self.location.origin)) return
+
+  // Never intercept auth callbacks (OAuth codes are single-use)
+  if (request.url.includes("/users/auth/")) return
 
   // Network-first strategy for navigation requests (HTML pages)
   if (request.mode === "navigate") {
