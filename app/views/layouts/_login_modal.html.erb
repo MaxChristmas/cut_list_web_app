@@ -13,6 +13,10 @@
                 class="pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 transition-colors">
           <%= t("login.sign_up") %>
         </button>
+        <button data-modal-target="tab" data-tab="forgot_password" data-action="click->modal#switchTab"
+                class="hidden pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 transition-colors">
+          <%= t("login.forgot_password") %>
+        </button>
       </div>
       <button data-action="click->modal#close"
               class="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
@@ -28,6 +32,12 @@
     <%# Error message %>
     <div data-modal-target="error" data-fallback="<%= t('login.invalid_credentials') %>"
          class="hidden p-3 bg-red-900/50 text-red-300 rounded text-sm"></div>
+
+    <%# Success message (for password reset) %>
+    <div data-modal-target="success"
+         class="hidden p-3 bg-green-900/50 text-green-300 rounded text-sm">
+      <%= t("login.reset_password_sent") %>
+    </div>
 
     <%# Sign In panel — two-column layout %>
     <div data-modal-target="panel" data-tab="sign_in" class="pt-4">
@@ -59,7 +69,10 @@
           <% end %>
 
           <div class="mt-4 text-center">
-            <%= link_to t("login.forgot_password"), new_user_password_path, class: "text-xs text-gray-500 hover:text-gray-300 transition-colors" %>
+            <button data-action="click->modal#showForgotPassword"
+                    class="text-xs text-gray-500 hover:text-gray-300 transition-colors">
+              <%= t("login.forgot_password") %>
+            </button>
           </div>
         </div>
 
@@ -83,6 +96,31 @@
             <%= t("login.sign_in_with_google") %>
           <% end %>
         </div>
+      </div>
+    </div>
+
+    <%# Forgot Password panel %>
+    <div data-modal-target="panel" data-tab="forgot_password" class="hidden pt-4">
+      <p class="text-sm text-gray-400 mb-4"><%= t("login.forgot_password_instructions") %></p>
+
+      <%= form_for(User.new, as: :user, url: user_password_path, html: { class: "space-y-4", data: { action: "submit->modal#submitPasswordReset", turbo: false } }) do |f| %>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1"><%= t("settings.email") %></label>
+          <%= f.email_field :email, autocomplete: "email",
+                class: "w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-gray-100 text-sm focus:outline-none focus:ring-1 focus:ring-gray-600" %>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+          <%= t("login.send_reset_instructions") %>
+        </button>
+      <% end %>
+
+      <div class="mt-4 text-center">
+        <button data-action="click->modal#showSignIn"
+                class="text-xs text-gray-500 hover:text-gray-300 transition-colors">
+          <%= t("login.back_to_sign_in") %>
+        </button>
       </div>
     </div>
 

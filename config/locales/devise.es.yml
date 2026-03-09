@@ -21,6 +21,12 @@ es:
         subject: "Instrucciones de confirmación"
       reset_password_instructions:
         subject: "Instrucciones para restablecer la contraseña"
+        title: "Restablecimiento de contraseña"
+        instruction: "Alguien solicitó el restablecimiento de la contraseña para la siguiente cuenta:"
+        instruction_2: "Para restablecer su contraseña, visite la siguiente dirección:"
+        action: "Haga clic aquí para restablecer su contraseña"
+        email_label: "Su correo: %{email}"
+        instruction_3: "Si esto fue un error, ignore este correo y no pasará nada."
       unlock_instructions:
         subject: "Instrucciones de desbloqueo"
       email_changed:

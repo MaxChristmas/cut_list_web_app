@@ -35,6 +35,10 @@ ja:
     sign_in_with_google: "Googleで続ける"
     or: "または"
     terms_html: "%{privacy_link}および%{legal_link}に同意します。"
+    forgot_password_instructions: "メールアドレスを入力してください。パスワードリセットの手順をお送りします。"
+    send_reset_instructions: "リセット手順を送信"
+    reset_password_sent: "メールアドレスが登録されている場合、パスワードリセットの手順が送信されます。"
+    back_to_sign_in: "ログインに戻る"
     google_terms_html: "続行すると、%{privacy_link}および%{legal_link}に同意したものとみなされます。"
   projects:
     index:

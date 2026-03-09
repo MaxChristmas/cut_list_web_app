@@ -35,6 +35,10 @@ es:
     sign_in_with_google: "Continuar con Google"
     or: "o"
     terms_html: "Acepto la %{privacy_link} y el %{legal_link}."
+    forgot_password_instructions: "Ingrese su dirección de correo electrónico y le enviaremos instrucciones para restablecer su contraseña."
+    send_reset_instructions: "Enviar instrucciones"
+    reset_password_sent: "Si su correo está registrado, recibirá instrucciones para restablecer su contraseña en breve."
+    back_to_sign_in: "Volver a iniciar sesión"
     google_terms_html: "Al continuar, acepta la %{privacy_link} y el %{legal_link}."
   projects:
     index:

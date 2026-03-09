@@ -2,12 +2,43 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-      /* Email styles need to be inline */
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
+  <body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f7;">
+      <tr>
+        <td align="center" style="padding: 40px 20px;">
+          <%# Logo / Brand %>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 570px;">
+            <tr>
+              <td align="center" style="padding-bottom: 30px;">
+                <img src="<%= image_url('android-chrome-192.png') %>" alt="CutOptima" width="48" height="48" style="display: block; margin: 0 auto 12px; border-radius: 10px;">
+                <span style="font-size: 24px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px;">CutOptima</span>
+              </td>
+            </tr>
+          </table>
 
-  <body>
-    <%= yield %>
+          <%# Content card %>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 570px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <tr>
+              <td style="padding: 40px 48px;">
+                <%= yield %>
+              </td>
+            </tr>
+          </table>
+
+          <%# Footer %>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 570px;">
+            <tr>
+              <td align="center" style="padding-top: 24px;">
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                  &copy; <%= Date.current.year %> CutOptima &mdash; cutoptima.com
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

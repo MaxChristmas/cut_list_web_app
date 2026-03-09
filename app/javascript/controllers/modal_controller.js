@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["dialog", "tab", "panel", "error", "promo"]
+  static targets = ["dialog", "tab", "panel", "error", "promo", "success"]
   static values = { message: String }
 
   connect() {
@@ -43,22 +43,7 @@ export default class extends Controller {
   }
 
   switchTab(event) {
-    const tab = event.currentTarget.dataset.tab
-
-    this.tabTargets.forEach(t => {
-      const active = t.dataset.tab === tab
-      t.classList.toggle("text-white", active)
-      t.classList.toggle("border-white", active)
-      t.classList.toggle("text-gray-500", !active)
-      t.classList.toggle("border-transparent", !active)
-    })
-
-    this.panelTargets.forEach(p => {
-      p.classList.toggle("hidden", p.dataset.tab !== tab)
-    })
-
-    this.clearErrors()
-    this.togglePromo(tab === "sign_up")
+    this._activateTab(event.currentTarget.dataset.tab)
   }
 
   async submitForm(event) {
@@ -103,6 +88,11 @@ export default class extends Controller {
     this.errorTarget.classList.add("hidden")
   }
 
+  clearSuccess() {
+    if (!this.hasSuccessTarget) return
+    this.successTarget.classList.add("hidden")
+  }
+
   showPromo(message) {
     if (!this.hasPromoTarget) return
     this.promoTarget.textContent = message
@@ -114,17 +104,63 @@ export default class extends Controller {
     this.promoTarget.classList.toggle("hidden", !visible)
   }
 
+  showForgotPassword() {
+    this._activateTab("forgot_password")
+  }
+
+  showSignIn() {
+    this._activateTab("sign_in")
+  }
+
+  async submitPasswordReset(event) {
+    event.preventDefault()
+    const form = event.target
+    const formData = new FormData(form)
+
+    try {
+      await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          "Accept": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')?.content
+        }
+      })
+
+      // Always show success message (server always returns 200)
+      this.clearErrors()
+      if (this.hasSuccessTarget) {
+        this.successTarget.classList.remove("hidden")
+      }
+      form.reset()
+    } catch {
+      this.showError(this.errorTarget.dataset.fallback)
+    }
+  }
+
   activateSignUpTab() {
+    this._activateTab("sign_up")
+  }
+
+  _activateTab(tab) {
     this.tabTargets.forEach(t => {
-      const active = t.dataset.tab === "sign_up"
+      const active = t.dataset.tab === tab
       t.classList.toggle("text-white", active)
       t.classList.toggle("border-white", active)
       t.classList.toggle("text-gray-500", !active)
       t.classList.toggle("border-transparent", !active)
+      // Show/hide the forgot_password tab (hidden by default)
+      if (t.dataset.tab === "forgot_password") {
+        t.classList.toggle("hidden", tab !== "forgot_password")
+      }
     })
 
     this.panelTargets.forEach(p => {
-      p.classList.toggle("hidden", p.dataset.tab !== "sign_up")
+      p.classList.toggle("hidden", p.dataset.tab !== tab)
     })
+
+    this.clearErrors()
+    this.clearSuccess()
+    this.togglePromo(tab === "sign_up")
   }
 }

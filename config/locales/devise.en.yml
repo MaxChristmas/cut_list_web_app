@@ -21,6 +21,12 @@ en:
         subject: "Confirmation instructions"
       reset_password_instructions:
         subject: "Reset password instructions"
+        title: "Password Reset"
+        instruction: "Someone requested that the password be reset for the following account:"
+        instruction_2: "To reset your password, visit the following address:"
+        action: "Click here to reset your password"
+        email_label: "Your email: %{email}"
+        instruction_3: "If this was a mistake, just ignore this email and nothing will happen."
       unlock_instructions:
         subject: "Unlock instructions"
       email_changed:

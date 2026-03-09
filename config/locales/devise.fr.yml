@@ -19,6 +19,12 @@ fr:
         subject: "Instructions de confirmation"
       reset_password_instructions:
         subject: "Instructions de réinitialisation du mot de passe"
+        title: "Réinitialisation du mot de passe"
+        instruction: "Une demande de réinitialisation du mot de passe a été effectuée pour le compte suivant :"
+        instruction_2: "Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous :"
+        action: "Cliquez ici pour réinitialiser votre mot de passe"
+        email_label: "Votre email : %{email}"
+        instruction_3: "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail."
       unlock_instructions:
         subject: "Instructions de déverrouillage"
       email_changed:

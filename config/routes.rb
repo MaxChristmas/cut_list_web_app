@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 
   post "stripe/webhooks", to: "stripe_webhooks#create"
 
-  devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions" }
+  devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions", passwords: "users/passwords" }
 
   resources :coupons, only: [ :create ]
   resources :report_issues, only: [ :create ]
