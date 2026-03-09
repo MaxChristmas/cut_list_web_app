@@ -39,6 +39,8 @@ ja:
     send_reset_instructions: "リセット手順を送信"
     reset_password_sent: "メールアドレスが登録されている場合、パスワードリセットの手順が送信されます。"
     back_to_sign_in: "ログインに戻る"
+    change_password: "パスワードを変更"
+    password_minimum: "6文字以上"
     google_terms_html: "続行すると、%{privacy_link}および%{legal_link}に同意したものとみなされます。"
   projects:
     index:

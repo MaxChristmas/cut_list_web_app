@@ -11,4 +11,9 @@ class Users::PasswordsController < Devise::PasswordsController
       redirect_to root_path, notice: I18n.t("devise.passwords.send_instructions")
     end
   end
+
+  # Redirect to root with token — the modal will auto-open
+  def edit
+    redirect_to root_path(reset_password_token: params[:reset_password_token])
+  end
 end

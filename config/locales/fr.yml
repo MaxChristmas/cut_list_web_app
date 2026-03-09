@@ -39,6 +39,8 @@ fr:
     send_reset_instructions: "Envoyer les instructions"
     reset_password_sent: "Si votre email est enregistré, vous recevrez les instructions de réinitialisation sous peu."
     back_to_sign_in: "Retour à la connexion"
+    change_password: "Modifier le mot de passe"
+    password_minimum: "6 caractères minimum"
     google_terms_html: "En continuant, vous acceptez la %{privacy_link} et les %{legal_link}."
   projects:
     index:

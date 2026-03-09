@@ -46,6 +46,9 @@ application.register("pwa-install", PwaInstallController)
 import ReportIssueController from "./report_issue_controller"
 application.register("report-issue", ReportIssueController)
 
+import ResetPasswordModalController from "./reset_password_modal_controller"
+application.register("reset-password-modal", ResetPasswordModalController)
+
 import ResizablePanelController from "./resizable_panel_controller"
 application.register("resizable-panel", ResizablePanelController)
 

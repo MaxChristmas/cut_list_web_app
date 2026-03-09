@@ -353,6 +353,13 @@
     <% end %>
   </aside>
 
+  <%# Reset password modal (auto-opens when reset_password_token is in URL) %>
+  <% if params[:reset_password_token].present? %>
+    <div data-controller="reset-password-modal">
+      <%= render "layouts/reset_password_modal" %>
+    </div>
+  <% end %>
+
   <%# Main content area %>
   <div class="flex-1 h-screen overflow-hidden max-md:pt-12 max-md:overflow-y-auto">
     <%= yield %>
