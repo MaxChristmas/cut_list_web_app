@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "noreply@cutoptima.com"
+  default from: "CutOptima <noreply@cutoptima.com>"
   layout "mailer"
 end
