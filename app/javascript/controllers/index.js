@@ -61,5 +61,8 @@ application.register("sidebar", SidebarController)
 import TabsController from "./tabs_controller"
 application.register("tabs", TabsController)
 
+import TutorialVideoController from "./tutorial_video_controller"
+application.register("tutorial-video", TutorialVideoController)
+
 import UserMenuController from "./user_menu_controller"
 application.register("user-menu", UserMenuController)

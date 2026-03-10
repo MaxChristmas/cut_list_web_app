@@ -1,0 +1,57 @@
+<% video_ids = { en: "sTu93qoNbT0", fr: "rFKqCbp3Pds", ja: "kUznZdh-DVs", es: "sTu93qoNbT0", pt: "aw8dSOAaKVY" } %>
+<% video_id = video_ids[I18n.locale] || video_ids[:en] %>
+
+<div data-controller="tutorial-video" data-tutorial-video-video-id-value="<%= video_id %>">
+  <%# Floating thumbnail widget - bottom right, above report issue button %>
+  <div data-tutorial-video-target="widget"
+       class="hidden fixed bottom-20 right-5 z-40">
+    <div data-action="click->tutorial-video#open"
+         role="button"
+         tabindex="0"
+         class="group relative block rounded-xl overflow-hidden shadow-lg border border-gray-700 hover:border-blue-500 transition-all hover:shadow-blue-500/20 hover:shadow-xl cursor-pointer">
+      <%# Dismiss button %>
+      <button data-action="click->tutorial-video#dismiss"
+              class="absolute top-1.5 right-1.5 z-10 p-0.5 rounded-full bg-black/60 hover:bg-black/80 text-gray-300 hover:text-white transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <%# YouTube thumbnail %>
+      <div class="w-48 h-28 relative">
+        <img src="https://img.youtube.com/vi/<%= video_id %>/mqdefault.jpg"
+             alt="<%= t("tutorial_video.thumbnail_label") %>"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
+          <svg class="w-10 h-10 text-white/90 group-hover:scale-110 transition-transform drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+        <span class="absolute bottom-1.5 left-1.5 text-xs text-white font-medium bg-black/60 px-1.5 py-0.5 rounded"><%= t("tutorial_video.thumbnail_label") %></span>
+      </div>
+    </div>
+  </div>
+
+  <%# Video modal %>
+  <dialog data-tutorial-video-target="dialog"
+          data-action="click->tutorial-video#backdropClose"
+          class="backdrop:bg-black/60 bg-transparent p-0 m-auto rounded-xl">
+    <div class="bg-gray-900 border border-gray-700 rounded-xl w-[40rem] max-w-[90vw] text-gray-200">
+      <%# Header %>
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+        <h2 class="text-lg font-semibold text-white"><%= t("tutorial_video.title") %></h2>
+        <button data-action="click->tutorial-video#close"
+                class="p-1 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <%# YouTube embed %>
+      <div class="p-5">
+        <div data-tutorial-video-target="videoContainer" class="aspect-video bg-gray-800 rounded-lg overflow-hidden">
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>

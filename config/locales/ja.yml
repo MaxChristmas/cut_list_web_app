@@ -502,3 +502,7 @@ ja:
     thanks_title: "ありがとうございます！"
     thanks_message: "報告が送信されました。まもなく確認いたします。"
     close: "閉じる"
+  tutorial_video:
+    thumbnail_label: "クイックチュートリアル"
+    title: "はじめに"
+    placeholder: "チュートリアル動画は近日公開"

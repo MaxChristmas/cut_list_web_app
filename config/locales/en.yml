@@ -511,3 +511,7 @@ en:
     thanks_title: "Thank you!"
     thanks_message: "Your report has been submitted. We'll review it shortly."
     close: "Close"
+  tutorial_video:
+    thumbnail_label: "Quick tutorial"
+    title: "Getting Started"
+    placeholder: "Tutorial video coming soon"

@@ -511,3 +511,7 @@ es:
     thanks_title: "¡Gracias!"
     thanks_message: "Su informe ha sido enviado. Lo revisaremos en breve."
     close: "Cerrar"
+  tutorial_video:
+    thumbnail_label: "Tutorial rápido"
+    title: "Primeros pasos"
+    placeholder: "Video tutorial próximamente"

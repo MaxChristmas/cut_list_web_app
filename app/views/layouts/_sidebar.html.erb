@@ -173,6 +173,13 @@
             </svg>
           </button>
           <div data-user-menu-target="reading" class="hidden pl-4">
+            <button onclick="document.dispatchEvent(new Event('tutorial-video:open'))"
+                    class="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 transition-colors w-full text-left">
+              <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <%= t("tutorial_video.thumbnail_label") %>
+            </button>
             <%= link_to faq_path, class: "flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 transition-colors" do %>
               <%= t("faq.link") %>
             <% end %>
@@ -272,6 +279,13 @@
         </button>
         <div data-user-menu-target="menu"
              class="hidden fixed bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-60 py-1">
+          <button onclick="document.dispatchEvent(new Event('tutorial-video:open'))"
+                  class="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors w-full text-left">
+            <svg class="w-4 h-4 shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <%= t("tutorial_video.thumbnail_label") %>
+          </button>
           <%= link_to faq_path, class: "flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors" do %>
             <svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/>
