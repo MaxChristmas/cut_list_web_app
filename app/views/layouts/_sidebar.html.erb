@@ -1,8 +1,13 @@
 <div data-controller="sidebar" class="h-screen flex relative">
-  <div class="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-900 border-b border-gray-700 flex items-center justify-between px-4 py-3">
-    <span class="text-base font-semibold text-white truncate">
-      <%= defined?(@project) && @project&.name.present? ? @project.name : t("app_name") %>
-    </span>
+  <div class="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-900 border-b border-gray-700 flex items-center justify-between px-4 py-2">
+    <div class="flex items-center gap-2 min-w-0">
+      <% logo_locale_mobile = { en: "en", fr: "fr", ja: "jp", es: "es" }.fetch(I18n.locale, "en") %>
+      <%= image_tag "cutoptima-logo-dark-#{logo_locale_mobile}.svg", alt: t("app_name"), class: 'h-8 w-auto shrink-0' %>
+      <% if defined?(@project) && @project&.name.present? %>
+        <span class="text-gray-500">—</span>
+        <span class="text-sm text-gray-300 truncate"><%= @project.name %></span>
+      <% end %>
+    </div>
     <button data-action="click->sidebar#toggleMobile"
             class="p-1.5 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
