@@ -13,6 +13,11 @@ export default class extends Controller {
 
     this._onOpen = () => this.#openModal()
     document.addEventListener("tutorial-video:open", this._onOpen)
+
+    const params = new URLSearchParams(window.location.search)
+    if (params.has("tutorial")) {
+      this.#openModal()
+    }
   }
 
   disconnect() {
