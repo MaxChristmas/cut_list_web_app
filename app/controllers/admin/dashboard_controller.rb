@@ -35,13 +35,14 @@ module Admin
       last_opts.each do |opt|
         next unless opt.result.is_a?(Hash) && opt.result["sheets"].is_a?(Array)
         pieces_count = opt.result["sheets"].sum { |s| s["placements"]&.size || 0 }
+        next if pieces_count > 5000
         bucket = (pieces_count / 10) * 10
         bucket_users[bucket].add(opt.project.user_id)
       end
 
-      max_bucket = bucket_users.keys.max || 0
-      @pieces_labels = (0..max_bucket).step(10).map { |b| "#{b}-#{b + 9}" }
-      @pieces_data = (0..max_bucket).step(10).map { |b| bucket_users[b]&.size || 0 }
+      sorted_buckets = bucket_users.keys.sort
+      @pieces_labels = sorted_buckets.map { |b| "#{b}-#{b + 9}" }
+      @pieces_data = sorted_buckets.map { |b| bucket_users[b].size }
     end
   end
 end
