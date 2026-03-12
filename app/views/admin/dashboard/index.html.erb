@@ -59,6 +59,20 @@
   </div>
 </div>
 
+<!-- Pieces distribution chart -->
+<div class="flex gap-4 mb-8">
+  <div class="w-1/2 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Distribution des utilisateurs par nombre de pièces (dernière optimisation)</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="bar-chart"
+        data-bar-chart-labels-value="<%= @pieces_labels.to_json %>"
+        data-bar-chart-data-value="<%= @pieces_data.to_json %>"
+      ></canvas>
+    </div>
+  </div>
+</div>
+
 <!-- Recent reports -->
 <div class="bg-white rounded-lg border border-gray-200">
   <div class="px-5 py-4 border-b border-gray-200 flex justify-between items-center">

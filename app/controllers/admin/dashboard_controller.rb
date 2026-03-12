@@ -22,6 +22,26 @@ module Admin
                      .count
       @new_users_labels = (start_date..Date.current).map { |d| d.strftime("%d/%m") }
       @new_users_data = (start_date..Date.current).map { |d| counts[d] || 0 }
+
+      # Pieces distribution: users grouped by piece count (per tens) from last optimization
+      public_project_ids = Project.where(user_id: public.select(:id)).select(:id)
+      last_opt_ids = Optimization
+        .select("DISTINCT ON (project_id) id")
+        .where(project_id: public_project_ids)
+        .order(:project_id, created_at: :desc)
+      last_opts = Optimization.where(id: last_opt_ids).includes(:project)
+
+      bucket_users = Hash.new { |h, k| h[k] = Set.new }
+      last_opts.each do |opt|
+        next unless opt.result.is_a?(Hash) && opt.result["sheets"].is_a?(Array)
+        pieces_count = opt.result["sheets"].sum { |s| s["placements"]&.size || 0 }
+        bucket = (pieces_count / 10) * 10
+        bucket_users[bucket].add(opt.project.user_id)
+      end
+
+      max_bucket = bucket_users.keys.max || 0
+      @pieces_labels = (0..max_bucket).step(10).map { |b| "#{b}-#{b + 9}" }
+      @pieces_data = (0..max_bucket).step(10).map { |b| bucket_users[b]&.size || 0 }
     end
   end
 end
