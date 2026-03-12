@@ -110,4 +110,13 @@ export default class extends Controller {
 
     return total > this.maxPiecesValue
   }
+
+  upgradeCheckout(event) {
+    const btn = event.currentTarget
+    const plan = btn.dataset.plan
+    const billing = btn.dataset.billing
+    window.dispatchEvent(new CustomEvent("pending-checkout", {
+      detail: { plan, billing }
+    }))
+  }
 }

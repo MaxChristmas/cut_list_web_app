@@ -179,8 +179,10 @@ ja:
     one_shot:
       title: "ワンショットアクセス"
       name: "3日間アクセス"
-      description: "すべてのPro機能を3日間利用可能"
-      duration: "3日間アクセス"
+      description: "週末にプロジェクトがありますか？"
+      full_access: "すべてのPro機能を利用可能"
+      no_subscription: "サブスク不要、一回払い"
+      duration: "3日間フルアクセス"
       buy: "購入"
       access_now: "今すぐアクセス"
       worker_name: "ワンショット ワーカー"

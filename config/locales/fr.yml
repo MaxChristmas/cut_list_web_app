@@ -179,9 +179,10 @@ fr:
     one_shot:
       title: "Accès ponctuel"
       name: "Accès 3 jours"
-      description: "Toutes les fonctionnalités Pro pendant 3 jours"
-      subtitle: "Besoin d'une seule utilisation ? Accédez à toutes les fonctionnalités pendant 3 jours."
-      duration: "Accès 3 jours"
+      description: "Vous avez un projet ce weekend ?"
+      full_access: "Toutes les fonctionnalités Pro"
+      no_subscription: "Sans abonnement, paiement unique"
+      duration: "Accès complet pendant 3 jours"
       buy: "Acheter"
       access_now: "Accéder maintenant"
       worker_name: "Ponctuel Worker"

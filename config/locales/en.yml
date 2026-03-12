@@ -179,9 +179,10 @@ en:
     one_shot:
       title: "One-shot Access"
       name: "3-Day Access"
-      description: "All Pro features for 3 days"
-      subtitle: "Need it just once? Get full access for 3 days."
-      duration: "3 days access"
+      description: "Got a project this weekend?"
+      full_access: "All Pro features included"
+      no_subscription: "No subscription, one-time payment"
+      duration: "Full access for 3 days"
       buy: "Buy"
       access_now: "Access now"
       worker_name: "One-shot Worker"

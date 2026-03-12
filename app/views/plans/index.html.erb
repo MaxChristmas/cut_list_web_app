@@ -21,15 +21,12 @@
       <%# Left card: Accès 3 jours (one-shot) %>
       <% one_shot_price = worker_config[:prices][:one_shot] %>
       <div class="rounded-xl border border-gray-700 bg-gray-900 p-6 flex flex-col">
-        <div class="mb-6">
-          <h2 class="text-lg font-bold text-white mb-1"><%= t("plans.one_shot.name") %></h2>
-          <p class="text-sm text-gray-400"><%= t("plans.one_shot.description") %></p>
-        </div>
+        <h2 class="text-lg font-bold text-white mb-1"><%= t("plans.one_shot.name") %></h2>
+        <p class="text-sm text-gray-400 mb-6"><%= t("plans.one_shot.description") %></p>
 
         <div class="mb-6">
           <span class="text-3xl font-bold text-white"><%= number_with_precision(one_shot_price[:amount] / 100.0, precision: 2, strip_insignificant_zeros: true) %>&euro;</span>
           <span class="text-gray-400 text-sm"><%= t("plans.tax_label") %></span>
-          <div class="text-xs text-gray-500 mt-1"><%= t("plans.one_shot.duration") %></div>
         </div>
 
         <ul class="space-y-3 flex-1 mb-6">
@@ -37,28 +34,20 @@
             <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
             </svg>
-            <span>
-              <strong class="text-white"><%= t("plans.unlimited") %></strong>
-              <%= t("plans.pieces_per_project") %>
-            </span>
+            <span class="text-gray-300"><%= t("plans.one_shot.full_access") %></span>
           </li>
           <li class="flex items-center gap-3 text-sm">
             <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
             </svg>
-            <span>
-              <strong class="text-white"><%= t("plans.unlimited") %></strong>
-              <%= t("plans.active_projects") %>
-            </span>
+            <span class="text-gray-300"><%= t("plans.one_shot.no_subscription") %></span>
           </li>
-          <% paid_only_features.each do |feature| %>
-            <li class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-              </svg>
-              <span class="text-gray-300"><%= t("plans.features.#{feature}") %></span>
-            </li>
-          <% end %>
+          <li class="flex items-center gap-3 text-sm">
+            <svg class="w-5 h-5 text-green-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+            </svg>
+            <span class="text-gray-300"><%= t("plans.one_shot.duration") %></span>
+          </li>
         </ul>
 
         <% if user_signed_in? %>
@@ -69,7 +58,7 @@
                   class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors" %>
           <% end %>
         <% else %>
-          <div data-controller="modal" class="mt-auto">
+          <div data-controller="modal" class="w-full mt-auto">
             <button data-action="click->modal#open"
                     class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
               <%= t("plans.one_shot.access_now") %>

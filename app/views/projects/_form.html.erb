@@ -16,7 +16,8 @@
 <div data-controller="form-validation"
      data-form-validation-max-pieces-value="<%= max_pieces_per_project == Float::INFINITY ? 0 : max_pieces_per_project %>">
 <%= form_with url: form_url, method: form_method, class: "space-y-10",
-    data: { controller: "pending-project", "pending-project-create-url-value": projects_path } do |f| %>
+    data: { controller: "pending-project", "pending-project-create-url-value": projects_path,
+            "pending-project-checkout-url-value": plan_checkout_path } do |f| %>
   <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10"
              data-controller="pieces" data-pieces-labels-mode-value="<%= labels_mode %>" data-pieces-grain-visible-value="<%= has_grain %>">
   <section>
@@ -316,20 +317,18 @@
           </button>
         <% end %>
       <% else %>
-        <div data-controller="modal">
-          <button type="button" data-action="click->modal#open"
-                  class="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors">
-            <%= t("limits.pro_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.pro_cta_tax") %></span>
-          </button>
-          <%= render "layouts/login_modal" %>
-        </div>
-        <div data-controller="modal">
-          <button type="button" data-action="click->modal#open"
-                  class="w-full px-4 py-2 rounded-lg text-sm font-medium bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 transition-colors">
-            <%= t("limits.one_shot_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.one_shot_cta_tax") %></span>
-          </button>
-          <%= render "layouts/login_modal" %>
-        </div>
+        <button type="button"
+                data-action="click->form-validation#upgradeCheckout"
+                data-plan="worker" data-billing="monthly"
+                class="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors">
+          <%= t("limits.pro_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.pro_cta_tax") %></span>
+        </button>
+        <button type="button"
+                data-action="click->form-validation#upgradeCheckout"
+                data-plan="worker" data-billing="one_shot"
+                class="w-full px-4 py-2 rounded-lg text-sm font-medium bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 transition-colors">
+          <%= t("limits.one_shot_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.one_shot_cta_tax") %></span>
+        </button>
       <% end %>
     </div>
     <p class="text-xs text-gray-500 text-center mt-3"><%= t("limits.reduce_pieces_hint") %></p>

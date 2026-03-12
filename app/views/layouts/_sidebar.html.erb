@@ -105,6 +105,17 @@
         <div data-user-menu-target="menu"
              class="hidden fixed bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-60 py-1 max-h-[70vh] overflow-y-auto">
 
+          <%# Quick tutorial %>
+          <button onclick="document.dispatchEvent(new Event('tutorial-video:open'))"
+                  class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-700 transition-colors w-full text-left">
+            <svg class="w-4 h-4 shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <%= t("tutorial_video.thumbnail_label") %>
+          </button>
+
+          <div class="border-t border-gray-700 my-1"></div>
+
           <%# Settings %>
           <%= link_to edit_user_registration_path, class: "flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-700 transition-colors" do %>
             <svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -131,12 +142,6 @@
               </svg>
               <%= t("sidebar.upgrade") %>
             <% end %>
-            <div class="px-3 py-2 space-y-1.5">
-              <div class="text-xs text-gray-500">
-                <% max_p = max_pieces_per_project %>
-                <%= max_p == Float::INFINITY ? t("sidebar.unlimited_pieces") : t("sidebar.pieces_per_project", count: max_p) %>
-              </div>
-            </div>
           <% end %>
 
           <%# "Un peu de lecture" expandable %>
@@ -154,13 +159,6 @@
             </svg>
           </button>
           <div data-user-menu-target="reading" class="hidden pl-4">
-            <button onclick="document.dispatchEvent(new Event('tutorial-video:open'))"
-                    class="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 transition-colors w-full text-left">
-              <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-              <%= t("tutorial_video.thumbnail_label") %>
-            </button>
             <%= link_to faq_path, class: "flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 transition-colors" do %>
               <%= t("faq.link") %>
             <% end %>
@@ -196,7 +194,7 @@
 
           <%# Sign out %>
           <div class="border-t border-gray-700 my-1"></div>
-          <%= button_to destroy_user_session_path, method: :delete, data: { turbo_confirm: t("settings.sign_out_confirmation") }, class: "flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-gray-700 transition-colors w-full" do %>
+          <%= button_to destroy_user_session_path, method: :delete, data: { turbo: false, turbo_confirm: t("settings.sign_out_confirmation") }, class: "flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-gray-700 transition-colors w-full" do %>
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"/>
             </svg>
@@ -217,12 +215,6 @@
           <span data-sidebar-target="label" class="whitespace-nowrap"><%= t("sidebar.upgrade") %></span>
         <% end %>
 
-        <div data-sidebar-target="label" class="px-2 space-y-1.5">
-          <div class="text-xs text-gray-500">
-            <% max_p = max_pieces_per_project %>
-            <%= max_p == Float::INFINITY ? t("sidebar.unlimited_pieces") : t("sidebar.pieces_per_project", count: max_p) %>
-          </div>
-        </div>
       </div>
 
       <%# "Un peu de lecture" dropdown %>
