@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Plannable, type: :model do
-  include ActiveSupport::Testing::TimeHelpers
   def create_user(plan: "free")
     User.create!(
       email: "plannable-test-#{SecureRandom.hex(4)}@example.com",
@@ -19,30 +18,20 @@ RSpec.describe Plannable, type: :model do
     let(:user) { create_user(plan: "free") }
 
     describe "#max_active_projects" do
-      it "allows 2 active projects" do
-        expect(user.max_active_projects).to eq(2)
+      it "allows 1000 active projects" do
+        expect(user.max_active_projects).to eq(1000)
       end
     end
 
-    describe "#max_daily_optimizations_per_project" do
-      it "allows 10 daily optimizations per project" do
-        expect(user.max_daily_optimizations_per_project).to eq(10)
+    describe "#max_pieces_per_project" do
+      it "allows 25 pieces per project" do
+        expect(user.max_pieces_per_project).to eq(25)
       end
     end
 
     describe "#can_create_project?" do
       it "allows creating a project when under the limit" do
         expect(user.can_create_project?).to be true
-      end
-
-      it "allows creating a second project" do
-        create_project(user: user)
-        expect(user.can_create_project?).to be true
-      end
-
-      it "denies creating a third project" do
-        2.times { create_project(user: user) }
-        expect(user.can_create_project?).to be false
       end
 
       it "does not count archived projects toward the limit" do
@@ -53,46 +42,23 @@ RSpec.describe Plannable, type: :model do
       end
     end
 
-    describe "#can_run_optimization?" do
-      let(:project) { create_project(user: user) }
-
-      it "allows running an optimization on a new project" do
-        expect(user.can_run_optimization?(project)).to be true
+    describe "#can_optimize_pieces?" do
+      it "allows optimizing with 25 pieces or fewer" do
+        pieces = [ { length: 100, width: 50, quantity: 25 } ]
+        expect(user.can_optimize_pieces?(pieces)).to be true
       end
 
-      it "does not count the initial optimization (created with the project today)" do
-        project.optimizations.create!(status: "completed", result: {})
-        expect(user.daily_optimizations_count_for(project)).to eq(0)
+      it "denies optimizing with more than 25 pieces" do
+        pieces = [ { length: 100, width: 50, quantity: 26 } ]
+        expect(user.can_optimize_pieces?(pieces)).to be false
       end
 
-      it "allows up to 10 additional optimizations per day" do
-        # The first optimization is free (created with the project)
-        11.times { project.optimizations.create!(status: "completed", result: {}) }
-
-        expect(user.daily_optimizations_count_for(project)).to eq(10)
-        expect(user.can_run_optimization?(project)).to be false
-      end
-
-      it "allows the 10th optimization but denies the 11th" do
-        # 1 initial + 10 additional = 11 total, count = 10
-        10.times { project.optimizations.create!(status: "completed", result: {}) }
-        expect(user.daily_optimizations_count_for(project)).to eq(9)
-        expect(user.can_run_optimization?(project)).to be true
-
-        project.optimizations.create!(status: "completed", result: {})
-        expect(user.daily_optimizations_count_for(project)).to eq(10)
-        expect(user.can_run_optimization?(project)).to be false
-      end
-
-      it "resets the count at the beginning of a new day" do
-        # Create optimizations yesterday
-        travel_to 1.day.ago do
-          11.times { project.optimizations.create!(status: "completed", result: {}) }
-        end
-
-        # Today, the count should be 0
-        expect(user.daily_optimizations_count_for(project)).to eq(0)
-        expect(user.can_run_optimization?(project)).to be true
+      it "sums quantities across multiple piece lines" do
+        pieces = [
+          { length: 100, width: 50, quantity: 15 },
+          { length: 200, width: 80, quantity: 11 }
+        ]
+        expect(user.can_optimize_pieces?(pieces)).to be false
       end
     end
 
@@ -123,14 +89,27 @@ RSpec.describe Plannable, type: :model do
     end
   end
 
+  describe "worker plan" do
+    let(:user) { create_user(plan: "worker") }
+
+    it "has unlimited pieces per project" do
+      expect(user.max_pieces_per_project).to eq(Float::INFINITY)
+    end
+
+    it "allows any number of pieces" do
+      pieces = [ { length: 100, width: 50, quantity: 1000 } ]
+      expect(user.can_optimize_pieces?(pieces)).to be true
+    end
+  end
+
   describe "plan expiration" do
     it "falls back to free plan limits when plan expires" do
       user = create_user(plan: "worker")
-      expect(user.max_active_projects).to eq(10)
+      expect(user.max_active_projects).to eq(Float::INFINITY)
 
       user.update!(plan_expires_at: 1.day.ago)
-      expect(user.max_active_projects).to eq(2)
-      expect(user.max_daily_optimizations_per_project).to eq(10)
+      expect(user.max_active_projects).to eq(1000)
+      expect(user.max_pieces_per_project).to eq(25)
     end
   end
 end

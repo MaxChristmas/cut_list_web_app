@@ -1,18 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Guest user limits", type: :request do
-  describe "optimization usage for template project" do
-    it "shows 0 optimizations for a template project the guest does not own" do
-      template = Project.create!(name: "Example Cut Sheet", template: true)
-      13.times { template.optimizations.create!(status: "completed", result: {}) }
-
-      get project_path(template.token)
-
-      expect(response.body).to include("0/10")
-      expect(response.body).not_to include("13/10")
-    end
-  end
-
   describe "POST /projects (create)" do
     it "redirects logged-out users to root with signup prompt" do
       post projects_path, params: {
@@ -39,7 +27,7 @@ RSpec.describe "Guest user limits", type: :request do
     end
   end
 
-  describe "project and optimization limits for free plan user" do
+  describe "pieces limit for free plan user" do
     let(:user) do
       User.create!(
         email: "free@example.com",
@@ -58,71 +46,34 @@ RSpec.describe "Guest user limits", type: :request do
       allow(RustCuttingService).to receive(:optimize).and_return(optimization_result)
     end
 
-    describe "project limit (max 2)" do
-      it "allows creating a first project" do
-        post projects_path, params: {
-          name: "Project 1", stock_l: 2440, stock_w: 1220,
-          pieces: [ { length: 500, width: 300, quantity: 1 } ]
-        }
+    it "allows creating a project with 25 pieces or fewer" do
+      post projects_path, params: {
+        name: "Small Project", stock_l: 2440, stock_w: 1220,
+        pieces: [ { length: 500, width: 300, quantity: 25 } ]
+      }
 
-        expect(response).to redirect_to(project_path(Project.last.token))
-        expect(user.projects.count).to eq(1)
-      end
-
-      it "allows creating a second project" do
-        user.projects.create!(name: "Project 1")
-
-        post projects_path, params: {
-          name: "Project 2", stock_l: 2440, stock_w: 1220,
-          pieces: [ { length: 500, width: 300, quantity: 1 } ]
-        }
-
-        expect(response).to redirect_to(project_path(Project.last.token))
-        expect(user.projects.count).to eq(2)
-      end
-
-      it "denies creating a third project and redirects to plans" do
-        2.times { |i| user.projects.create!(name: "Project #{i + 1}") }
-
-        post projects_path, params: {
-          name: "Project 3", stock_l: 2440, stock_w: 1220,
-          pieces: [ { length: 500, width: 300, quantity: 1 } ]
-        }
-
-        expect(response).to redirect_to(plans_path)
-        expect(user.projects.count).to eq(2)
-      end
+      expect(response).to redirect_to(project_path(Project.last.token))
     end
 
-    describe "optimization limit (max 10 per project per month)" do
-      let(:project) { user.projects.create!(name: "My Project") }
+    it "denies creating a project with more than 25 pieces and redirects to plans" do
+      post projects_path, params: {
+        name: "Large Project", stock_l: 2440, stock_w: 1220,
+        pieces: [ { length: 500, width: 300, quantity: 26 } ]
+      }
 
-      before do
-        # Create the initial optimization (free, doesn't count)
-        project.optimizations.create!(status: "completed", result: optimization_result)
-      end
+      expect(response).to redirect_to(plans_path)
+    end
 
-      it "allows running optimizations up to the limit" do
-        9.times { project.optimizations.create!(status: "completed", result: optimization_result) }
+    it "denies updating a project with more than 25 pieces" do
+      project = user.projects.create!(name: "My Project")
+      project.optimizations.create!(status: "completed", result: optimization_result)
 
-        patch project_path(project.token), params: {
-          name: project.name, stock_l: 2440, stock_w: 1220,
-          pieces: [ { length: 500, width: 300, quantity: 1 } ]
-        }
+      patch project_path(project.token), params: {
+        name: project.name, stock_l: 2440, stock_w: 1220,
+        pieces: [ { length: 500, width: 300, quantity: 26 } ]
+      }
 
-        expect(response).to redirect_to(project_path(project.token))
-      end
-
-      it "denies running optimization beyond the limit and redirects to plans" do
-        10.times { project.optimizations.create!(status: "completed", result: optimization_result) }
-
-        patch project_path(project.token), params: {
-          name: project.name, stock_l: 2440, stock_w: 1220,
-          pieces: [ { length: 500, width: 300, quantity: 1 } ]
-        }
-
-        expect(response).to redirect_to(plans_path)
-      end
+      expect(response).to redirect_to(plans_path)
     end
   end
 

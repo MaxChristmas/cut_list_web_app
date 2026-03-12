@@ -127,16 +127,13 @@
           <div class="p-4 bg-gray-900 border border-gray-800 rounded-lg space-y-3">
             <div class="flex justify-between text-sm">
               <span class="text-gray-400"><%= t("plans.active_projects") %></span>
-              <span class="text-gray-200">
-                <% max = resource.max_active_projects %>
-                <%= max == Float::INFINITY ? t("plans.unlimited") : max %>
-              </span>
+              <span class="text-gray-200"><%= t("plans.unlimited") %></span>
             </div>
             <div class="flex justify-between text-sm">
-              <span class="text-gray-400"><%= t("plans.daily_optimizations_per_project") %></span>
+              <span class="text-gray-400"><%= t("plans.pieces_per_project") %></span>
               <span class="text-gray-200">
-                <% max_opt = resource.max_daily_optimizations_per_project %>
-                <%= max_opt == Float::INFINITY ? t("plans.unlimited") : max_opt %>
+                <% max_pieces = resource.max_pieces_per_project %>
+                <%= max_pieces == Float::INFINITY ? t("plans.unlimited") : max_pieces %>
               </span>
             </div>
 

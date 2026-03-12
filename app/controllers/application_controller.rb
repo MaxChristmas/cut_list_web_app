@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   around_action :switch_locale
   before_action :load_recent_projects
 
-  helper_method :can_create_project?, :can_run_optimization?, :current_plan_name,
-                :usage_projects, :usage_optimizations, :has_feature?
+  helper_method :can_create_project?, :can_optimize_pieces?, :current_plan_name,
+                :usage_projects, :max_pieces_per_project, :has_feature?
 
   def set_locale
     locale = params[:locale].to_s.strip.to_sym
@@ -56,8 +56,9 @@ class ApplicationController < ActionController::Base
     user_signed_in? && current_user.can_create_project?
   end
 
-  def can_run_optimization?(project = nil)
-    user_signed_in? && current_user.can_run_optimization?(project)
+  def can_optimize_pieces?(pieces)
+    return true unless user_signed_in?
+    current_user.can_optimize_pieces?(pieces)
   end
 
   def current_plan_name
@@ -93,17 +94,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def usage_optimizations(project = nil)
-    config = Plannable::PLANS[current_plan_name]
-    max = config[:max_daily_optimizations_per_project]
-    if project.nil?
-      { used: 0, max: max }
-    elsif user_signed_in?
-      { used: current_user.daily_optimizations_count_for(project), max: max }
-    elsif GuestLimits.guest_tokens(session).include?(project.token)
-      { used: GuestLimits.daily_count_for(project.token), max: max }
-    else
-      { used: 0, max: max }
-    end
+  def max_pieces_per_project
+    Plannable::PLANS[current_plan_name][:max_pieces_per_project]
   end
 end

@@ -19,13 +19,13 @@ RSpec.describe User, type: :model do
     it "limits to 2 active projects" do
       user = build_user
       user.save!
-      expect(user.max_active_projects).to eq(2)
+      expect(user.max_active_projects).to eq(1000)
     end
 
-    it "limits to 10 daily optimizations per project" do
+    it "limits to 25 pieces per project" do
       user = build_user
       user.save!
-      expect(user.max_daily_optimizations_per_project).to eq(10)
+      expect(user.max_pieces_per_project).to eq(25)
     end
   end
 

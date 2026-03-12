@@ -132,34 +132,10 @@
               <%= t("sidebar.upgrade") %>
             <% end %>
             <div class="px-3 py-2 space-y-1.5">
-              <% proj = usage_projects %>
-              <div>
-                <div class="flex justify-between text-xs text-gray-500 mb-0.5">
-                  <span><%= t("sidebar.projects_usage") %></span>
-                  <span><%= proj[:used] %>/<%= proj[:max] %></span>
-                </div>
-                <div class="h-1 bg-gray-900 rounded-full overflow-hidden">
-                  <% pct = proj[:max] > 0 ? [(proj[:used].to_f / proj[:max] * 100), 100].min : 0 %>
-                  <div class="h-full rounded-full <%= pct >= 100 ? 'bg-red-500' : pct >= 75 ? 'bg-amber-500' : 'bg-blue-500' %>" style="width: <%= pct %>%"></div>
-                </div>
+              <div class="text-xs text-gray-500">
+                <% max_p = max_pieces_per_project %>
+                <%= max_p == Float::INFINITY ? t("sidebar.unlimited_pieces") : t("sidebar.pieces_per_project", count: max_p) %>
               </div>
-              <% opt = usage_optimizations(defined?(@project) && @project&.persisted? ? @project : nil) %>
-              <% if opt[:max] == Float::INFINITY %>
-                <div class="text-xs text-gray-500"><%= t("sidebar.unlimited_optimizations") %></div>
-              <% elsif defined?(@project) && @project&.persisted? %>
-                <div>
-                  <div class="flex justify-between text-xs text-gray-500 mb-0.5">
-                    <span><%= t("sidebar.optimizations_usage") %></span>
-                    <span><%= opt[:used] %>/<%= opt[:max] %></span>
-                  </div>
-                  <div class="h-1 bg-gray-900 rounded-full overflow-hidden">
-                    <% pct = opt[:max] > 0 ? [(opt[:used].to_f / opt[:max] * 100), 100].min : 0 %>
-                    <div class="h-full rounded-full <%= pct >= 100 ? 'bg-red-500' : pct >= 75 ? 'bg-amber-500' : 'bg-blue-500' %>" style="width: <%= pct %>%"></div>
-                  </div>
-                </div>
-              <% else %>
-                <div class="text-xs text-gray-500"><%= t("sidebar.optimizations_per_project", count: opt[:max]) %></div>
-              <% end %>
             </div>
           <% end %>
 
@@ -242,34 +218,10 @@
         <% end %>
 
         <div data-sidebar-target="label" class="px-2 space-y-1.5">
-          <% proj = usage_projects %>
-          <div>
-            <div class="flex justify-between text-xs text-gray-500 mb-0.5">
-              <span><%= t("sidebar.projects_usage") %></span>
-              <span><%= proj[:used] %>/<%= proj[:max] %></span>
-            </div>
-            <div class="h-1 bg-gray-800 rounded-full overflow-hidden">
-              <% pct = proj[:max] > 0 ? [(proj[:used].to_f / proj[:max] * 100), 100].min : 0 %>
-              <div class="h-full rounded-full <%= pct >= 100 ? 'bg-red-500' : pct >= 75 ? 'bg-amber-500' : 'bg-blue-500' %>" style="width: <%= pct %>%"></div>
-            </div>
+          <div class="text-xs text-gray-500">
+            <% max_p = max_pieces_per_project %>
+            <%= max_p == Float::INFINITY ? t("sidebar.unlimited_pieces") : t("sidebar.pieces_per_project", count: max_p) %>
           </div>
-          <% opt = usage_optimizations(defined?(@project) && @project&.persisted? ? @project : nil) %>
-          <% if opt[:max] == Float::INFINITY %>
-            <div class="text-xs text-gray-500"><%= t("sidebar.unlimited_optimizations") %></div>
-          <% elsif defined?(@project) && @project&.persisted? %>
-            <div>
-              <div class="flex justify-between text-xs text-gray-500 mb-0.5">
-                <span><%= t("sidebar.optimizations_usage") %></span>
-                <span><%= opt[:used] %>/<%= opt[:max] %></span>
-              </div>
-              <div class="h-1 bg-gray-800 rounded-full overflow-hidden">
-                <% pct = opt[:max] > 0 ? [(opt[:used].to_f / opt[:max] * 100), 100].min : 0 %>
-                <div class="h-full rounded-full <%= pct >= 100 ? 'bg-red-500' : pct >= 75 ? 'bg-amber-500' : 'bg-blue-500' %>" style="width: <%= pct %>%"></div>
-              </div>
-            </div>
-          <% else %>
-            <div class="text-xs text-gray-500"><%= t("sidebar.optimizations_per_project", count: opt[:max]) %></div>
-          <% end %>
         </div>
       </div>
 

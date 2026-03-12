@@ -13,8 +13,10 @@
 <% labels_mode = (@pieces.present? && @pieces.any? { |p| (p[:label] || p["label"]).present? }) ? "manual" : "none" %>
 <% has_grain = (@grain_direction || "none") != "none" %>
 
+<div data-controller="form-validation"
+     data-form-validation-max-pieces-value="<%= max_pieces_per_project == Float::INFINITY ? 0 : max_pieces_per_project %>">
 <%= form_with url: form_url, method: form_method, class: "space-y-10",
-    data: { controller: "pending-project form-validation", "pending-project-create-url-value": projects_path } do |f| %>
+    data: { controller: "pending-project", "pending-project-create-url-value": projects_path } do |f| %>
   <fieldset <%= "disabled" if template_project %> class="m-0 p-0 border-0 min-w-0 space-y-10"
              data-controller="pieces" data-pieces-labels-mode-value="<%= labels_mode %>" data-pieces-grain-visible-value="<%= has_grain %>">
   <section>
@@ -263,18 +265,74 @@
   </fieldset>
 
   <% if !user_signed_in? && !template_project %>
-    <button type="button"
-            data-action="click->pending-project#saveAndPrompt"
-            data-pending-project-message-param="<%= t("limits.guest_signup_prompt") %>"
-            class="mt-10 w-full px-4 py-2 rounded font-medium text-sm bg-white text-gray-950 hover:bg-gray-200">
-      <%= t("projects.index.optimize") %>
-    </button>
+    <div data-form-validation-target="submitWrapper">
+      <button type="button"
+              data-action="click->pending-project#saveAndPrompt"
+              data-pending-project-message-param="<%= t("limits.guest_signup_prompt") %>"
+              class="mt-10 w-full px-4 py-2 rounded font-medium text-sm bg-white text-gray-950 hover:bg-gray-200">
+        <%= t("projects.index.optimize") %>
+      </button>
+    </div>
   <% else %>
-    <button type="submit" data-action="click->form-panel#submitAndCollapse"
-            data-form-validation-target="submitButton"
-            class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
-            <%= "disabled" if template_project %>>
-      <%= t("projects.index.optimize") %>
-    </button>
+    <div data-form-validation-target="submitWrapper">
+      <button type="submit" data-action="click->form-panel#submitAndCollapse"
+              data-form-validation-target="submitButton"
+              class="mt-10 w-full px-4 py-2 rounded font-medium text-sm <%= template_project ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-950 hover:bg-gray-200' %>"
+              <%= "disabled" if template_project %>>
+        <%= t("projects.index.optimize") %>
+      </button>
+    </div>
   <% end %>
 <% end %>
+
+<%# Pieces limit upgrade card — outside the main form to avoid nested forms %>
+<div class="hidden mt-10" data-form-validation-target="piecesLimitBanner">
+  <div class="p-5 bg-gray-800 border border-gray-700 rounded-xl">
+    <div class="flex items-start gap-3 mb-4">
+      <svg class="w-5 h-5 text-blue-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+      </svg>
+      <div>
+        <p class="text-sm font-medium text-white"><%= t("limits.pieces_limit_title") %></p>
+        <p class="text-xs text-gray-400 mt-0.5"><%= t("limits.pieces_limit_subtitle") %></p>
+      </div>
+    </div>
+    <div class="space-y-2">
+      <% if user_signed_in? %>
+        <%= form_with url: plan_checkout_path, method: :post, data: { turbo: false } do |f| %>
+          <%= f.hidden_field :plan, value: "worker" %>
+          <%= f.hidden_field :billing_cycle, value: "monthly" %>
+          <button type="submit"
+                  class="w-full px-4 py-2.5 rounded-lg text-sm font-semibold cursor-pointer bg-blue-600 hover:bg-blue-500 text-white transition-colors">
+            <%= t("limits.pro_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.pro_cta_tax") %></span>
+          </button>
+        <% end %>
+        <%= form_with url: plan_checkout_path, method: :post, data: { turbo: false } do |f| %>
+          <%= f.hidden_field :plan, value: "worker" %>
+          <%= f.hidden_field :billing_cycle, value: "one_shot" %>
+          <button type="submit"
+                  class="w-full px-4 py-2 rounded-lg text-sm font-medium cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 transition-colors">
+            <%= t("limits.one_shot_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.one_shot_cta_tax") %></span>
+          </button>
+        <% end %>
+      <% else %>
+        <div data-controller="modal">
+          <button type="button" data-action="click->modal#open"
+                  class="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors">
+            <%= t("limits.pro_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.pro_cta_tax") %></span>
+          </button>
+          <%= render "layouts/login_modal" %>
+        </div>
+        <div data-controller="modal">
+          <button type="button" data-action="click->modal#open"
+                  class="w-full px-4 py-2 rounded-lg text-sm font-medium bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 transition-colors">
+            <%= t("limits.one_shot_cta") %> <span class="text-xs font-normal opacity-70"><%= t("limits.one_shot_cta_tax") %></span>
+          </button>
+          <%= render "layouts/login_modal" %>
+        </div>
+      <% end %>
+    </div>
+    <p class="text-xs text-gray-500 text-center mt-3"><%= t("limits.reduce_pieces_hint") %></p>
+  </div>
+</div>
+</div>

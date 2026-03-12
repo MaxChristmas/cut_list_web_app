@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["stockLength", "stockWidth", "stockError", "piecesBody", "pieceError", "submitButton"]
+  static targets = ["stockLength", "stockWidth", "stockError", "piecesBody", "pieceError", "submitButton", "piecesLimitBanner", "submitWrapper"]
+  static values = { maxPieces: { type: Number, default: Infinity } }
 
   connect() {
     this.validate()
@@ -18,12 +19,22 @@ export default class extends Controller {
   validate() {
     const stockValid = this.validateStock()
     const piecesValid = this.validatePieces()
+    const overLimit = this.checkPiecesLimit()
     const hasSubmit = this.hasSubmitButtonTarget
 
     if (hasSubmit) {
-      this.submitButtonTarget.disabled = !stockValid || !piecesValid
-      this.submitButtonTarget.classList.toggle("opacity-50", !stockValid || !piecesValid)
-      this.submitButtonTarget.classList.toggle("cursor-not-allowed", !stockValid || !piecesValid)
+      const disabled = !stockValid || !piecesValid || overLimit
+      this.submitButtonTarget.disabled = disabled
+      this.submitButtonTarget.classList.toggle("opacity-50", disabled)
+      this.submitButtonTarget.classList.toggle("cursor-not-allowed", disabled)
+    }
+
+    if (this.hasSubmitWrapperTarget) {
+      this.submitWrapperTarget.classList.toggle("hidden", overLimit)
+    }
+
+    if (this.hasPiecesLimitBannerTarget) {
+      this.piecesLimitBannerTarget.classList.toggle("hidden", !overLimit)
     }
   }
 
@@ -83,5 +94,20 @@ export default class extends Controller {
     }
 
     return allValid && hasPiece
+  }
+
+  checkPiecesLimit() {
+    if (this.maxPiecesValue === Infinity || this.maxPiecesValue === 0) return false
+
+    let total = 0
+    const rows = this.piecesBodyTarget.querySelectorAll("tr")
+    rows.forEach(row => {
+      const qtyInput = row.querySelector("input[name='pieces[][quantity]']")
+      if (qtyInput && qtyInput.value) {
+        total += parseInt(qtyInput.value, 10) || 0
+      }
+    })
+
+    return total > this.maxPiecesValue
   }
 }
