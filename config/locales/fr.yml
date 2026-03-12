@@ -176,6 +176,9 @@ fr:
     pro:
       name: "Pro"
       description: "Pour les professionnels et petites équipes"
+    checkout_description:
+      one_shot: "Toutes les fonctionnalités Pro · Paiement unique · Accès 3 jours"
+      subscription: "Pièces et projets illimités · Import CSV · Export PDF · Étiquettes"
     one_shot:
       title: "Accès ponctuel"
       name: "Accès 3 jours"

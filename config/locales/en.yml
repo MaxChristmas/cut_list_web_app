@@ -176,6 +176,9 @@ en:
     pro:
       name: "Pro"
       description: "For professionals and small teams"
+    checkout_description:
+      one_shot: "All Pro features · One-time payment · Full access for 3 days"
+      subscription: "Unlimited pieces & projects · CSV import · PDF export · Labels"
     one_shot:
       title: "One-shot Access"
       name: "3-Day Access"

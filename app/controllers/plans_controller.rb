@@ -26,8 +26,8 @@ class PlansController < ApplicationController
       return redirect_to plans_path, notice: t("plans.updated", plan: t("plans.#{plan}.name"))
     end
 
-    price_id = Plannable.stripe_price_id(plan, billing_cycle)
-    unless price_id.present?
+    price_config = config[:prices][billing_cycle]
+    unless price_config.present? && ENV[price_config[:env_key]].present?
       return redirect_to plans_path, alert: t("plans.invalid")
     end
 
@@ -35,11 +35,32 @@ class PlansController < ApplicationController
 
     is_one_shot = billing_cycle == :one_shot
 
+    description_key = is_one_shot ? "one_shot" : "subscription"
+    checkout_description = I18n.t("plans.checkout_description.#{description_key}")
+    plan_name = is_one_shot ? t("plans.one_shot.name") : t("plans.pro.name")
+
+    line_item = {
+      quantity: 1,
+      price_data: {
+        currency: "eur",
+        unit_amount: price_config[:amount],
+        product_data: {
+          name: "CutOptima #{plan_name}",
+          description: checkout_description
+        }
+      }
+    }
+
+    unless is_one_shot
+      interval = billing_cycle == :yearly ? "year" : "month"
+      line_item[:price_data][:recurring] = { interval: interval }
+    end
+
     session = Stripe::Checkout::Session.create(
       customer: customer_id,
       mode: is_one_shot ? "payment" : "subscription",
       locale: I18n.locale.to_s,
-      line_items: [ { price: price_id, quantity: 1 } ],
+      line_items: [ line_item ],
       billing_address_collection: "required",
       tax_id_collection: { enabled: true },
       customer_update: { name: "auto", address: "auto" },

@@ -176,6 +176,9 @@ es:
     pro:
       name: "Pro"
       description: "Para profesionales y pequeños equipos"
+    checkout_description:
+      one_shot: "Todas las funciones Pro · Pago único · Acceso 3 días"
+      subscription: "Piezas y proyectos ilimitados · CSV · PDF · Etiquetas"
     one_shot:
       title: "Acceso puntual"
       name: "Acceso 3 días"

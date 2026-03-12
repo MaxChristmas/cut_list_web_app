@@ -176,6 +176,9 @@ ja:
     pro:
       name: "Pro"
       description: "プロフェッショナルと小規模チーム向け"
+    checkout_description:
+      one_shot: "すべてのPro機能 · 一回払い · 3日間フルアクセス"
+      subscription: "ピース・プロジェクト無制限 · CSV · PDF · ラベル"
     one_shot:
       title: "ワンショットアクセス"
       name: "3日間アクセス"
