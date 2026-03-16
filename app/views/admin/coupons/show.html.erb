@@ -37,7 +37,7 @@
       <dt class="text-sm font-medium text-gray-500">Expires At</dt>
       <dd class="mt-1 text-sm text-gray-900">
         <% if @coupon.expires_at.present? %>
-          <%= @coupon.expires_at.strftime("%b %d, %Y at %H:%M") %>
+          <%= @coupon.expires_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %>
           <% if @coupon.expired? %>
             <span class="ml-1 text-xs text-red-600 font-medium">Expired</span>
           <% end %>
@@ -48,7 +48,7 @@
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Created</dt>
-      <dd class="mt-1 text-sm text-gray-900"><%= @coupon.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
+      <dd class="mt-1 text-sm text-gray-900"><%= @coupon.created_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %></dd>
     </div>
   </dl>
 </div>
@@ -68,7 +68,7 @@
         <% @redemptions.each do |redemption| %>
           <tr class="hover:bg-gray-50">
             <td class="px-5 py-3 text-sm text-gray-900"><%= redemption.user.email %></td>
-            <td class="px-5 py-3 text-sm text-gray-500"><%= redemption.created_at.strftime("%b %d, %Y at %H:%M") %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= redemption.created_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %></td>
             <td class="px-5 py-3 text-right">
               <%= link_to "View user", admin_user_path(redemption.user), class: "text-sm text-blue-600 hover:text-blue-800" %>
             </td>

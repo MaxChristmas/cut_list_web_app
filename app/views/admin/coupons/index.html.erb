@@ -31,7 +31,7 @@
             <%= coupon.uses_count %><%= coupon.max_uses ? " / #{coupon.max_uses}" : "" %>
           </td>
           <td class="px-5 py-3 text-sm text-gray-500">
-            <%= coupon.expires_at ? coupon.expires_at.strftime("%b %d, %Y at %H:%M") : "Never" %>
+            <%= coupon.expires_at ? coupon.expires_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") : "Never" %>
           </td>
           <td class="px-5 py-3">
             <% if coupon.redeemable? %>

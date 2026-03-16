@@ -31,7 +31,7 @@
       <dt class="text-sm font-medium text-gray-500">Plan Expires At</dt>
       <dd class="mt-1 text-sm text-gray-900">
         <% if @user.plan_expires_at.present? %>
-          <%= @user.plan_expires_at.strftime("%b %d, %Y at %H:%M") %>
+          <%= @user.plan_expires_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %>
           <% if @user.plan_expired? %>
             <span class="ml-1 text-xs text-red-600 font-medium">Expired</span>
           <% end %>
@@ -54,11 +54,11 @@
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Last Sign-in At</dt>
-      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_at&.strftime("%b %d, %Y at %H:%M") || "—" %></dd>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_at&.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") || "—" %></dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Created</dt>
-      <dd class="mt-1 text-sm text-gray-900"><%= @user.created_at.strftime("%b %d, %Y at %H:%M") %></dd>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.created_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %></dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Last Sign-in IP</dt>
@@ -138,7 +138,7 @@
                 <span class="text-green-600">Active</span>
               <% end %>
             </td>
-            <td class="px-5 py-3 text-sm text-gray-500"><%= project.created_at.strftime("%b %d, %Y at %H:%M") %></td>
+            <td class="px-5 py-3 text-sm text-gray-500"><%= project.created_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %></td>
             <td class="px-5 py-3 text-right">
               <%= link_to "View", admin_project_path(project), class: "text-sm text-blue-600 hover:text-blue-800" %>
             </td>
