@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_many :projects, dependent: :nullify
   has_many :coupon_redemptions, dependent: :destroy
+  has_many :scan_tokens, dependent: :delete_all
 
   scope :kept, -> { where(discarded_at: nil) }
   scope :discarded, -> { where.not(discarded_at: nil) }

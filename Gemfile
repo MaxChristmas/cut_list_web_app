@@ -76,6 +76,9 @@ gem "dotenv-rails", groups: [ :development, :test ]
 
 gem "prawn-svg", "~> 0.38.1"
 gem "geocoder"
+gem "rqrcode"
+gem "anthropic"
+gem "aws-sdk-s3", require: false
 
 # Monitoring
 gem "sentry-ruby"

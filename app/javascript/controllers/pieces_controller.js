@@ -16,6 +16,13 @@ export default class extends Controller {
       this.showGrainColumns()
     }
 
+    // Listen for photo import pieces
+    this._onPhotoPieces = (e) => {
+      this._lastScanTokenId = e.detail.scanTokenId
+      this.addPhotoPieces(e.detail.pieces)
+    }
+    document.addEventListener("photo-pieces:add", this._onPhotoPieces)
+
     this.colorMap = null
     this._onColorsUpdated = (e) => {
       this.colorMap = e.detail.colorMap
@@ -38,6 +45,7 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("piece-colors:updated", this._onColorsUpdated)
+    document.removeEventListener("photo-pieces:add", this._onPhotoPieces)
     this.bodyTarget.removeEventListener("input", this._onDimensionChange)
   }
 
@@ -198,6 +206,95 @@ export default class extends Controller {
     } while (used.has(code))
     used.add(code)
     return code
+  }
+
+  addPhotoPieces(pieces) {
+    // Remove empty rows before adding imported pieces
+    this.bodyTarget.querySelectorAll("tr").forEach(row => {
+      const length = row.querySelector("input[name='pieces[][length]']")?.value
+      const width = row.querySelector("input[name='pieces[][width]']")?.value
+      if (!length && !width) row.remove()
+    })
+
+    for (const piece of pieces) {
+      const row = this.templateTarget.content.cloneNode(true)
+      const numberInputs = row.querySelectorAll("input[type='number']")
+      numberInputs[0].value = piece.length
+      numberInputs[1].value = piece.width
+      numberInputs[2].value = piece.quantity || 1
+
+      if (piece.label && this.labelsModeValue !== "none") {
+        const labelInput = row.querySelector("input[type='text']")
+        if (labelInput) labelInput.value = piece.label
+      }
+
+      if (this.labelsModeValue !== "none") {
+        row.querySelectorAll("[data-pieces-target='labelCol']").forEach(el => el.removeAttribute("hidden"))
+      }
+
+      if (this.grainVisibleValue) {
+        row.querySelectorAll("[data-pieces-target='grainCol']").forEach(el => el.removeAttribute("hidden"))
+      }
+
+      this.bodyTarget.appendChild(row)
+    }
+
+    // Inject scan_token_id hidden input into the form
+    if (this._lastScanTokenId) {
+      const form = this.element.closest("form")
+      if (form) {
+        let hidden = form.querySelector("input[name='scan_token_id']")
+        if (!hidden) {
+          hidden = document.createElement("input")
+          hidden.type = "hidden"
+          hidden.name = "scan_token_id"
+          form.appendChild(hidden)
+        }
+        hidden.value = this._lastScanTokenId
+      }
+    }
+
+    this.applyColors()
+
+    // Trigger form validation
+    this.bodyTarget.dispatchEvent(new Event("input", { bubbles: true }))
+  }
+
+  openPhotoImport() {
+    const modal = document.getElementById("photo-import-modal")
+    const content = document.getElementById("photo-import-content")
+    if (!modal || !content) return
+
+    modal.classList.remove("hidden")
+    modal.classList.add("flex")
+
+    // Extract project token from the current URL: /projects/:token or /projects/:token/edit
+    const projectToken = window.location.pathname.match(/\/projects\/([^/]+)/)?.[1]
+
+    const body = new URLSearchParams()
+    if (projectToken) body.set("project_token", projectToken)
+
+    // Fetch QR code via POST
+    fetch("/scan_tokens", {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")?.content,
+        "Accept": "text/html",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: body.toString()
+    })
+    .then(response => response.text().then(html => ({ ok: response.ok, html })))
+    .then(({ ok, html }) => {
+      if (!ok) {
+        content.innerHTML = html || '<p class="text-red-400 text-sm text-center py-4">Error creating scan token</p>'
+      } else {
+        content.innerHTML = html
+      }
+    })
+    .catch(() => {
+      content.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Error creating scan token</p>'
+    })
   }
 
   openCsvDialog() {

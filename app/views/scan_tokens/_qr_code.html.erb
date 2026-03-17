@@ -1,0 +1,68 @@
+<%
+  scan_url = scan_url(scan_token.token)
+  qr = RQRCode::QRCode.new(scan_url, level: :m)
+  svg = qr.as_svg(
+    viewbox: true,
+    use_path: true,
+    fill: "ffffff",
+    color: "1a1a2e",
+    shape_rendering: "crispEdges",
+    module_size: 4
+  )
+
+  user = scan_token.user
+  used = user.scans_used
+  max = user.max_scans
+  pct = max > 0 ? [(used.to_f / max * 100), 100].min : 0
+%>
+
+<div class="space-y-5">
+  <%# Usage bar at the top %>
+  <div class="flex items-center gap-3">
+    <span class="text-xs text-gray-400 shrink-0"><%= t("scan.usage_count", used: used, max: max) %></span>
+    <div class="w-1/2 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+      <div class="h-full rounded-full transition-all <%= pct >= 80 ? 'bg-red-500' : 'bg-blue-500' %>"
+           style="width: <%= pct %>%"></div>
+    </div>
+  </div>
+
+  <div id="scan_photo_preview">
+    <div class="text-center space-y-2">
+      <h3 class="text-base font-semibold"><%= t("scan.qr_title") %> <span class="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 align-middle">Beta</span></h3>
+      <p class="text-xs text-gray-400"><%= t("scan.qr_instruction") %></p>
+    </div>
+
+    <div class="bg-white rounded-xl p-4 mx-auto w-56 h-56 flex items-center justify-center mt-4">
+      <%= svg.html_safe %>
+    </div>
+
+    <p class="text-xs text-gray-500 text-center mt-4"><%= t("scan.qr_expires") %></p>
+
+    <div class="relative flex items-center mt-4">
+      <div class="grow border-t border-gray-700"></div>
+      <span class="px-3 text-xs text-gray-500"><%= t("login.or") %></span>
+      <div class="grow border-t border-gray-700"></div>
+    </div>
+
+    <div class="mt-4" data-controller="desktop-upload" data-desktop-upload-token-value="<%= scan_token.token %>">
+      <input type="file" accept="image/*" class="hidden"
+             data-desktop-upload-target="fileInput"
+             data-action="change->desktop-upload#fileSelected">
+      <button type="button" data-action="desktop-upload#openFile"
+              data-desktop-upload-target="button"
+              class="w-full py-2.5 px-4 rounded-lg text-sm font-medium bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 transition-colors">
+        <%= t("scan.upload_file") %>
+      </button>
+      <div data-desktop-upload-target="spinner" class="hidden items-center justify-center gap-2 py-2.5 text-sm text-gray-400">
+        <div class="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        <span><%= t("scan.uploading") %></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-xs text-gray-500 text-center italic"><%= t("scan.quality_hint") %></p>
+
+  <%= turbo_stream_from "scan_token_#{scan_token.id}" %>
+
+  <div id="photo_import_result"></div>
+</div>

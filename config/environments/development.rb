@@ -28,8 +28,8 @@ Rails.application.configure do
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Store uploaded files on the local file system, or Cloudflare R2 if configured.
+  config.active_storage.service = ENV["CLOUDFLARE_R2_ACCESS_KEY_ID"].present? ? :cloudflare_r2 : :local
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -41,6 +41,11 @@ Rails.application.configure do
 
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+
+  # Use local IP so mobile devices on the same network can access scan URLs
+  local_ip = Socket.ip_address_list.detect { |addr| addr.ipv4_private? }&.ip_address || "localhost"
+  Rails.application.routes.default_url_options = { host: local_ip, port: 3000 }
+  config.action_controller.default_url_options = { host: local_ip, port: 3000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

@@ -65,6 +65,20 @@
         <h2 class="text-sm font-semibold uppercase tracking-wide"><%= t("projects.index.pieces_to_cut") %></h2>
       </div>
       <div class="flex items-center gap-4">
+        <% if current_user&.internal? %>
+          <% if feature_locked?(:photo_import) %>
+            <span class="inline-flex items-center opacity-50 cursor-not-allowed">
+              <span class="text-sm text-white font-medium"><%= t("projects.index.import_photo") %></span>
+              <%= plan_badge_for(:photo_import) %>
+            </span>
+          <% elsif user_signed_in? %>
+            <button type="button" id="photo-import-trigger"
+                    data-action="click->pieces#openPhotoImport"
+                    class="text-sm text-white hover:text-blue-300 font-medium">
+              <%= t("projects.index.import_photo") %>
+            </button>
+          <% end %>
+        <% end %>
         <% if feature_locked?(:import_csv) %>
           <span class="inline-flex items-center opacity-50 cursor-not-allowed">
             <span class="text-sm text-white font-medium"><%= t("projects.index.import_csv") %></span>
@@ -285,6 +299,26 @@
       </button>
     </div>
   <% end %>
+<% end %>
+
+<%# Photo import modal %>
+<% if current_user&.internal? && !feature_locked?(:photo_import) %>
+  <div id="photo-import-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+    <div class="bg-gray-800 border border-gray-700 rounded-xl p-6 w-full max-w-md mx-4 relative">
+      <button type="button" onclick="document.getElementById('photo-import-modal').classList.add('hidden')"
+              class="absolute top-3 right-3 text-gray-400 hover:text-white">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div id="photo-import-content">
+        <div class="text-center py-8">
+          <div class="w-8 h-8 mx-auto border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-sm text-gray-400 mt-3"><%= t("scan.loading_qr") %></p>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <%# Pieces limit upgrade card — outside the main form to avoid nested forms %>

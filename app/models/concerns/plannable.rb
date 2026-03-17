@@ -3,7 +3,7 @@ module Plannable
 
   FEATURES = %i[
     pdf_export label_pieces cut_direction blade_kerf
-    import_csv print_labels margin archive move_pieces
+    import_csv print_labels margin archive move_pieces photo_import
   ].freeze
 
   PLANS = {
@@ -18,7 +18,8 @@ module Plannable
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
       max_daily_optimizations: Float::INFINITY,
-      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces],
+      max_monthly_scans: 20,
+      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces photo_import],
       prices: {
         monthly:  { amount: 1000, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
         yearly:   { amount: 10000, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },
@@ -29,6 +30,7 @@ module Plannable
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
       max_daily_optimizations: Float::INFINITY,
+      max_monthly_scans: 40,
       features: FEATURES,
       prices: {
         monthly:  { amount: 2000, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
@@ -87,6 +89,33 @@ module Plannable
 
   def can_optimize_today?
     daily_optimizations_count < max_daily_optimizations
+  end
+
+  ONE_SHOT_MAX_SCANS = 5
+
+  def monthly_scans_count
+    scan_tokens
+      .where(status: "completed")
+      .where("created_at >= ?", Time.current.beginning_of_month)
+      .count
+  end
+
+  def max_scans
+    one_shot_plan? ? ONE_SHOT_MAX_SCANS : plan_config.fetch(:max_monthly_scans, 0)
+  end
+
+  def scans_used
+    if one_shot_plan?
+      scan_tokens.where(status: "completed").count
+    else
+      monthly_scans_count
+    end
+  end
+
+  def can_scan?
+    return false unless has_feature?(:photo_import)
+
+    scans_used < max_scans
   end
 
   def usage_daily_optimizations

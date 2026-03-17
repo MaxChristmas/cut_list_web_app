@@ -1,0 +1,12 @@
+<div id="scan_photo_preview" class="group relative mx-auto w-56 h-56">
+  <% if scan_token.photo.attached? %>
+    <%= image_tag scan_token.photo, class: "w-full h-full object-cover rounded-xl" %>
+    <div class="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+      <button type="button"
+              onclick="document.getElementById('photo-import-modal').classList.add('hidden'); document.getElementById('photo-import-modal').classList.remove('flex'); document.getElementById('photo-import-trigger')?.click();"
+              class="px-3 py-1.5 bg-white text-gray-900 text-xs font-medium rounded-lg hover:bg-gray-100 transition-colors">
+        <%= t("scan.retake_photo") %>
+      </button>
+    </div>
+  <% end %>
+</div>

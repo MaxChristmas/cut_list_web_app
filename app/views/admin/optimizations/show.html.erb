@@ -48,6 +48,62 @@
   </dl>
 </div>
 
+<% if @optimization.scan_token.present? %>
+  <% scan = @optimization.scan_token %>
+  <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-3">Photo Import</h3>
+    <dl class="grid grid-cols-2 gap-4">
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Scan Token</dt>
+        <dd class="mt-1 text-sm">
+          <%= link_to "##{scan.id}", admin_scan_token_path(scan), class: "text-blue-600 hover:text-blue-800" %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Pieces Modified?</dt>
+        <dd class="mt-1 text-sm">
+          <% if scan.pieces_modified? %>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Modified</span>
+          <% else %>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">Used as-is</span>
+          <% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">AI Pieces (raw)</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= (scan.result || []).size %> pieces</dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Submitted Pieces</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= (scan.submitted_pieces || []).size %> pieces</dd>
+      </div>
+    </dl>
+
+    <% if scan.pieces_modified? %>
+      <details class="mt-4">
+        <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">View diff</summary>
+        <div class="mt-2 grid grid-cols-2 gap-4">
+          <div>
+            <h4 class="text-xs font-semibold text-gray-500 uppercase mb-1">AI Raw</h4>
+            <pre class="bg-gray-100 rounded p-3 text-xs overflow-x-auto"><%= JSON.pretty_generate(scan.result || []) %></pre>
+          </div>
+          <div>
+            <h4 class="text-xs font-semibold text-gray-500 uppercase mb-1">User Submitted</h4>
+            <pre class="bg-gray-100 rounded p-3 text-xs overflow-x-auto"><%= JSON.pretty_generate(scan.submitted_pieces || []) %></pre>
+          </div>
+        </div>
+      </details>
+    <% end %>
+
+    <% if scan.photo.attached? %>
+      <div class="mt-4">
+        <dt class="text-sm font-medium text-gray-500 mb-1">Photo</dt>
+        <dd><%= image_tag scan.photo, class: "rounded-lg max-w-xs border border-gray-200" %></dd>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 <% if @optimization.result.present? %>
   <div data-controller="sheet-visualizer"
        data-sheet-visualizer-result-value="<%= @optimization.result.to_json %>"

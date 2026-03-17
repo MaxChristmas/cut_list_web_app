@@ -125,7 +125,8 @@ class ProjectsController < ApplicationController
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],
-      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
+      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil,
+      scan_token_id: params[:scan_token_id].presence
     )
 
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
@@ -189,7 +190,8 @@ class ProjectsController < ApplicationController
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],
-      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil
+      efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil,
+      scan_token_id: params[:scan_token_id].presence
     )
 
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1

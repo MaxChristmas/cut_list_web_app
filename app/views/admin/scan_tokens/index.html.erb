@@ -1,0 +1,166 @@
+<h2 class="text-2xl font-semibold text-gray-900 mb-6">Scan Tokens</h2>
+
+<%
+  completed_with_submitted = ScanToken.where(status: "completed").where.not(submitted_pieces: nil)
+  accuracy_scores = completed_with_submitted.filter_map { |st| st.accuracy_report&.dig(:accuracy_pct) }
+  avg_accuracy = accuracy_scores.any? ? (accuracy_scores.sum / accuracy_scores.size.to_f).round(1) : nil
+
+  agent_labels = @stats[:agent_counts].keys
+  agent_data = @stats[:agent_counts].values
+  agent_colors = agent_labels.map { |a|
+    case a
+    when "plan_2d" then "#3b82f6"
+    when "meuble_3d" then "#f59e0b"
+    when "liste" then "#10b981"
+    else "#6b7280"
+    end
+  }
+%>
+
+<div class="grid grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Total scans</div>
+    <div class="mt-1 text-3xl font-bold text-gray-900"><%= @stats[:total] %></div>
+    <div class="mt-1 text-xs text-gray-400"><%= @stats[:completed] %> completed</div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Avg accuracy</div>
+    <% if avg_accuracy %>
+      <div class="mt-1 text-3xl font-bold <%= avg_accuracy >= 80 ? 'text-green-600' : avg_accuracy >= 50 ? 'text-yellow-600' : 'text-red-600' %>">
+        <%= avg_accuracy %>%
+      </div>
+      <div class="mt-1 text-xs text-gray-400">based on <%= accuracy_scores.size %> scans</div>
+    <% else %>
+      <div class="mt-1 text-3xl font-bold text-gray-300">—</div>
+      <div class="mt-1 text-xs text-gray-400">no data yet</div>
+    <% end %>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Total cost</div>
+    <div class="mt-1 text-3xl font-bold text-gray-900">$<%= @stats[:total_cost].to_f.round(2) %></div>
+    <% avg_cost = @stats[:completed] > 0 ? (@stats[:total_cost].to_f / @stats[:completed]).round(4) : 0 %>
+    <div class="mt-1 text-xs text-gray-400">~$<%= avg_cost %> per scan</div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500 mb-2">Agents</div>
+    <% if agent_data.any? %>
+      <div class="h-28">
+        <canvas
+          data-controller="doughnut-chart"
+          data-doughnut-chart-labels-value="<%= agent_labels.to_json %>"
+          data-doughnut-chart-data-value="<%= agent_data.to_json %>"
+          data-doughnut-chart-colors-value="<%= agent_colors.to_json %>"
+        ></canvas>
+      </div>
+    <% else %>
+      <div class="h-28 flex items-center justify-center text-sm text-gray-400">No data</div>
+    <% end %>
+  </div>
+</div>
+
+<%= form_tag admin_scan_tokens_path, method: :get, class: "mb-4 flex justify-end items-center gap-3" do %>
+  <div class="flex items-center gap-2">
+    <label for="status" class="text-sm font-medium text-gray-700">Status:</label>
+    <select name="status" id="status" onchange="this.form.submit()"
+      class="rounded-lg border-gray-300 text-sm py-1.5 pl-3 pr-8 focus:border-blue-500 focus:ring-blue-500">
+      <option value="">All</option>
+      <% %w[completed processing pending expired].each do |s| %>
+        <option value="<%= s %>" <%= "selected" if params[:status] == s %>><%= s.capitalize %></option>
+      <% end %>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <label for="agent" class="text-sm font-medium text-gray-700">Agent:</label>
+    <select name="agent" id="agent" onchange="this.form.submit()"
+      class="rounded-lg border-gray-300 text-sm py-1.5 pl-3 pr-8 focus:border-blue-500 focus:ring-blue-500">
+      <option value="">All</option>
+      <% %w[plan_2d meuble_3d liste].each do |a| %>
+        <option value="<%= a %>" <%= "selected" if params[:agent] == a %>><%= a %></option>
+      <% end %>
+    </select>
+  </div>
+<% end %>
+
+<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Photo</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Agent</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pieces</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Accuracy</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @scan_tokens.each do |scan_token| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-5 py-3 text-sm text-gray-500 font-mono"><%= scan_token.id %></td>
+          <td class="px-5 py-3 text-sm text-gray-500">
+            <% if scan_token.user %>
+              <%= link_to scan_token.user.email, admin_user_path(scan_token.user), class: "text-blue-600 hover:text-blue-800" %>
+            <% else %>
+              <span class="text-gray-400">—</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-sm">
+            <% case scan_token.status %>
+            <% when "completed" %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span>
+            <% when "processing" %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Processing</span>
+            <% when "expired" %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Expired</span>
+            <% else %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Pending</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-sm">
+            <% if scan_token.photo.attached? %>
+              <%= image_tag scan_token.photo.representation(resize_to_limit: [60, 60]), class: "w-10 h-10 object-cover rounded" %>
+            <% else %>
+              <span class="text-gray-400">—</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-sm">
+            <% if scan_token.image_type.present? %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"><%= scan_token.image_type %></span>
+            <% else %>
+              <span class="text-gray-400">—</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-sm text-gray-500">
+            <%= scan_token.result.is_a?(Array) ? scan_token.result.size : "—" %>
+          </td>
+          <td class="px-5 py-3 text-sm">
+            <% report = scan_token.accuracy_report %>
+            <% if report %>
+              <span class="font-medium <%= report[:accuracy_pct] >= 80 ? 'text-green-600' : report[:accuracy_pct] >= 50 ? 'text-yellow-600' : 'text-red-600' %>">
+                <%= report[:accuracy_pct] %>%
+              </span>
+            <% else %>
+              <span class="text-gray-400">—</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-sm text-gray-500">
+            <%= scan_token.cost_usd.present? ? "$#{scan_token.cost_usd}" : "—" %>
+          </td>
+          <td class="px-5 py-3 text-sm text-gray-500"><%= scan_token.created_at.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") %></td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "View", admin_scan_token_path(scan_token), class: "text-sm text-blue-600 hover:text-blue-800" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= admin_pagination %>

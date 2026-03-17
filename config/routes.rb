@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       post :reply, on: :member
     end
     resources :coupons
+    resources :scan_tokens, only: [ :index, :show ]
   end
 
   resources :projects, param: :token do
@@ -38,6 +39,15 @@ Rails.application.routes.draw do
   post "stripe/webhooks", to: "stripe_webhooks#create"
 
   devise_for :users, controllers: { registrations: "users/registrations", omniauth_callbacks: "users/omniauth_callbacks", sessions: "users/sessions", passwords: "users/passwords" }
+
+  resources :scan_tokens, only: [ :create ] do
+    patch :submit_pieces, on: :member
+  end
+
+  scope :scan do
+    get ":token", to: "scans#show", as: :scan
+    post ":token/upload", to: "scans#upload", as: :scan_upload
+  end
 
   resources :coupons, only: [ :create ]
   resources :report_issues, only: [ :create ]

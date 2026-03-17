@@ -16,6 +16,9 @@ application.register("collapsible", CollapsibleController)
 import CookieConsentController from "./cookie_consent_controller"
 application.register("cookie-consent", CookieConsentController)
 
+import DesktopUploadController from "./desktop_upload_controller"
+application.register("desktop-upload", DesktopUploadController)
+
 import DoughnutChartController from "./doughnut_chart_controller"
 application.register("doughnut-chart", DoughnutChartController)
 
@@ -37,6 +40,9 @@ application.register("modal", ModalController)
 import PendingProjectController from "./pending_project_controller"
 application.register("pending-project", PendingProjectController)
 
+import PhotoImportController from "./photo_import_controller"
+application.register("photo-import", PhotoImportController)
+
 import PiecesController from "./pieces_controller"
 application.register("pieces", PiecesController)
 
@@ -45,6 +51,9 @@ application.register("pwa-install", PwaInstallController)
 
 import ReportIssueController from "./report_issue_controller"
 application.register("report-issue", ReportIssueController)
+
+import ScanUploadController from "./scan_upload_controller"
+application.register("scan-upload", ScanUploadController)
 
 import ResetPasswordModalController from "./reset_password_modal_controller"
 application.register("reset-password-modal", ResetPasswordModalController)

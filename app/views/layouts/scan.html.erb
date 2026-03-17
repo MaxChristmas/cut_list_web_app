@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CutOptima — Scan</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="robots" content="noindex,nofollow">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="w-full max-w-sm mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-xl font-bold tracking-tight">CutOptima</h1>
+      </div>
+      <%= yield %>
+    </div>
+    <% content_for(:skip_cookie_consent) { true } %>
+  </body>
+</html>
