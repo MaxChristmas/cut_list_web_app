@@ -54,7 +54,7 @@
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Last Sign-in At</dt>
-      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_at&.in_time_zone("Europe/Paris").strftime("%b %d, %Y at %H:%M") || "—" %></dd>
+      <dd class="mt-1 text-sm text-gray-900"><%= @user.last_sign_in_at&.in_time_zone("Europe/Paris")&.strftime("%b %d, %Y at %H:%M") || "—" %></dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-gray-500">Created</dt>
