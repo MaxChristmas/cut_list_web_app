@@ -53,8 +53,9 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "app.cutoptima.com" }
+  # Set host for URL generation (Active Storage, mailers, etc.)
+  Rails.application.routes.default_url_options = { host: "app.cutoptima.com", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "app.cutoptima.com", protocol: "https" }
 
   # Brevo (Sendinblue) SMTP. Credentials set via ENV (SMTP_USER_NAME, SMTP_PASSWORD).
   config.action_mailer.delivery_method = :smtp
