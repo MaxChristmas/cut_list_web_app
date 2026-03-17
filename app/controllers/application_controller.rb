@@ -6,7 +6,8 @@ class ApplicationController < ActionController::Base
   before_action :load_recent_projects
 
   helper_method :can_create_project?, :can_optimize_pieces?, :current_plan_name,
-                :usage_projects, :max_pieces_per_project, :has_feature?
+                :usage_projects, :max_pieces_per_project, :has_feature?,
+                :can_optimize_today?, :usage_daily_optimizations
 
   def set_locale
     locale = params[:locale].to_s.strip.to_sym
@@ -96,5 +97,18 @@ class ApplicationController < ActionController::Base
 
   def max_pieces_per_project
     Plannable::PLANS[current_plan_name][:max_pieces_per_project]
+  end
+
+  def can_optimize_today?
+    return true unless user_signed_in?
+    current_user.can_optimize_today?
+  end
+
+  def usage_daily_optimizations
+    if user_signed_in?
+      current_user.usage_daily_optimizations
+    else
+      { used: 0, max: Plannable::PLANS["free"][:max_daily_optimizations] }
+    end
   end
 end

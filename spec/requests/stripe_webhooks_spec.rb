@@ -76,7 +76,7 @@ RSpec.describe "Stripe webhooks – subscription lifecycle", type: :request do
       travel_to period_end + 1.hour do
         expect(user.plan_expired?).to be true
         expect(user.effective_plan).to eq("free")
-        expect(user.max_active_projects).to eq(1000)
+        expect(user.max_active_projects).to eq(5)
         expect(user.max_pieces_per_project).to eq(25)
       end
     end
@@ -141,7 +141,7 @@ RSpec.describe "Stripe webhooks – subscription lifecycle", type: :request do
       travel_to user.plan_expires_at + 1.hour do
         expect(user.plan_expired?).to be true
         expect(user.effective_plan).to eq("free")
-        expect(user.max_active_projects).to eq(1000)
+        expect(user.max_active_projects).to eq(5)
       end
     end
 

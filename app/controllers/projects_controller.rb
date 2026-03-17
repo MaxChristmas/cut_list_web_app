@@ -102,6 +102,11 @@ class ProjectsController < ApplicationController
       return
     end
 
+    unless can_optimize_today?
+      redirect_to plans_path, alert: t("limits.max_daily_optimizations_reached")
+      return
+    end
+
     stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces, grain_direction: grain_direction)
 
@@ -159,6 +164,11 @@ class ProjectsController < ApplicationController
 
     unless can_optimize_pieces?(pieces)
       redirect_to plans_path, alert: t("limits.max_pieces_reached")
+      return
+    end
+
+    unless can_optimize_today?
+      redirect_to plans_path, alert: t("limits.max_daily_optimizations_reached")
       return
     end
 

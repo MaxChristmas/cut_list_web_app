@@ -16,6 +16,7 @@ fr:
     sign_in: "Connexion"
     upgrade: "Version Pro"
     projects_usage: "Projets"
+    daily_optimizations: "Optimisations du jour"
     pieces_per_project: "%{count} pièces max par projet"
     unlimited_pieces: "Pièces illimitées"
     install_app: "Installer l'app"
@@ -211,6 +212,7 @@ fr:
     pro_cta_tax: "HT"
     guest_signup_prompt: "Inscrivez-vous gratuitement pour optimiser vos découpes !"
     feature_not_available: "Cette fonctionnalité n'est pas disponible avec votre forfait actuel. Passez au plan supérieur pour y accéder."
+    max_daily_optimizations_reached: "Vous avez atteint votre limite quotidienne d'optimisations (10 par jour). Passez au plan supérieur pour des optimisations illimitées."
   pdf:
     measurements_in_mm: "Toutes les mesures sont en millimètres (mm)"
     sheets_used: "Panneaux utilisés"
@@ -505,7 +507,7 @@ fr:
       answer: "Oui. Cliquez sur \"Modifier la disposition\" pour passer en mode édition. Vous pouvez déplacer les pièces au sein d'un panneau ou les transférer vers un autre panneau. La détection de collision avec le kerf empêche le chevauchement. Cliquez sur \"Enregistrer\" pour sauvegarder, ou \"Rétablir l'original\" pour revenir à la disposition optimisée."
     q8:
       question: "Quels sont les abonnements disponibles ?"
-      answer: "CutList propose trois plans : Gratuit (2 projets actifs, 10 optimisations par projet par jour, export PDF, étiquettes, sens de coupe, épaisseur de lame), Worker (10 projets, optimisations illimitées, import CSV, impression d'étiquettes, déplacement de pièces), et Entreprise (projets et optimisations illimités, marge sur panneaux, archivage). Un accès ponctuel de 3 jours est également disponible."
+      answer: "CutList propose trois plans : Gratuit (5 projets actifs, 10 optimisations par jour tous projets confondus, export PDF, étiquettes, sens de coupe, épaisseur de lame), Worker (projets et optimisations illimités, import CSV, impression d'étiquettes, déplacement de pièces), et Entreprise (tout illimité, marge sur panneaux, archivage). Un accès ponctuel de 3 jours est également disponible."
     q9:
       question: "Comment gérer mon compte ?"
       answer: "Cliquez sur votre email dans la barre latérale pour accéder aux paramètres. Vous pouvez modifier votre mot de passe, changer de langue et gérer votre abonnement. Vous pouvez aussi vous connecter avec Google. Vos projets et données sont stockés de manière sécurisée et accessibles depuis n'importe quel appareil."

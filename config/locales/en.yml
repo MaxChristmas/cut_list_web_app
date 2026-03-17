@@ -16,6 +16,7 @@ en:
     sign_in: "Sign In"
     upgrade: "Upgrade"
     projects_usage: "Projects"
+    daily_optimizations: "Daily optimizations"
     pieces_per_project: "%{count} pieces max per project"
     unlimited_pieces: "Unlimited pieces"
     install_app: "Install App"
@@ -211,6 +212,7 @@ en:
     pro_cta_tax: "excl. tax"
     guest_signup_prompt: "Sign up for free to optimize your cut list!"
     feature_not_available: "This feature is not available on your current plan. Upgrade to access it."
+    max_daily_optimizations_reached: "You've reached your daily optimization limit (10 per day). Upgrade your plan for unlimited optimizations."
   pdf:
     measurements_in_mm: "All measurements in millimeters (mm)"
     sheets_used: "Sheets used"
@@ -505,7 +507,7 @@ en:
       answer: "Yes. Click \"Edit Layout\" to enter edit mode. You can drag pieces to reposition them within a sheet, or drag them to another sheet. Collision detection with kerf ensures pieces don't overlap. Click \"Save Layout\" to save your changes, or \"Reset to Original\" to go back to the optimized layout."
     q8:
       question: "What are the subscription plans?"
-      answer: "CutList offers three plans: Free (2 active projects, 10 optimizations per project per day, PDF export, labels, cut direction, blade kerf), Worker (10 projects, unlimited optimizations, CSV import, print labels, move pieces), and Enterprise (unlimited projects and optimizations, margin on panels, archive projects). One-shot 3-day access is also available."
+      answer: "CutList offers three plans: Free (5 active projects, 10 optimizations per day across all projects, PDF export, labels, cut direction, blade kerf), Worker (unlimited projects and optimizations, CSV import, print labels, move pieces), and Enterprise (unlimited everything, margin on panels, archive projects). One-shot 3-day access is also available."
     q9:
       question: "How do I manage my account?"
       answer: "Click your email in the sidebar to access settings. You can change your password, switch language, and manage your subscription. You can also sign in with Google for quick access. Your projects and data are securely stored and accessible from any device."

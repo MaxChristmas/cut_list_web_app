@@ -19,7 +19,7 @@ RSpec.describe User, type: :model do
     it "limits to 2 active projects" do
       user = build_user
       user.save!
-      expect(user.max_active_projects).to eq(1000)
+      expect(user.max_active_projects).to eq(5)
     end
 
     it "limits to 25 pieces per project" do

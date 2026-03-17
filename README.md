@@ -125,25 +125,54 @@ Devise séparé (`database_authenticatable, rememberable, validatable`). Panel a
 
 ## Système de plans (Plannable)
 
-```ruby
-{
-  "free"       => { max_active_projects: 1000, max_pieces_per_project: 25,      features: [:pdf_export, :label_pieces, :cut_direction, :blade_kerf] },
-  "worker"     => { max_active_projects: ∞,    max_pieces_per_project: ∞,       features: [..., :import_csv, :print_labels, :move_pieces], prices: { monthly: 10€, yearly: 100€, one_shot: 5€ } },
-  "enterprise" => { max_active_projects: ∞,    max_pieces_per_project: ∞,       features: [tous les 8], prices: { monthly: 20€, yearly: 200€, one_shot: 8€ } }
-}
-```
+### Grille tarifaire
 
-Méthodes clés (disponibles partout via ApplicationController) :
+| | **Free** | **Worker** | **Enterprise** |
+|---|---|---|---|
+| **Prix mensuel** | Gratuit | 10€ HT/mois | 20€ HT/mois |
+| **Prix annuel** | — | 100€ HT/an (-17%) | 200€ HT/an (-17%) |
+| **One-shot (3 jours)** | — | 5€ HT | 8€ HT |
+
+### Limites par plan
+
+| Limite | **Free** | **Worker** | **Enterprise** |
+|---|---|---|---|
+| Projets actifs | 5 | Illimité | Illimité |
+| Pièces par projet | 25 | Illimité | Illimité |
+| Optimisations par jour | 10 | Illimité | Illimité |
+
+### Fonctionnalités par plan
+
+| Fonctionnalité | Clé | **Free** | **Worker** | **Enterprise** |
+|---|---|---|---|---|
+| Export PDF | `pdf_export` | ✅ | ✅ | ✅ |
+| Étiqueter les pièces | `label_pieces` | ✅ | ✅ | ✅ |
+| Direction de coupe | `cut_direction` | ✅ | ✅ | ✅ |
+| Épaisseur de lame | `blade_kerf` | ✅ | ✅ | ✅ |
+| Import CSV | `import_csv` | ❌ | ✅ | ✅ |
+| Impression d'étiquettes | `print_labels` | ❌ | ✅ | ✅ |
+| Déplacer les pièces | `move_pieces` | ❌ | ✅ | ✅ |
+| Marge sur panneau brut | `margin` | ❌ | ❌ | ✅ |
+| Archiver les projets | `archive` | ❌ | ❌ | ✅ |
+
+### Méthodes clés
+
+Disponibles partout via `ApplicationController` :
+
 - `effective_plan` — plan effectif (prend en compte l'expiration)
 - `plan_expired?` — vérifie `plan_expires_at < now`
-- `can_create_project?`, `can_optimize_pieces?(pieces)`
+- `can_create_project?` — vérifie la limite de projets actifs
+- `can_optimize_pieces?(pieces)` — vérifie la limite de pièces par projet
+- `can_optimize_today?` — vérifie la limite quotidienne d'optimisations
 - `has_feature?(feature)` — vérifie si la feature est dans le plan
 - `usage_projects` — `{ used:, max: }` pour l'affichage de la progression
+- `usage_daily_optimizations` — `{ used:, max: }` pour l'affichage
 
-**Types de paiement :**
-- Abonnement mensuel / annuel (Stripe Subscription)
-- One-shot 3 jours (Stripe Checkout non-récurrent)
-- Coupon (accordé par admin, durée configurable)
+### Types de paiement
+
+- **Abonnement** mensuel / annuel (Stripe Subscription)
+- **One-shot** 3 jours (Stripe Checkout non-récurrent)
+- **Coupon** (accordé par admin, durée configurable)
 
 ---
 

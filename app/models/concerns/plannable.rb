@@ -8,14 +8,16 @@ module Plannable
 
   PLANS = {
     "free" => {
-      max_active_projects: 1000,
+      max_active_projects: 5,
       max_pieces_per_project: 25,
+      max_daily_optimizations: 10,
       features: %i[pdf_export label_pieces cut_direction blade_kerf],
       prices: nil
     },
     "worker" => {
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
+      max_daily_optimizations: Float::INFINITY,
       features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces],
       prices: {
         monthly:  { amount: 1000, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
@@ -26,6 +28,7 @@ module Plannable
     "enterprise" => {
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
+      max_daily_optimizations: Float::INFINITY,
       features: FEATURES,
       prices: {
         monthly:  { amount: 2000, env_key: "STRIPE_ENTERPRISE_MONTHLY_PRICE_ID" },
@@ -69,6 +72,25 @@ module Plannable
 
   def max_pieces_per_project
     plan_config[:max_pieces_per_project]
+  end
+
+  def max_daily_optimizations
+    plan_config[:max_daily_optimizations]
+  end
+
+  def daily_optimizations_count
+    Optimization.joins(:project)
+      .where(projects: { user_id: id })
+      .where("optimizations.created_at >= ?", Time.current.beginning_of_day)
+      .count
+  end
+
+  def can_optimize_today?
+    daily_optimizations_count < max_daily_optimizations
+  end
+
+  def usage_daily_optimizations
+    { used: daily_optimizations_count, max: max_daily_optimizations }
   end
 
   def active_projects_count
