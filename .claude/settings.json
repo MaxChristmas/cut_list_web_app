@@ -3,9 +3,25 @@
     "allow": [
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Read(//private/tmp/**)",
-      "Bash(curl -sL \"https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansJP.zip\" -o NotoSansJP.zip)",
-      "Bash(bundle exec:*)"
+      "Bash(bundle exec:*)",
+      "Bash(npm list:*)",
+      "WebSearch",
+      "Bash(git add:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command' | { read -r cmd; if echo \"$cmd\" | grep -q 'git push'; then cd /Users/maxence/works/cut_list_web_app && bundle exec rspec spec/ && bin/rubocop; fi; }",
+            "timeout": 300,
+            "statusMessage": "Running rspec & rubocop before push..."
+          }
+        ]
+      }
     ]
   }
 }

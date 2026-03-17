@@ -14,7 +14,8 @@
 <% has_grain = (@grain_direction || "none") != "none" %>
 
 <div data-controller="form-validation"
-     data-form-validation-max-pieces-value="<%= max_pieces_per_project == Float::INFINITY ? 0 : max_pieces_per_project %>">
+     data-form-validation-max-pieces-value="<%= max_pieces_per_project == Float::INFINITY ? 0 : max_pieces_per_project %>"
+     class="overflow-hidden">
 <%= form_with url: form_url, method: form_method, class: "space-y-10",
     data: { controller: "pending-project", "pending-project-create-url-value": projects_path,
             "pending-project-checkout-url-value": plan_checkout_path } do |f| %>

@@ -49,3 +49,15 @@ bin/rails db:prepare   # Create and migrate
 bin/rails db:migrate   # Run pending migrations
 bin/rails db:reset     # Drop, create, migrate, seed
 ```
+
+## Agents
+
+Specialized agents are available in `.claude/agents/`. Use them proactively:
+
+- **rails-expert**: Use automatically for any Rails code task (models, controllers, views, migrations, Hotwire, RSpec tests, performance). No need for the user to ask explicitly — delegate Rails implementation work to this agent.
+- **ui-designer**: Use when working on UI/UX, design systems, component styling, or accessibility.
+- **data-analyst**: Use when analyzing business data, building dashboards, or writing complex SQL.
+- **business-analyst**: Use when analyzing requirements, business processes, or ROI.
+- **seo-specialist**: Use for SEO audits, meta tags, structured data, or search optimization.
+- **sales-engineer**: Use for pricing analysis, competitive positioning, or technical sales content.
+- **legal-advisor**: Use for contracts, compliance (GDPR), terms of service, or legal risk review.

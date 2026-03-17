@@ -44,3 +44,9 @@
 !/spec/screens/.gitkeep
 
 .DS_Store
+
+# MCP config (contains DB credentials)
+.mcp.json
+
+# Claude Code local settings (contains credentials)
+.claude/settings.local.json
