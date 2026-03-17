@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe PhotoPieceExtractorService do
+  before { allow(ENV).to receive(:fetch).and_call_original }
+  before { allow(ENV).to receive(:fetch).with("ANTHROPIC_API_KEY").and_return("test-key") }
+
   # ──────────────────────────────────────────────
   # Helpers & shared doubles
   # ──────────────────────────────────────────────
