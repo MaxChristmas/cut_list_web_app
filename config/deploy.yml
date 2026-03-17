@@ -40,6 +40,9 @@ env:
     - SMTP_USER_NAME
     - SMTP_PASSWORD
     - SENTRY_DSN
+    - ANTHROPIC_API_KEY
+    - CLOUDFLARE_R2_ACCESS_KEY_ID
+    - CLOUDFLARE_R2_SECRET_ACCESS_KEY
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     SOLID_QUEUE_IN_PUMA: true
@@ -52,6 +55,9 @@ env:
     GOOGLE_ANALYTICS_ID: G-M83WH5P1YY
 
     NTFY_TOPIC: dWPtSywf0tYwQrdl-cutoptima-production
+
+    CLOUDFLARE_R2_ENDPOINT: https://e3b3d401eeeed99993c0419ac46e91b2.r2.cloudflarestorage.com
+    CLOUDFLARE_R2_BUCKET: cutoptima-production
 
 # SSH user (not root).
 ssh:

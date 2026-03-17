@@ -141,7 +141,13 @@ jobs:
           SMTP_USER_NAME=${{ vars.SMTP_USER_NAME }}
           SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
           SENTRY_DSN=${{ vars.SENTRY_DSN }}
+          GOOGLE_ANALYTICS_ID=${{ vars.GOOGLE_ANALYTICS_ID }}
           NTFY_TOPIC=${{ vars.NTFY_TOPIC }}
+          ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID=${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY=${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          CLOUDFLARE_R2_ENDPOINT=${{ vars.CLOUDFLARE_R2_ENDPOINT }}
+          CLOUDFLARE_R2_BUCKET=${{ vars.CLOUDFLARE_R2_BUCKET }}
           EOF
           sed -i 's/^[[:space:]]*//' .env.production
 
