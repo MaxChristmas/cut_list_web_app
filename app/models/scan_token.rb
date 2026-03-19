@@ -7,6 +7,7 @@ class ScanToken < ApplicationRecord
   validates :token, presence: true, uniqueness: true
   validates :status, presence: true, inclusion: { in: %w[pending processing completed expired] }
   validates :expires_at, presence: true
+  validates :ai_provider, inclusion: { in: %w[anthropic openai] }, allow_nil: true
 
   before_validation :generate_token, on: :create
   before_validation :set_expiry, on: :create

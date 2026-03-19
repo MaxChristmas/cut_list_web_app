@@ -274,6 +274,9 @@ export default class extends Controller {
     const body = new URLSearchParams()
     if (projectToken) body.set("project_token", projectToken)
 
+    const providerSelect = document.getElementById("ai-provider-select")
+    if (providerSelect) body.set("ai_provider", providerSelect.value)
+
     // Fetch QR code via POST
     fetch("/scan_tokens", {
       method: "POST",

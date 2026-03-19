@@ -69,7 +69,23 @@ class ScansController < ApplicationController
         content_type: "image/jpeg"
       )
 
-      result = PhotoPieceExtractorService.new(image_data, photo.content_type).call
+      # Classify the image first with the chosen provider
+      service_class = scan_token.ai_provider == "openai" ? PhotoPieceExtractorOpenaiService : PhotoPieceExtractorService
+      service = service_class.new(image_data, photo.content_type)
+      result = service.call
+
+      # Force the best provider per image type:
+      # - liste → OpenAI (GPT-4o reads tables better)
+      # - plan_2d, meuble_2d → Anthropic (better at technical drawings)
+      # - meuble_3d → user's choice
+      image_type = result["image_type"]
+      if image_type == "liste" && service_class != PhotoPieceExtractorOpenaiService
+        Rails.logger.info("[PhotoImport] Forcing OpenAI for liste extraction")
+        result = PhotoPieceExtractorOpenaiService.new(image_data, photo.content_type).call
+      elsif image_type.in?(%w[plan_2d meuble_2d meuble_3d]) && service_class != PhotoPieceExtractorService
+        Rails.logger.info("[PhotoImport] Forcing Anthropic for #{image_type} extraction")
+        result = PhotoPieceExtractorService.new(image_data, photo.content_type).call
+      end
       pieces = normalize_pieces(result["pieces"] || [])
       pieces = merge_duplicate_pieces(pieces)
 

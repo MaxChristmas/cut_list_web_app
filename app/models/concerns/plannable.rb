@@ -101,6 +101,8 @@ module Plannable
   end
 
   def max_scans
+    return scan_limit_override if scan_limit_override.present?
+
     one_shot_plan? ? ONE_SHOT_MAX_SCANS : plan_config.fetch(:max_monthly_scans, 0)
   end
 

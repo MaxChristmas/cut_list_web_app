@@ -10,7 +10,7 @@ class PhotoPieceExtractorService
     {"pieces": [{"nom": "Côté", "longueur": 750, "largeur": 500, "quantite": 2, "materiau": null, "confiance": "haute"}, {"nom": "Étagère", "longueur": 1200, "largeur": 300, "quantite": 4, "materiau": "mélaminé", "confiance": "moyenne"}]}
 
     Champs obligatoires pour chaque pièce :
-    - nom : string, rôle du panneau
+    - nom : string, label tel qu'écrit sur l'image (ex: "P1", "A", "Côté G"), sinon rôle du panneau
     - longueur : number, en mm, TOUJOURS >= largeur
     - largeur : number, en mm, TOUJOURS <= longueur
     - quantite : number, entier >= 1
@@ -22,7 +22,8 @@ class PhotoPieceExtractorService
   ROUTER_PROMPT = <<~PROMPT.freeze
     Classifie cette image dans UNE des catégories suivantes :
 
-    - "plan_2d" : plan 2D technique, vue éclatée, logiciel CAO (SketchUp, Fusion 360...), rectangles cotés individuellement disposés sur une page
+    - "plan_2d" : plan 2D technique, vue éclatée, logiciel CAO (SketchUp, Fusion 360...), rectangles cotés individuellement disposés sur une page — chaque rectangle est UN panneau distinct
+    - "meuble_2d" : plan technique d'un meuble avec PLUSIEURS VUES du même objet (face, dessus, côté, perspective) et des cotes structurelles (épaisseurs, dimensions internes). Souvent un titre comme "cabinet", "bookshelf", "commode"
     - "meuble_3d" : croquis 3D, dessin en perspective, photo de meuble ou d'esquisse à main levée montrant un objet en volume
     - "liste" : tableau, liste textuelle, spreadsheet, capture d'écran avec colonnes de dimensions
     - "autre" : tout ce qui ne rentre pas dans les catégories ci-dessus
@@ -42,7 +43,7 @@ class PhotoPieceExtractorService
     3. Lis les valeurs EXACTES inscrites sur l'image — ne les arrondis PAS
     4. Attention aux virgules décimales : "54,74 cm" = 547.4 mm
     5. Si deux rectangles ont exactement les mêmes dimensions, fusionne-les en une ligne avec quantite = nombre de rectangles identiques
-    6. Nomme chaque pièce par son rôle si indiqué, sinon "Panneau A", "Panneau B"...
+    6. Utilise le label EXACT écrit sur l'image comme nom (ex: "P1", "A", "Côté G"). S'il n'y a aucun label, utilise "Panneau A", "Panneau B"...
 
     #{JSON_FORMAT}
 
@@ -56,65 +57,184 @@ class PhotoPieceExtractorService
 
   # Step 2b: Agent Meuble 3D — croquis/photo de meuble à décomposer
   MEUBLE_3D_PROMPT = <<~PROMPT.freeze
-    Tu es un expert menuisier. L'image montre un meuble en 3D (croquis, perspective, photo).
-    Ton rôle : le décomposer en PANNEAUX PLATS individuels pour une liste de découpe.
+    Tu es un expert menuisier. L'image montre un meuble en 3D (croquis à main levée, perspective, photo).
+    Ton rôle : extraire UNIQUEMENT les panneaux labelisés + le fond/dos.
+
+    ## RÈGLES DE LECTURE
+
+    0. NOM = LABEL DU CROQUIS
+      Utilise le label EXACT écrit sur le croquis comme nom de pièce (ex: "P1", "A", "Côté G").
+      Ne renomme JAMAIS un panneau labelisé — garde le texte tel quel.
+      S'il n'y a aucun label, utilise le rôle du panneau (ex: "Côté", "Dessus").
+
+    1. LABELS IDENTIQUES = DIMENSIONS IDENTIQUES
+      Si plusieurs panneaux portent le même label (P1, P2, A...),
+      ils ont exactement les mêmes dimensions.
+      Fusionne-les en une seule ligne, quantite = nombre total d'occurrences.
+
+    2. VUE 3D = FACES CACHÉES EXISTENT PAR SYMÉTRIE
+      Le dessin est en perspective : les panneaux non visibles existent forcément.
+      - 1 côté visible → 2 côtés au total
+      - 1 dessus visible → dessus + dessous au total (quantité = 2)
+      Applique cette symétrie TOUJOURS (avec ou sans labels).
+
+    3. POSITION DE LA COTE = ÉLÉMENT CONCERNÉ
+      Une cote est toujours annotée au milieu de l'élément qu'elle mesure.
+      Ne réaffecte jamais une cote à un autre élément.
+
+    4. NE JAMAIS INVENTER DE PIÈCE SUPPLÉMENTAIRE
+      A) Si le croquis CONTIENT des labels (P1, P2, A...) :
+         → N'inclus QUE les panneaux labelisés + le fond/dos.
+         → Les séparateurs, étagères, cloisons SANS label = IGNORER.
+      B) Si le croquis NE CONTIENT AUCUN label :
+         → Décompose le meuble par rôle (Côté, Dessus, Façade tiroir, Fond...).
+         → N'ajoute PAS de séparateurs internes ni d'étagères non visibles.
+      Dans les DEUX cas : les lignes qui divisent l'espace intérieur = IGNORER.
+
+    5. UNIQUEMENT L'EXTÉRIEUR
+      N'inclus pas les éléments intérieurs non visibles
+      (fond de tiroir, quincaillerie, glissières...).
 
     ## MÉTHODE
 
-    Étape 1 — Identifier le type de meuble (étagère, armoire, caisson, bureau, commode...)
-    Étape 2 — Compter CHAQUE panneau physique visible sur le dessin :
-      - Côtés verticaux (généralement 2)
-      - Panneaux horizontaux internes : compte les panneaux entre le dessus et le dessous.
-        N lignes horizontales internes = N panneaux horizontaux internes.
-      - Dessus et dessous du meuble
-      - Fond/dos (généralement 1)
-      - Façades/Portes/Tiroirs : si des panneaux de façade sont visibles en face avant,
-        chaque façade est un panneau à découper avec ses propres dimensions (largeur × hauteur_compartiment).
-      - Séparations verticales internes
-    Étape 3 — Calculer les dimensions de chaque panneau :
-      - Côtés : hauteur_totale × profondeur_meuble
-      - Dessus/Dessous : largeur_meuble × profondeur_meuble
-      - Étagères internes : largeur_meuble × profondeur_meuble
-      - Façades : largeur_meuble × hauteur_compartiment
-        Ex : si 4 compartiments de 20 cm → 4 façades de largeur_meuble × 200 mm
-      - Fond/Dos : largeur_meuble × hauteur_totale
-      - Hauteur totale = nombre de compartiments × hauteur d'un compartiment
-        Ex : 4 compartiments de 20 cm → hauteur = 4 × 20 = 80 cm
-      - La profondeur du meuble (cotée sur le dessus) est utilisée pour côtés, dessus/dessous, étagères.
-      - La hauteur du compartiment est utilisée pour les FAÇADES (pas pour les étagères).
+    Étape 1 — Identifier le type de meuble (étagère, armoire, commode, caisson...)
+    Étape 2 — Relever toutes les cotes écrites et leur élément associé (règle 3)
+    Étape 3 — Pour CHAQUE label distinct, identifier son RÔLE sur le meuble :
+      - Où est-il placé ? (face avant = façade, dessus = dessus, côté = côté)
+      - Chaque label DIFFÉRENT = une pièce DIFFÉRENTE avec ses propres dimensions.
+        Ex: P1 en façade, P2 sur le dessus, P3 sur le côté → 3 lignes séparées.
+      - Ne JAMAIS fusionner des labels différents (P1 ≠ P2 ≠ P3).
+      - Seuls les labels IDENTIQUES se fusionnent (règle 1).
+      Puis appliquer la symétrie (règle 2) :
+      - Dessus visible avec label → quantité = 2 (dessus + dessous)
+      - Côté visible avec label → quantité = 2 (gauche + droit)
+      - Ajouter le fond/dos (×1, seule pièce sans label autorisée)
+      Si AUCUN label : décomposer par rôle :
+      - N façades empilées en face avant = N façades de tiroir
+      - Côtés = 2, Dessus + Dessous = 2, Fond = 1
+    Étape 4 — Calculer la hauteur totale :
+      Compter le NOMBRE DE COTES de hauteur écrites sur le côté du meuble.
+      Ce nombre = nombre de rangées (tiroirs, compartiments).
+      Ex: 4 cotes de "20 cm" → 4 rangées → hauteur_totale = 4 × 200 = 800 mm.
+      ATTENTION : ne PAS compter les lignes de séparation. Compter les COTES ÉCRITES.
+      La hauteur_totale doit être utilisée pour Côtés ET Fond.
+    Étape 5 — Calculer les dimensions de chaque panneau SÉPARÉMENT :
+      - Façades/Portes : largeur_meuble × hauteur_d_une_rangée
+      - Côtés : hauteur_totale (étape 4) × profondeur
+      - Dessus/Dessous : largeur × profondeur — TOUJOURS quantité = 2 (dessus + dessous)
+      - Fond/Dos : largeur × hauteur_totale (étape 4)
+      IMPORTANT :
+      - Ne JAMAIS fusionner Côtés et Dessus/Dessous. Ce sont des pièces DIFFÉRENTES.
+      - Les Côtés utilisent la hauteur_totale, PAS la hauteur d'une rangée.
+        Ex: 3 tiroirs de 10 cm → hauteur_totale = 30 cm → Côté = 300 × profondeur.
 
     #{JSON_FORMAT}
 
     ## RÈGLES CRITIQUES
-    - UTILISE UNIQUEMENT les cotes ÉCRITES sur l'image pour les dimensions. Ne déduis JAMAIS une dimension à partir de la perspective du dessin.
-    - Si une cote est écrite "50 cm", utilise 500 mm — ne l'ajuste PAS visuellement.
-    - Chaque dimension d'un panneau doit provenir d'une cote écrite sur l'image. Si une dimension n'est pas cotée, déduis-la à partir des autres cotes écrites (ex: hauteur = N × espacement coté) et mets confiance "moyenne".
+
+    - Utilise UNIQUEMENT les cotes écrites sur l'image — jamais la perspective visuelle
     - Longueur >= largeur toujours
     - Convertis en mm (1 cm = 10 mm, 1 pouce = 25.4 mm)
-    - Un meuble a TOUJOURS au minimum 3-4 types de panneaux distincts
-    - Ne retourne JAMAIS 1 ou 2 pièces pour un meuble entier
+    - Si des labels existent sur le croquis, ne retourne JAMAIS un panneau sans label (sauf fond/dos)
     - L'épaisseur du panneau n'est PAS une dimension de découpe
-    - FUSIONNE les panneaux de mêmes dimensions en UNE ligne avec quantite = total
-    - Si une dimension est déduite, confiance "moyenne" — si incertaine, "basse"
+    - Si une dimension est déduite (non cotée), confiance = "moyenne"
+    - Si une dimension est incertaine, confiance = "basse"
   PROMPT
 
-  # Step 2c: Agent Liste — tableau ou liste de dimensions
+  # Step 2c: Agent Meuble 2D — plan technique multi-vues d'un meuble
+  MEUBLE_2D_PROMPT = <<~PROMPT.freeze
+    Tu es un expert menuisier. L'image montre un PLAN TECHNIQUE d'un meuble avec plusieurs vues
+    (face, dessus, côté, perspective). Ces vues montrent LE MÊME meuble sous différents angles.
+    Ton rôle : croiser les vues pour extraire la liste des panneaux plats à découper.
+
+    ## PRINCIPES
+
+    1. PLUSIEURS VUES = UN SEUL MEUBLE
+      Ne PAS traiter chaque vue comme un meuble séparé.
+      Les vues se complètent : la vue de face donne largeur + hauteur,
+      la vue de dessus donne largeur + profondeur, la vue de côté donne profondeur + hauteur.
+
+    2. DIMENSIONS GLOBALES EN PREMIER
+      Si les dimensions globales sont indiquées (ex: "595 x 349 x 750 mm"),
+      les utiliser comme référence : largeur × profondeur × hauteur.
+
+    3. COTES INTERNES = DIMENSIONS DES PANNEAUX
+      Les cotes internes sur les vues donnent les dimensions réelles des panneaux
+      (qui sont plus petites que les dimensions extérieures à cause de l'épaisseur).
+      Privilégier les cotes internes quand elles existent.
+
+    ## MÉTHODE
+
+    Étape 1 — Lire les dimensions globales du meuble (largeur × profondeur × hauteur)
+    Étape 2 — Identifier les vues disponibles (face, dessus, côté, perspective)
+    Étape 3 — Sur la VUE DE FACE, identifier les panneaux :
+      - Côtés verticaux (gauche + droit) → lire hauteur et épaisseur
+      - Dessus et dessous → lire largeur et épaisseur
+      - Étagères/séparateurs horizontaux → lire largeur interne
+      - Séparateurs verticaux → lire hauteur interne
+      - Fond/dos
+    Étape 4 — Sur la VUE DE DESSUS, lire la profondeur de chaque panneau
+    Étape 5 — Sur la VUE DE CÔTÉ, confirmer/compléter les hauteurs et profondeurs
+    Étape 6 — Calculer les dimensions finales de chaque panneau :
+      - Côtés : hauteur_totale × profondeur
+      - Dessus/Dessous : largeur_totale × profondeur
+      - Étagères internes : largeur_interne × profondeur_interne
+      - Séparateurs verticaux : hauteur_interne × profondeur_interne
+      - Fond/Dos : largeur_interne × hauteur_interne
+    Étape 7 — Fusionner les panneaux de mêmes dimensions
+
+    #{JSON_FORMAT}
+
+    ## RÈGLES CRITIQUES
+
+    - CROISER les vues : ne jamais extraire d'une seule vue
+    - Utilise UNIQUEMENT les cotes écrites — jamais la perspective visuelle
+    - Longueur >= largeur toujours
+    - Les cotes sont généralement en mm sauf indication contraire
+    - Convertis en mm si nécessaire (1 cm = 10 mm)
+    - Épaisseur du panneau (souvent 17 ou 18 mm) = PAS une dimension de découpe
+    - confiance "haute" si les 2 dimensions viennent de cotes écrites
+    - confiance "moyenne" si une dimension est déduite
+    - confiance "basse" si incertaine
+  PROMPT
+
+  # Step 2d: Agent Liste — tableau ou liste de dimensions
   LISTE_PROMPT = <<~PROMPT.freeze
     L'image montre un tableau ou une liste de dimensions de pièces à découper.
-    Extrais chaque ligne du tableau comme une pièce.
+
+    ## MÉTHODE — SUIVRE DANS L'ORDRE
+
+    Étape 1 — LIRE TOUS LES EN-TÊTES de gauche à droite.
+      Avant de lire les données, liste mentalement CHAQUE colonne du tableau.
+      Un tableau de découpe a souvent ces colonnes :
+      N° | Description | Longueur (Lg) | Largeur (Larg) | Épaisseur (Ep) | Qté | Matière
+      ATTENTION : Lg et Larg sont DEUX colonnes distinctes côte à côte.
+      L'épaisseur (Ep) est souvent une 3ème colonne numérique → L'IGNORER.
+
+    Étape 2 — Pour CHAQUE LIGNE du tableau, lire TOUTES les cellules de gauche à droite.
+      Vérifier que chaque valeur correspond bien à sa colonne (en-tête).
+      Un tableau avec 7 colonnes doit donner 7 valeurs par ligne.
+
+    Étape 3 — Chaque ligne = une pièce séparée avec son propre nom.
+      Ne JAMAIS fusionner deux lignes, même si elles ont les mêmes dimensions.
+      Ex: "C001 - Côté gauche" et "C002 - Côté droit" = 2 pièces distinctes de qté 1.
 
     #{JSON_FORMAT}
 
     ## RÈGLES
     - Longueur >= largeur toujours
-    - Convertis en mm (1 cm = 10 mm, 1 pouce = 25.4 mm)
-    - Utilise le libellé de la ligne comme nom, sinon "Pièce 1", "Pièce 2"...
+    - Convertis en mm si nécessaire (1 cm = 10 mm, 1 pouce = 25.4 mm)
+    - Si pas d'unité indiquée et les valeurs sont > 100, considérer qu'elles sont en mm
+    - Utilise le libellé EXACT de la ligne comme nom (ex: "C001 - Côté gauche")
+      S'il y a un N° de pièce ET une description, combiner les deux
     - quantite = la colonne quantité si présente, sinon 1
+    - L'épaisseur N'EST PAS une dimension de découpe → ne pas l'utiliser comme longueur ou largeur
     - confiance "haute" si lisible, "basse" si incertaine
   PROMPT
 
   AGENT_PROMPTS = {
     "plan_2d" => PLAN_2D_PROMPT,
+    "meuble_2d" => MEUBLE_2D_PROMPT,
     "meuble_3d" => MEUBLE_3D_PROMPT,
     "liste" => LISTE_PROMPT
   }.freeze
@@ -132,6 +252,14 @@ class PhotoPieceExtractorService
         data: Base64.strict_encode64(@image_data)
       }
     }
+
+    # DEBUG: save the image sent to the API
+    if Rails.env.development?
+      ext = extension_for(@content_type)
+      debug_path = Rails.root.join("tmp", "debug_api_image#{ext}")
+      File.binwrite(debug_path, @image_data)
+      Rails.logger.info("[PhotoImport] DEBUG: image saved to #{debug_path} (#{@image_data.bytesize} bytes)")
+    end
   end
 
   def call

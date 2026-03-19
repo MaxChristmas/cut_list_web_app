@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_17_150003) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_140305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -120,6 +120,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_150003) do
   end
 
   create_table "scan_tokens", force: :cascade do |t|
+    t.string "ai_provider", default: "anthropic"
     t.decimal "cost_usd", precision: 8, scale: 4
     t.datetime "created_at", null: false
     t.datetime "expires_at", null: false
@@ -161,6 +162,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_150003) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.integer "scan_limit_override"
     t.integer "sign_in_count", default: 0, null: false
     t.string "stripe_customer_id"
     t.string "stripe_subscription_id"

@@ -78,6 +78,7 @@ gem "prawn-svg", "~> 0.38.1"
 gem "geocoder"
 gem "rqrcode"
 gem "anthropic"
+gem "ruby-openai"
 gem "aws-sdk-s3", require: false
 
 # Monitoring

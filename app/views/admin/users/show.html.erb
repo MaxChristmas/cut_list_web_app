@@ -41,6 +41,15 @@
       </dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Scans</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <%= @user.scans_used %> / <%= @user.max_scans %>
+        <% if @user.scan_limit_override.present? %>
+          <span class="ml-1 text-xs text-blue-600 font-medium">custom</span>
+        <% end %>
+      </dd>
+    </div>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Provider</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @user.provider.presence || "Email" %></dd>
     </div>

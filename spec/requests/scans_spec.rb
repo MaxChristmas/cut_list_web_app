@@ -37,6 +37,10 @@ RSpec.describe "Scans", type: :request do
     }
     service_double = instance_double(PhotoPieceExtractorService, call: result)
     allow(PhotoPieceExtractorService).to receive(:new).and_return(service_double)
+
+    openai_double = instance_double(PhotoPieceExtractorOpenaiService, call: result)
+    allow(PhotoPieceExtractorOpenaiService).to receive(:new).and_return(openai_double)
+
     service_double
   end
 

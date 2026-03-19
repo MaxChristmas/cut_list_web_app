@@ -10,7 +10,8 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(rm /Users/maxence/works/cut_list_web_app/.claude/commands/push.md)",
-      "Bash(rmdir /Users/maxence/works/cut_list_web_app/.claude/commands)"
+      "Bash(rmdir /Users/maxence/works/cut_list_web_app/.claude/commands)",
+      "Bash(bundle install:*)"
     ],
     "additionalDirectories": [
       "/Users/maxence/.claude"
