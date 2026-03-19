@@ -17,13 +17,7 @@ class ScanTokensController < ApplicationController
     # Expire any previous pending tokens for this user
     current_user.scan_tokens.valid_pending.update_all(status: "expired")
 
-    ai_provider = if Rails.env.development? && params[:ai_provider].in?(%w[anthropic openai])
-      params[:ai_provider]
-    else
-      "anthropic"
-    end
-
-    @scan_token = current_user.scan_tokens.create!(project: project, ai_provider: ai_provider)
+    @scan_token = current_user.scan_tokens.create!(project: project, ai_provider: "anthropic")
 
     render partial: "scan_tokens/qr_code", locals: { scan_token: @scan_token }, layout: false
   end

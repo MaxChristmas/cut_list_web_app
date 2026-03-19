@@ -311,15 +311,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
       </button>
-      <% if Rails.env.development? %>
-        <div class="mb-4 flex items-center justify-center gap-2">
-          <span class="text-xs text-gray-400">AI Provider:</span>
-          <select id="ai-provider-select" class="text-xs bg-gray-700 text-gray-200 border border-gray-600 rounded px-2 py-1">
-            <option value="anthropic">Claude (Anthropic)</option>
-            <option value="openai">GPT-4o (OpenAI)</option>
-          </select>
-        </div>
-      <% end %>
       <div id="photo-import-content">
         <div class="text-center py-8">
           <div class="w-8 h-8 mx-auto border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>

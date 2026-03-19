@@ -6,11 +6,6 @@
       </svg>
       <span><%= t("scan.pieces_found", count: pieces.sum { |p| (p["quantite"] || 1).to_i }) %></span>
     </div>
-    <% if Rails.env.development? %>
-      <span class="text-[10px] font-medium px-1.5 py-0.5 rounded-full <%= scan_token.ai_provider == 'openai' ? 'bg-green-900/50 text-green-400' : 'bg-purple-900/50 text-purple-400' %>">
-        <%= scan_token.ai_provider == "openai" ? "GPT-4o" : "Claude" %>
-      </span>
-    <% end %>
   </div>
 
   <div class="max-h-64 overflow-y-auto">
