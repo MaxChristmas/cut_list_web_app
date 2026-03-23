@@ -77,11 +77,6 @@
     <%# Scrollable content area %>
     <div class="flex-1 overflow-y-auto px-6 pb-6">
       <div data-sheet-visualizer-target="canvas"></div>
-
-      <details class="mt-6">
-        <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700"><%= t("projects.index.raw_json") %></summary>
-        <pre class="bg-gray-100 rounded p-4 overflow-x-auto text-sm mt-2"><%= JSON.pretty_generate(@result) %></pre>
-      </details>
     </div>
   </div>
 <% else %>

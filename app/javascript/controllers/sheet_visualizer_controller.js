@@ -142,18 +142,14 @@ export default class extends Controller {
       const bg = this.svgRect(0, 0, stock.w, stock.h, "#dce6f0", this.editMode ? "#3b82f6" : "#cbd5e0", this.editMode ? 3 : 2)
       svg.appendChild(bg)
 
-      // Dimension labels
-      const dimFontSize = stock.w * 0.04
+      // Dimension lines
+      const dimOffset = labelMargin * 0.55
+      const dimFontSize = stock.w * 0.025
 
-      const topLabel = this.svgText(stock.w / 2, -labelMargin * 0.4, `${stock.w}`, dimFontSize)
-      svg.appendChild(topLabel)
-
-      const bottomLabel = this.svgText(stock.w / 2, stock.h + labelMargin * 0.6, `${stock.w}`, dimFontSize)
-      svg.appendChild(bottomLabel)
-
-      const leftLabel = this.svgText(-labelMargin * 0.4, stock.h / 2, `${stock.h}`, dimFontSize)
-      leftLabel.setAttribute("transform", `rotate(-90, ${-labelMargin * 0.4}, ${stock.h / 2})`)
-      svg.appendChild(leftLabel)
+      // Top: width
+      this.svgDimLine(svg, 0, -dimOffset, stock.w, -dimOffset, `${stock.w}`, dimFontSize, "h")
+      // Left: height
+      this.svgDimLine(svg, -dimOffset, 0, -dimOffset, stock.h, `${stock.h}`, dimFontSize, "v")
 
       sheet.placements.forEach((p, pi) => {
         const rw = p.rect.w ?? p.rect.length
@@ -232,6 +228,47 @@ export default class extends Controller {
             svg.appendChild(labelEl)
           }
         }
+      })
+
+      // Waste zone overlays with dashed cut lines
+      const wasteRects = this.computeWasteRects(sheet.placements, stock)
+      wasteRects.forEach(wr => {
+        const wasteFontSize = Math.min(stock.w * 0.02, Math.min(wr.w, wr.h) * 0.25)
+        // Group for cut line + dimensions (shown on hover)
+        const dimGroup = document.createElementNS("http://www.w3.org/2000/svg", "g")
+        dimGroup.setAttribute("opacity", "0")
+        dimGroup.style.transition = "opacity 0.2s"
+        dimGroup.setAttribute("pointer-events", "none")
+
+        // Dashed red cut line
+        const cutRect = this.svgRect(wr.x, wr.y, wr.w, wr.h, "none", "#dc2626", 1.5)
+        cutRect.setAttribute("stroke-dasharray", "8 4")
+        dimGroup.appendChild(cutRect)
+
+        const wFontSize = wasteFontSize
+        const inset = wFontSize * 0.8
+
+        // Width label (top)
+        const wLabel = this.svgText(wr.x + wr.w / 2, wr.y + inset, `${parseFloat(wr.w.toFixed(1))}`, wFontSize)
+        wLabel.setAttribute("fill", "#991b1b")
+        wLabel.setAttribute("class", "select-none pointer-events-none")
+        dimGroup.appendChild(wLabel)
+
+        // Height label (left, rotated)
+        const hLabel = this.svgText(wr.x + inset, wr.y + wr.h / 2, `${parseFloat(wr.h.toFixed(1))}`, wFontSize)
+        hLabel.setAttribute("fill", "#991b1b")
+        hLabel.setAttribute("class", "select-none pointer-events-none")
+        hLabel.setAttribute("transform", `rotate(-90, ${wr.x + inset}, ${wr.y + wr.h / 2})`)
+        dimGroup.appendChild(hLabel)
+
+        svg.appendChild(dimGroup)
+
+        // Invisible hover zone
+        const hoverRect = this.svgRect(wr.x, wr.y, wr.w, wr.h, "transparent", "none", 0)
+        hoverRect.style.cursor = "crosshair"
+        hoverRect.addEventListener("mouseenter", () => dimGroup.setAttribute("opacity", "1"))
+        hoverRect.addEventListener("mouseleave", () => dimGroup.setAttribute("opacity", "0"))
+        svg.appendChild(hoverRect)
       })
 
       // Grain direction image overlay — tiled pattern on top of pieces
@@ -805,6 +842,179 @@ export default class extends Controller {
     return Math.max(10, Math.min(maxByWidth, maxByHeight, minDim * 0.25))
   }
 
+  computeWasteRects(placements, stock) {
+    const xs = new Set([0, stock.w])
+    const ys = new Set([0, stock.h])
+    placements.forEach(p => {
+      const pw = p.rect.w ?? p.rect.length
+      const ph = p.rect.h ?? p.rect.width
+      xs.add(p.x); xs.add(p.x + pw)
+      ys.add(p.y); ys.add(p.y + ph)
+    })
+    const sortedX = [...xs].sort((a, b) => a - b)
+    const sortedY = [...ys].sort((a, b) => a - b)
+    const cols = sortedX.length - 1
+    const rows = sortedY.length - 1
+    const minDim = Math.max(stock.w, stock.h) * 0.01
+
+    // Build empty cell grid
+    const empty = Array.from({ length: rows }, () => new Array(cols).fill(false))
+    for (let yi = 0; yi < rows; yi++) {
+      for (let xi = 0; xi < cols; xi++) {
+        const cx = sortedX[xi], cy = sortedY[yi]
+        const cw = sortedX[xi + 1] - cx, ch = sortedY[yi + 1] - cy
+        if (cw <= 0 || ch <= 0) continue
+        const midX = cx + cw / 2, midY = cy + ch / 2
+        const covered = placements.some(p => {
+          const pw = p.rect.w ?? p.rect.length
+          const ph = p.rect.h ?? p.rect.width
+          return midX >= p.x && midX <= p.x + pw && midY >= p.y && midY <= p.y + ph
+        })
+        empty[yi][xi] = !covered
+      }
+    }
+
+    // Check if a vertical grid line at sortedX[xi] is a real cut at row yi
+    const isVertCut = (xi, yi) => {
+      const x = sortedX[xi]
+      const midY = (sortedY[yi] + sortedY[yi + 1]) / 2
+      return placements.some(p => {
+        const pw = p.rect.w ?? p.rect.length
+        const ph = p.rect.h ?? p.rect.width
+        return (Math.abs(p.x - x) < 0.01 || Math.abs(p.x + pw - x) < 0.01) &&
+               midY >= p.y && midY <= p.y + ph
+      })
+    }
+
+    // Check if a horizontal grid line at sortedY[yi] is a real cut at column xi
+    const isHorizCut = (xi, yi) => {
+      const y = sortedY[yi]
+      const midX = (sortedX[xi] + sortedX[xi + 1]) / 2
+      return placements.some(p => {
+        const pw = p.rect.w ?? p.rect.length
+        const ph = p.rect.h ?? p.rect.width
+        return (Math.abs(p.y - y) < 0.01 || Math.abs(p.y + ph - y) < 0.01) &&
+               midX >= p.x && midX <= p.x + pw
+      })
+    }
+
+    // Step 1: merge cells horizontally within each row where no real vertical cut exists
+    const hStrips = []
+    for (let yi = 0; yi < rows; yi++) {
+      let startXi = null
+      for (let xi = 0; xi < cols; xi++) {
+        if (empty[yi][xi]) {
+          if (startXi === null) startXi = xi
+          if (xi + 1 < cols && empty[yi][xi + 1] && !isVertCut(xi + 1, yi)) continue
+          hStrips.push({ xi1: startXi, xi2: xi, yi })
+          startXi = null
+        } else {
+          startXi = null
+        }
+      }
+    }
+
+    // Step 2: merge vertical strips that share the same x-range and no real horizontal cut
+    const used = new Set()
+    const rects = []
+    for (let i = 0; i < hStrips.length; i++) {
+      if (used.has(i)) continue
+      used.add(i)
+      const s = hStrips[i]
+      let maxYi = s.yi
+
+      while (true) {
+        const nextIdx = hStrips.findIndex((n, ni) =>
+          !used.has(ni) && n.xi1 === s.xi1 && n.xi2 === s.xi2 && n.yi === maxYi + 1
+        )
+        if (nextIdx < 0) break
+        // Check no horizontal cut across the full strip width
+        let hasCut = false
+        for (let xi = s.xi1; xi <= s.xi2; xi++) {
+          if (isHorizCut(xi, maxYi + 1)) { hasCut = true; break }
+        }
+        if (hasCut) break
+        used.add(nextIdx)
+        maxYi = hStrips[nextIdx].yi
+      }
+
+      const x = sortedX[s.xi1]
+      const y = sortedY[s.yi]
+      const w = sortedX[s.xi2 + 1] - x
+      const h = sortedY[maxYi + 1] - y
+      if (w >= minDim && h >= minDim) rects.push({ x, y, w, h })
+    }
+
+    return rects
+  }
+
+  svgDimLine(svg, x1, y1, x2, y2, label, fontSize, orientation) {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+    const stroke = "#1e293b"
+    const strokeWidth = 1.5
+    const tickLen = fontSize * 0.6
+
+    const line = (lx1, ly1, lx2, ly2) => {
+      const l = document.createElementNS("http://www.w3.org/2000/svg", "line")
+      l.setAttribute("x1", lx1)
+      l.setAttribute("y1", ly1)
+      l.setAttribute("x2", lx2)
+      l.setAttribute("y2", ly2)
+      l.setAttribute("stroke", stroke)
+      l.setAttribute("stroke-width", strokeWidth)
+      l.setAttribute("vector-effect", "non-scaling-stroke")
+      return l
+    }
+
+    if (orientation === "h") {
+      // Extension lines (vertical ticks at each end)
+      g.appendChild(line(x1, y1 - tickLen / 2, x1, y1 + tickLen / 2))
+      g.appendChild(line(x2, y2 - tickLen / 2, x2, y2 + tickLen / 2))
+      // Dimension line
+      g.appendChild(line(x1, y1, x2, y2))
+      // Label
+      const text = this.svgText((x1 + x2) / 2, y1, label, fontSize)
+      text.setAttribute("fill", stroke)
+      // Background behind text
+      const bgPad = fontSize * 0.4
+      const bgRect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+      const charW = label.length * fontSize * 0.55
+      bgRect.setAttribute("x", (x1 + x2) / 2 - charW / 2 - bgPad / 2)
+      bgRect.setAttribute("y", y1 - fontSize / 2 - bgPad / 4)
+      bgRect.setAttribute("width", charW + bgPad)
+      bgRect.setAttribute("height", fontSize + bgPad / 2)
+      bgRect.setAttribute("fill", "white")
+      bgRect.setAttribute("opacity", "1")
+      g.appendChild(bgRect)
+      g.appendChild(text)
+    } else {
+      // Extension lines (horizontal ticks at each end)
+      g.appendChild(line(x1 - tickLen / 2, y1, x1 + tickLen / 2, y1))
+      g.appendChild(line(x2 - tickLen / 2, y2, x2 + tickLen / 2, y2))
+      // Dimension line
+      g.appendChild(line(x1, y1, x2, y2))
+      // Label (rotated)
+      const text = this.svgText(x1, (y1 + y2) / 2, label, fontSize)
+      text.setAttribute("fill", stroke)
+      text.setAttribute("transform", `rotate(-90, ${x1}, ${(y1 + y2) / 2})`)
+      // Background behind text
+      const bgPad = fontSize * 0.4
+      const bgRect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+      const charW = label.length * fontSize * 0.55
+      bgRect.setAttribute("x", x1 - charW / 2 - bgPad / 2)
+      bgRect.setAttribute("y", (y1 + y2) / 2 - fontSize / 2 - bgPad / 4)
+      bgRect.setAttribute("width", charW + bgPad)
+      bgRect.setAttribute("height", fontSize + bgPad / 2)
+      bgRect.setAttribute("fill", "white")
+      bgRect.setAttribute("opacity", "1")
+      bgRect.setAttribute("transform", `rotate(-90, ${x1}, ${(y1 + y2) / 2})`)
+      g.appendChild(bgRect)
+      g.appendChild(text)
+    }
+
+    svg.appendChild(g)
+  }
+
   svgText(x, y, content, fontSize) {
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text")
     text.setAttribute("x", x)
@@ -828,6 +1038,7 @@ export default class extends Controller {
     rect.setAttribute("fill", fill)
     rect.setAttribute("stroke", stroke)
     rect.setAttribute("stroke-width", strokeWidth)
+    rect.setAttribute("vector-effect", "non-scaling-stroke")
     return rect
   }
 }
