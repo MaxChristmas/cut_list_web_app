@@ -22,6 +22,9 @@ application.register("desktop-upload", DesktopUploadController)
 import DoughnutChartController from "./doughnut_chart_controller"
 application.register("doughnut-chart", DoughnutChartController)
 
+import FeedbackWidgetController from "./feedback_widget_controller"
+application.register("feedback-widget", FeedbackWidgetController)
+
 import FormPanelController from "./form_panel_controller"
 application.register("form-panel", FormPanelController)
 
@@ -52,14 +55,14 @@ application.register("pwa-install", PwaInstallController)
 import ReportIssueController from "./report_issue_controller"
 application.register("report-issue", ReportIssueController)
 
-import ScanUploadController from "./scan_upload_controller"
-application.register("scan-upload", ScanUploadController)
-
 import ResetPasswordModalController from "./reset_password_modal_controller"
 application.register("reset-password-modal", ResetPasswordModalController)
 
 import ResizablePanelController from "./resizable_panel_controller"
 application.register("resizable-panel", ResizablePanelController)
+
+import ScanUploadController from "./scan_upload_controller"
+application.register("scan-upload", ScanUploadController)
 
 import SheetVisualizerController from "./sheet_visualizer_controller"
 application.register("sheet-visualizer", SheetVisualizerController)

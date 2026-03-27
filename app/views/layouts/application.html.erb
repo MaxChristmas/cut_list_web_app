@@ -38,6 +38,7 @@
     <% end %>
     <%= render "layouts/cookie_consent" unless content_for?(:skip_cookie_consent) %>
     <%= render "layouts/tutorial_video" %>
+    <%= render "layouts/feedback_widget" if user_signed_in? && current_user.should_show_feedback? %>
     <%= render "layouts/report_issue" if user_signed_in? %>
   </body>
 </html>

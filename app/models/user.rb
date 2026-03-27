@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :projects, dependent: :nullify
   has_many :coupon_redemptions, dependent: :destroy
   has_many :scan_tokens, dependent: :delete_all
+  has_many :feedbacks, dependent: :destroy
 
   scope :kept, -> { where(discarded_at: nil) }
   scope :discarded, -> { where.not(discarded_at: nil) }
@@ -39,6 +40,16 @@ class User < ApplicationRecord
       last_sign_in_country: nil,
       last_sign_in_device: nil
     )
+  end
+
+  FEEDBACK_MIN_PROJECTS = 3
+  FEEDBACK_MIN_OPTIMIZATIONS = 5
+
+  def should_show_feedback?
+    feedback_dismissed_at.nil? &&
+      feedbacks.none? &&
+      projects.count >= FEEDBACK_MIN_PROJECTS &&
+      Optimization.joins(:project).where(projects: { user_id: id }).count >= FEEDBACK_MIN_OPTIMIZATIONS
   end
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true

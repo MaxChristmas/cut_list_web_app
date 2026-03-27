@@ -526,6 +526,23 @@ ja:
     thanks_title: "ありがとうございます！"
     thanks_message: "報告が送信されました。まもなく確認いたします。"
     close: "閉じる"
+  feedback:
+    title: "フィードバック"
+    rate_question: "CutOptimaの評価をお聞かせください"
+    improvement_question: "改善できる点はありますか？"
+    improvement_choices:
+      ease_of_use: "使いやすさ"
+      optimization_speed: "最適化の速度"
+      result_quality: "結果の品質"
+      other: "その他..."
+    improvement_placeholder: "改善してほしい点を教えてください..."
+    feature_question: "欲しい機能はありますか？"
+    feature_placeholder: "あると便利な機能を教えてください..."
+    skip: "スキップ"
+    next: "次へ"
+    submit: "送信"
+    thanks_title: "ありがとうございます！"
+    thanks_message: "いただいたご意見は改善に役立てます。"
   tutorial_video:
     thumbnail_label: "クイックチュートリアル"
     title: "はじめに"

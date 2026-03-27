@@ -527,6 +527,23 @@ es:
     thanks_title: "¡Gracias!"
     thanks_message: "Su informe ha sido enviado. Lo revisaremos en breve."
     close: "Cerrar"
+  feedback:
+    title: "Tu opinión"
+    rate_question: "¿Cómo calificarías CutOptima?"
+    improvement_question: "¿Qué podríamos mejorar?"
+    improvement_choices:
+      ease_of_use: "Facilidad de uso"
+      optimization_speed: "Velocidad de optimización"
+      result_quality: "Calidad de los resultados"
+      other: "Otro..."
+    improvement_placeholder: "Cuéntanos qué podríamos hacer mejor..."
+    feature_question: "¿Alguna función que te gustaría ver?"
+    feature_placeholder: "Describe una función que te resultaría útil..."
+    skip: "Omitir"
+    next: "Siguiente"
+    submit: "Enviar"
+    thanks_title: "¡Gracias!"
+    thanks_message: "Tus comentarios nos ayudan a mejorar."
   tutorial_video:
     thumbnail_label: "Tutorial rápido"
     title: "Primeros pasos"

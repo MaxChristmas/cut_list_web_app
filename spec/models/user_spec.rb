@@ -56,4 +56,94 @@ RSpec.describe User, type: :model do
       expect(build_user(password: "short", password_confirmation: "short")).not_to be_valid
     end
   end
+
+  describe "#should_show_feedback?" do
+    def create_user_for_feedback(overrides = {})
+      User.create!({
+        email: "feedback-show-#{SecureRandom.hex(4)}@example.com",
+        password: "password123",
+        password_confirmation: "password123",
+        terms_accepted: true
+      }.merge(overrides))
+    end
+
+    def create_project(user)
+      user.projects.create!(name: "Project #{SecureRandom.hex(4)}")
+    end
+
+    def create_optimization(project)
+      Optimization.create!(project: project, result: {}, status: "completed")
+    end
+
+    def setup_qualifying_user
+      user = create_user_for_feedback
+      3.times { create_project(user).tap { |p| create_optimization(p) } }
+      # Two extra optimizations to reach the 5-optimization threshold
+      extra_project = create_project(user)
+      2.times { create_optimization(extra_project) }
+      user
+    end
+
+    it "returns true when all conditions are met" do
+      user = setup_qualifying_user
+      expect(user.should_show_feedback?).to be true
+    end
+
+    it "returns false when feedback_dismissed_at is set" do
+      user = setup_qualifying_user
+      user.update!(feedback_dismissed_at: Time.current)
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns false when the user has already submitted feedback" do
+      user = setup_qualifying_user
+      Feedback.create!(user: user, rating: 4)
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns false when the user has fewer than 3 projects" do
+      user = create_user_for_feedback
+      project = create_project(user)
+      5.times { create_optimization(project) }
+      # only 1 project — below FEEDBACK_MIN_PROJECTS
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns false when the user has fewer than 5 optimizations" do
+      user = create_user_for_feedback
+      3.times { create_project(user).tap { |p| create_optimization(p) } }
+      # 3 projects, 3 optimizations — below FEEDBACK_MIN_OPTIMIZATIONS
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns false when the user has exactly 2 projects and 5 optimizations" do
+      user = create_user_for_feedback
+      project_a = create_project(user)
+      3.times { create_optimization(project_a) }
+      project_b = create_project(user)
+      2.times { create_optimization(project_b) }
+      # 2 projects — below FEEDBACK_MIN_PROJECTS
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns false when both feedback_dismissed_at is set and feedback exists" do
+      user = setup_qualifying_user
+      user.update!(feedback_dismissed_at: Time.current)
+      Feedback.create!(user: user, rating: 5)
+      expect(user.should_show_feedback?).to be false
+    end
+
+    it "returns true at the exact thresholds (3 projects, 5 optimizations)" do
+      user = create_user_for_feedback
+      3.times { create_project(user) }
+      # Attach 5 optimizations spread across projects
+      user.projects.each_with_index do |project, i|
+        create_optimization(project) if i < 2
+      end
+      # add remaining optimizations on the last project to reach 5 total
+      remaining_project = user.projects.last
+      3.times { create_optimization(remaining_project) }
+      expect(user.should_show_feedback?).to be true
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_140305) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_140305) do
     t.datetime "updated_at", null: false
     t.integer "uses_count", default: 0, null: false
     t.index ["code"], name: "index_coupons_on_code", unique: true
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "feature_request"
+    t.text "improvement"
+    t.integer "rating"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "optimizations", force: :cascade do |t|
@@ -148,6 +158,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_140305) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.integer "failed_attempts", default: 0, null: false
+    t.datetime "feedback_dismissed_at"
     t.boolean "internal", default: false, null: false
     t.datetime "last_sign_in_at"
     t.string "last_sign_in_city"
@@ -180,6 +191,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_140305) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "coupon_redemptions", "coupons"
   add_foreign_key "coupon_redemptions", "users"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "optimizations", "projects"
   add_foreign_key "optimizations", "scan_tokens"
   add_foreign_key "projects", "users"

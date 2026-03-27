@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       post :reply, on: :member
     end
     resources :coupons
+    resources :feedbacks, only: [ :index, :show, :destroy ]
     resources :scan_tokens, only: [ :index, :show ]
   end
 
@@ -50,6 +51,9 @@ Rails.application.routes.draw do
   end
 
   resources :coupons, only: [ :create ]
+  resources :feedbacks, only: [ :create, :update ] do
+    post :dismiss, on: :collection
+  end
   resources :report_issues, only: [ :create ]
 
   patch "locale", to: "application#set_locale", as: :locale

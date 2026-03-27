@@ -1,0 +1,101 @@
+<div data-controller="feedback-widget"
+     data-feedback-widget-create-url-value="<%= feedbacks_path %>"
+     data-feedback-widget-dismiss-url-value="<%= dismiss_feedbacks_path %>">
+
+  <%# Floating widget - bottom right, above report issue %>
+  <div data-feedback-widget-target="container"
+       class="fixed bottom-20 right-5 z-40 w-72 bg-gray-900 border border-gray-700 rounded-xl shadow-lg translate-y-full opacity-0 transition-all duration-500 ease-out">
+
+    <%# Header with dismiss %>
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+      <span class="text-sm font-medium text-white"><%= t("feedback.title") %></span>
+      <button data-action="click->feedback-widget#dismiss"
+              class="p-0.5 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <%# Progress dots %>
+    <div class="flex justify-center gap-2 pt-3 pb-1">
+      <div data-feedback-widget-target="dot" class="w-2 h-2 rounded-full bg-blue-500 transition-colors"></div>
+      <div data-feedback-widget-target="dot" class="w-2 h-2 rounded-full bg-gray-600 transition-colors"></div>
+      <div data-feedback-widget-target="dot" class="w-2 h-2 rounded-full bg-gray-600 transition-colors"></div>
+    </div>
+
+    <%# Step 1: Star rating %>
+    <div data-feedback-widget-target="step1" class="px-4 py-3">
+      <p class="text-sm text-gray-300 mb-3 text-center"><%= t("feedback.rate_question") %></p>
+      <div class="flex justify-center gap-1" data-action="mouseleave->feedback-widget#resetStars">
+        <% (1..5).each do |i| %>
+          <button data-action="click->feedback-widget#selectRating mouseenter->feedback-widget#hoverStar"
+                  data-rating="<%= i %>" data-star="<%= i %>"
+                  class="p-1 text-gray-400 hover:scale-110 transition-transform cursor-pointer">
+            <svg data-filled class="w-7 h-7 text-yellow-400 hidden" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <svg data-empty class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Step 2: Improvement (predefined choices + other) %>
+    <div data-feedback-widget-target="step2" class="hidden px-4 py-3">
+      <p class="text-sm text-gray-300 mb-3"><%= t("feedback.improvement_question") %></p>
+      <div class="space-y-2">
+        <% %w[ease_of_use optimization_speed result_quality].each do |key| %>
+          <button data-action="click->feedback-widget#selectImprovement"
+                  data-value="<%= key %>"
+                  class="w-full text-left px-3 py-2 text-sm text-gray-200 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-gray-750 transition-colors">
+            <%= t("feedback.improvement_choices.#{key}") %>
+          </button>
+        <% end %>
+        <button data-action="click->feedback-widget#showOtherImprovement"
+                data-feedback-widget-target="otherBtn"
+                class="w-full text-left px-3 py-2 text-sm text-gray-400 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:text-gray-200 transition-colors">
+          <%= t("feedback.improvement_choices.other") %>
+        </button>
+        <div data-feedback-widget-target="otherInput" class="hidden">
+          <textarea rows="2"
+                    placeholder="<%= t("feedback.improvement_placeholder") %>"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+          <div class="flex justify-end mt-1">
+            <button data-action="click->feedback-widget#submitOtherImprovement"
+                    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg transition-colors"><%= t("feedback.next") %></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-start mt-2">
+        <button data-action="click->feedback-widget#skipStep"
+                class="text-xs text-gray-500 hover:text-gray-300 transition-colors"><%= t("feedback.skip") %></button>
+      </div>
+    </div>
+
+    <%# Step 3: Feature request %>
+    <div data-feedback-widget-target="step3" class="hidden px-4 py-3">
+      <p class="text-sm text-gray-300 mb-2"><%= t("feedback.feature_question") %></p>
+      <textarea rows="3"
+                placeholder="<%= t("feedback.feature_placeholder") %>"
+                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+      <div class="flex justify-between mt-2">
+        <button data-action="click->feedback-widget#skipStep"
+                class="text-xs text-gray-500 hover:text-gray-300 transition-colors"><%= t("feedback.skip") %></button>
+        <button data-action="click->feedback-widget#submitFeatureRequest"
+                class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium rounded-lg transition-colors"><%= t("feedback.submit") %></button>
+      </div>
+    </div>
+
+    <%# Thanks %>
+    <div data-feedback-widget-target="thanks" class="hidden px-4 py-5 text-center">
+      <svg class="w-10 h-10 mx-auto text-green-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+      </svg>
+      <p class="text-sm font-medium text-white"><%= t("feedback.thanks_title") %></p>
+      <p class="text-xs text-gray-400 mt-1"><%= t("feedback.thanks_message") %></p>
+    </div>
+  </div>
+</div>

@@ -11,7 +11,9 @@
       "Bash(git push:*)",
       "Bash(rm /Users/maxence/works/cut_list_web_app/.claude/commands/push.md)",
       "Bash(rmdir /Users/maxence/works/cut_list_web_app/.claude/commands)",
-      "Bash(bundle install:*)"
+      "Bash(bundle install:*)",
+      "Bash(bin/rails generate:*)",
+      "Bash(bin/rubocop --no-server)"
     ],
     "additionalDirectories": [
       "/Users/maxence/.claude"
