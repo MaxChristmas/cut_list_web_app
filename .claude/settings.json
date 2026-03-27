@@ -13,7 +13,9 @@
       "Bash(rmdir /Users/maxence/works/cut_list_web_app/.claude/commands)",
       "Bash(bundle install:*)",
       "Bash(bin/rails generate:*)",
-      "Bash(bin/rubocop --no-server)"
+      "Bash(bin/rubocop --no-server)",
+      "Bash(bundle update:*)",
+      "Bash(bin/bundler-audit)"
     ],
     "additionalDirectories": [
       "/Users/maxence/.claude"
