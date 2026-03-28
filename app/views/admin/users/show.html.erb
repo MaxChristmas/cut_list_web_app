@@ -2,9 +2,9 @@
   <%= link_to "&larr; Back to Users".html_safe, admin_users_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
 </div>
 
-<div class="flex justify-between items-start mb-6">
-  <div class="flex items-center gap-3">
-    <h2 class="text-2xl font-semibold text-gray-900"><%= @user.email %></h2>
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-6">
+  <div class="flex flex-wrap items-center gap-3">
+    <h2 class="text-2xl font-semibold text-gray-900 break-all"><%= @user.email %></h2>
     <% if @user.internal? %>
       <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">Internal</span>
     <% end %>
@@ -12,7 +12,7 @@
       <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Soft Deleted</span>
     <% end %>
   </div>
-  <div class="flex gap-2">
+  <div class="flex flex-wrap gap-2 shrink-0">
     <%= link_to "Edit", edit_admin_user_path(@user), class: "bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" %>
     <% unless @user.discarded? %>
       <%= button_to "Soft Delete", soft_delete_admin_user_path(@user), method: :patch, data: { turbo_confirm: "This will anonymize the user's data and lock their account. Continue?" }, class: "bg-orange-500 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-orange-600" %>
@@ -22,7 +22,7 @@
 </div>
 
 <div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
-  <dl class="grid grid-cols-2 gap-4">
+  <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
       <dt class="text-sm font-medium text-gray-500">Plan</dt>
       <dd class="mt-1 text-sm text-gray-900 capitalize"><%= @user.plan %></dd>
@@ -152,7 +152,7 @@
 
 <h3 class="text-lg font-medium text-gray-900 mb-3">Projects (<%= @projects.size %>)</h3>
 <% if @projects.any? %>
-  <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <div class="bg-white rounded-lg border border-gray-200 overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>

@@ -17,7 +17,7 @@
   }
 %>
 
-<div class="grid grid-cols-4 gap-4 mb-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
   <div class="bg-white rounded-lg border border-gray-200 p-5">
     <div class="text-sm font-medium text-gray-500">Total scans</div>
     <div class="mt-1 text-3xl font-bold text-gray-900"><%= @stats[:total] %></div>
@@ -61,7 +61,7 @@
   </div>
 </div>
 
-<%= form_tag admin_scan_tokens_path, method: :get, class: "mb-4 flex justify-end items-center gap-3" do %>
+<%= form_tag admin_scan_tokens_path, method: :get, class: "mb-4 flex flex-wrap justify-end items-center gap-3" do %>
   <div class="flex items-center gap-2">
     <label for="status" class="text-sm font-medium text-gray-700">Status:</label>
     <select name="status" id="status" onchange="this.form.submit()"
@@ -84,7 +84,7 @@
   </div>
 <% end %>
 
-<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+<div class="bg-white rounded-lg border border-gray-200 overflow-x-auto">
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
