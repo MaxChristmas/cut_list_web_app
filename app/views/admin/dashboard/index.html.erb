@@ -1,7 +1,7 @@
 <h2 class="text-2xl font-semibold text-gray-900 mb-6">Dashboard</h2>
 
 <!-- Stats cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
   <div class="bg-white rounded-lg border border-gray-200 p-5">
     <div class="text-sm font-medium text-gray-500">Total Users</div>
     <div class="mt-1 text-2xl font-semibold text-gray-900"><%= @total_users %></div>
@@ -29,6 +29,25 @@
           <span class="font-medium text-gray-900"><%= count %></span>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-medium text-gray-500">Paid Users</div>
+    <div class="mt-1 text-2xl font-semibold text-gray-900"><%= @paid_users_total %></div>
+    <div class="mt-2 space-y-1">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Subscription</span>
+        <span class="font-medium text-gray-900"><%= @paid_subscription_count %></span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">One-shot</span>
+        <span class="font-medium text-gray-900"><%= @paid_one_shot_count %></span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Coupon</span>
+        <span class="font-medium text-gray-900"><%= @paid_coupon_count %></span>
+      </div>
     </div>
   </div>
 </div>

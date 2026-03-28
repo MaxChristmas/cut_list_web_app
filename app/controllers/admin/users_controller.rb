@@ -38,6 +38,7 @@ module Admin
     end
 
     def show
+      ActiveRecord::Associations::Preloader.new(records: [ @user ], associations: { coupon_redemptions: :coupon }).call
       @projects = @user.projects.order(created_at: :desc)
     end
 

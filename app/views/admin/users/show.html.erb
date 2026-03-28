@@ -58,6 +58,34 @@
       <dd class="mt-1 text-sm text-gray-900"><%= @user.stripe_customer_id.presence || "—" %></dd>
     </div>
     <div>
+      <dt class="text-sm font-medium text-gray-500">Billing</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <% if @user.free_plan? %>
+          <span class="text-gray-400">Free</span>
+        <% elsif @user.stripe_subscription_id.present? %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">Subscription</span>
+        <% elsif @user.plan_expires_at.present? && @user.coupon_redemptions.any? %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">Coupon</span>
+        <% elsif @user.plan_expires_at.present? %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">One-shot</span>
+        <% elsif @user.coupon_redemptions.any? %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">Coupon</span>
+        <% else %>
+          <span class="text-gray-400">—</span>
+        <% end %>
+      </dd>
+    </div>
+    <% if @user.coupon_redemptions.any? %>
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Coupon(s) Used</dt>
+      <dd class="mt-1 text-sm text-gray-900 flex flex-wrap gap-1">
+        <% @user.coupon_redemptions.each do |redemption| %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-medium bg-gray-100 text-gray-700"><%= redemption.coupon.code %></span>
+        <% end %>
+      </dd>
+    </div>
+    <% end %>
+    <div>
       <dt class="text-sm font-medium text-gray-500">Sign-in Count</dt>
       <dd class="mt-1 text-sm text-gray-900"><%= @user.sign_in_count %></dd>
     </div>

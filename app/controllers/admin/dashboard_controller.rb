@@ -10,6 +10,18 @@ module Admin
       @total_optimizations = Optimization.where(project_id: Project.where(user_id: public.select(:id)).select(:id)).count
       @avg_optimizations_per_project_per_user = @total_users.zero? ? 0 : (@total_optimizations.to_f / @total_users).round(1)
       @users_by_plan = public.group(:plan).count
+
+      # Paid users breakdown (non-expired paid plans only)
+      paid = public.where.not(plan: "free")
+                   .where("plan_expires_at IS NULL OR plan_expires_at > ?", Time.current)
+      @paid_users_total = paid.count
+      @paid_subscription_count = paid.where.not(stripe_subscription_id: nil).count
+      @paid_one_shot_count = paid.where(stripe_subscription_id: nil)
+                                 .where.not(plan_expires_at: nil).count
+      @paid_coupon_count = paid.where(stripe_subscription_id: nil)
+                               .where(plan_expires_at: nil)
+                               .where(id: CouponRedemption.select(:user_id)).count
+
       @recent_reports = ReportIssue.order(created_at: :desc).limit(5).includes(:user)
 
       # Device breakdown
