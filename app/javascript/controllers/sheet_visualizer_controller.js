@@ -167,7 +167,7 @@ export default class extends Controller {
           group.dataset.sheetIndex = i
           group.dataset.placementIndex = pi
 
-          const rect = this.svgRect(0, 0, pw, ph, color, "#0f1117", 1.5)
+          const rect = this.svgRect(0, 0, pw, ph, color, "#0f1117", 0.5)
           rect.setAttribute("opacity", "0.8")
           group.appendChild(rect)
 
@@ -200,7 +200,7 @@ export default class extends Controller {
 
           svg.appendChild(group)
         } else {
-          const rect = this.svgRect(p.x, p.y, pw, ph, color, "#0f1117", 1.5)
+          const rect = this.svgRect(p.x, p.y, pw, ph, color, "#0f1117", 0.5)
           rect.setAttribute("opacity", "0.8")
           svg.appendChild(rect)
 
