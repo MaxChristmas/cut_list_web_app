@@ -1,6 +1,62 @@
 module Admin
   class DashboardController < BaseController
     def index
+      compute_dashboard_stats
+    end
+
+    def export
+      compute_dashboard_stats
+
+      new_users_trend = @new_users_labels.zip(@new_users_data).map do |date, count|
+        { date: date, count: count }
+      end
+
+      pieces_distribution = @pieces_labels.zip(@pieces_data).map do |range, users|
+        { range: range, users: users }
+      end
+
+      opt_distribution = @opt_distribution_labels.zip(@opt_distribution_data).map do |range, users|
+        { range: range, users: users }
+      end
+
+      payload = {
+        exported_at: Time.current.iso8601,
+        users: {
+          total: @total_users,
+          new_last_30_days: @new_users_30d,
+          by_plan: @users_by_plan,
+          paid: {
+            total: @paid_users_total,
+            subscription: @paid_subscription_count,
+            one_shot: @paid_one_shot_count,
+            coupon: @paid_coupon_count
+          },
+          devices: {
+            desktop: @device_counts["desktop"] || 0,
+            mobile: @device_counts["mobile"] || 0
+          }
+        },
+        projects: {
+          total: @total_projects,
+          avg_per_user: @avg_projects_per_user
+        },
+        optimizations: {
+          total: @total_optimizations,
+          avg_per_user: @avg_optimizations_per_project_per_user,
+          distribution_by_user: @opt_distribution_labels.zip(@opt_distribution_data).to_h
+        },
+        new_users_trend: new_users_trend,
+        pieces_distribution: pieces_distribution,
+        optimizations_distribution: opt_distribution
+      }
+
+      filename = "dashboard_export_#{Date.current.strftime("%Y%m%d")}.json"
+      send_data payload.to_json, filename: filename, type: "application/json", disposition: "attachment"
+    end
+
+    private
+
+    def compute_dashboard_stats
       public = User.public_users
 
       @total_users = public.count
@@ -55,6 +111,31 @@ module Admin
       sorted_buckets = bucket_users.keys.sort
       @pieces_labels = sorted_buckets.map { |b| "#{b}-#{b + 9}" }
       @pieces_data = sorted_buckets.map { |b| bucket_users[b].size }
+
+      # Optimizations per user distribution: single JOIN query, bucket in Ruby
+      opt_counts_by_user = User
+        .public_users
+        .left_joins(projects: :optimizations)
+        .group("users.id")
+        .count("optimizations.id")
+
+      opt_buckets = { "0" => 0, "1" => 0, "2-5" => 0, "6-10" => 0, "11-25" => 0, "26-50" => 0, "51-100" => 0, "100+" => 0 }
+      opt_counts_by_user.each_value do |n|
+        bucket = case n
+                 when 0       then "0"
+                 when 1       then "1"
+                 when 2..5    then "2-5"
+                 when 6..10   then "6-10"
+                 when 11..25  then "11-25"
+                 when 26..50  then "26-50"
+                 when 51..100 then "51-100"
+                 else              "100+"
+                 end
+        opt_buckets[bucket] += 1
+      end
+
+      @opt_distribution_labels = opt_buckets.keys
+      @opt_distribution_data   = opt_buckets.values
     end
   end
 end

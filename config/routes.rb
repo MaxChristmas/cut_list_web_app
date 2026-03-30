@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "dashboard#index"
+    get "dashboard/export", to: "dashboard#export", as: :dashboard_export
     resources :users do
       patch :soft_delete, on: :member
     end
