@@ -87,6 +87,7 @@ en:
       optimize: "Optimize"
       raw_json: "Raw JSON"
       export_pdf: "Export PDF"
+      export_dxf: "Export DXF"
       colors: "Colors"
       no_colors: "No Colors"
       edit_layout: "Edit Layout"

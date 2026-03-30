@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :projects, param: :token do
     member do
       get :export_pdf
+      get :export_dxf
       get :export_labels
       patch :archive
       patch :unarchive

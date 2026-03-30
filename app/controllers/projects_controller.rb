@@ -29,6 +29,26 @@ class ProjectsController < ApplicationController
               type: "application/pdf", disposition: "attachment"
   end
 
+  def export_dxf
+    @project = Project.find_by!(token: params[:token])
+    optimization = @project.optimizations.order(created_at: :desc).first
+    result = optimization&.edited_result || optimization&.result
+
+    if result.blank?
+      redirect_to project_path(@project.token), alert: "No optimization results to export."
+      return
+    end
+
+    dxf = CutListDxfService.new(result, @project).generate
+    filename = if @project.name.present?
+      "#{@project.name.parameterize}.dxf"
+    else
+      "cut-list-#{@project.token}.dxf"
+    end
+    send_data dxf, filename: filename,
+              type: "application/dxf", disposition: "attachment"
+  end
+
   def export_labels
     @project = Project.find_by!(token: params[:token])
 

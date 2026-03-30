@@ -87,6 +87,7 @@ fr:
       optimize: "Optimiser"
       raw_json: "JSON brut"
       export_pdf: "Exporter PDF"
+      export_dxf: "Exporter DXF"
       colors: "Couleurs"
       no_colors: "Sans couleurs"
       edit_layout: "Modifier la disposition"

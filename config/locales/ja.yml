@@ -85,6 +85,7 @@ ja:
       optimize: "最適化"
       raw_json: "JSON（生データ）"
       export_pdf: "PDFエクスポート"
+      export_dxf: "DXFエクスポート"
       colors: "カラー"
       no_colors: "カラーなし"
       edit_layout: "レイアウト編集"
