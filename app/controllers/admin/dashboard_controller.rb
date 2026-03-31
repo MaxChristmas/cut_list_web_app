@@ -47,7 +47,21 @@ module Admin
         },
         new_users_trend: new_users_trend,
         pieces_distribution: pieces_distribution,
-        optimizations_distribution: opt_distribution
+        optimizations_distribution: opt_distribution,
+        retention_cohorts: @retention_cohorts,
+        paid_users_details: @paid_users_details.map do |u|
+          {
+            id: u[:id],
+            plan: u[:plan],
+            type: u[:is_subscription] ? "subscription" : "one_shot",
+            signup_date: u[:signup_date]&.iso8601,
+            sign_in_count: u[:sign_in_count],
+            total_projects: u[:total_projects],
+            total_optimizations: u[:total_optimizations],
+            active_weeks: u[:active_weeks],
+            last_optimization: u[:last_optimization]&.iso8601
+          }
+        end
       }
 
       filename = "dashboard_export_#{Date.current.strftime("%Y%m%d")}.json"
@@ -77,6 +91,45 @@ module Admin
       @paid_coupon_count = paid.where(stripe_subscription_id: nil)
                                .where(plan_expires_at: nil)
                                .where(id: CouponRedemption.select(:user_id)).count
+
+      # Paid users detail — single LEFT JOIN query
+      paid_rows = User
+        .public_users
+        .where.not(plan: "free")
+        .where("users.plan_expires_at IS NULL OR users.plan_expires_at > ?", Time.current)
+        .select(
+          "users.id",
+          "users.plan",
+          "users.stripe_subscription_id IS NOT NULL AS is_subscription",
+          "users.created_at AS signup_date",
+          "users.sign_in_count",
+          "COUNT(DISTINCT projects.id) AS total_projects",
+          "COUNT(DISTINCT optimizations.id) AS total_optimizations",
+          "COUNT(DISTINCT DATE_TRUNC('week', optimizations.created_at)) AS active_weeks",
+          "MAX(optimizations.created_at) AS last_optimization"
+        )
+        .left_joins(projects: :optimizations)
+        .group("users.id, users.plan, users.stripe_subscription_id, users.created_at, users.sign_in_count")
+        .order("is_subscription DESC, total_optimizations DESC")
+
+      @paid_users_details = paid_rows.map do |row|
+        {
+          id: row.id,
+          plan: row.plan,
+          is_subscription: row.is_subscription,
+          signup_date: row.signup_date,
+          sign_in_count: row.sign_in_count,
+          total_projects: row.total_projects.to_i,
+          total_optimizations: row.total_optimizations.to_i,
+          active_weeks: row.active_weeks.to_i,
+          last_optimization: row.last_optimization
+        }
+      end
+
+      @paid_subscription_vs_oneshot = {
+        subscription: @paid_users_details.count { |u| u[:is_subscription] },
+        one_shot: @paid_users_details.count { |u| !u[:is_subscription] }
+      }
 
       @recent_reports = ReportIssue.order(created_at: :desc).limit(5).includes(:user)
 
@@ -136,6 +189,52 @@ module Admin
 
       @opt_distribution_labels = opt_buckets.keys
       @opt_distribution_data   = opt_buckets.values
+
+      # Cohort retention table — last 6 months of signups
+      # Single query: for each public user, get their signup date and
+      # the earliest optimization date they ever created (across all projects).
+      today = Date.current
+      cohort_start = 6.months.ago.beginning_of_month
+
+      retention_rows = User
+        .public_users
+        .where("users.created_at >= ?", cohort_start)
+        .select(
+          "users.id",
+          "DATE_TRUNC('month', users.created_at) AS signup_month",
+          "users.created_at AS user_created_at",
+          "MIN(optimizations.created_at) AS first_opt_at"
+        )
+        .left_joins(projects: :optimizations)
+        .group("users.id, signup_month, users.created_at")
+        .order("signup_month ASC")
+
+      # Group rows by cohort month, then compute retention for each threshold
+      cohorts_raw = retention_rows.group_by { |r| r.signup_month.to_date.beginning_of_month }
+
+      @retention_cohorts = cohorts_raw.map do |month_date, rows|
+        total = rows.size
+        cohort_age_days = (today - month_date.to_date).to_i
+
+        build_retention = lambda do |days|
+          next nil if cohort_age_days < days
+
+          count = rows.count do |r|
+            r.first_opt_at.present? &&
+              r.first_opt_at.to_time > r.user_created_at.to_time + days.days
+          end
+          pct = total.zero? ? 0.0 : (count.to_f / total * 100).round(1)
+          { count: count, pct: pct }
+        end
+
+        {
+          month:     month_date.strftime("%b %Y"),
+          total:     total,
+          return_7:  build_retention.call(7),
+          return_14: build_retention.call(14),
+          return_30: build_retention.call(30)
+        }
+      end
     end
   end
 end
