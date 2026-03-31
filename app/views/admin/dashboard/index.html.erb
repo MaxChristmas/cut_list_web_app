@@ -1,4 +1,13 @@
-<h2 class="text-2xl font-semibold text-gray-900 mb-6">Dashboard</h2>
+<div class="flex items-center justify-between mb-6">
+  <h2 class="text-2xl font-semibold text-gray-900">Dashboard</h2>
+  <%= link_to admin_dashboard_export_path, class: "inline-flex items-center gap-1.5 rounded-md bg-gray-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+      <path d="M8.75 2.75a.75.75 0 0 0-1.5 0v5.69L5.03 6.22a.75.75 0 0 0-1.06 1.06l3.5 3.5a.75.75 0 0 0 1.06 0l3.5-3.5a.75.75 0 0 0-1.06-1.06L8.75 8.44V2.75Z" />
+      <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
+    </svg>
+    Export JSON
+  <% end %>
+</div>
 
 <!-- Stats cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
@@ -90,6 +99,150 @@
       ></canvas>
     </div>
   </div>
+
+  <div class="w-full md:w-1/2 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Optimisations par utilisateur</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="bar-chart"
+        data-bar-chart-labels-value="<%= @opt_distribution_labels.to_json %>"
+        data-bar-chart-data-value="<%= @opt_distribution_data.to_json %>"
+      ></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Cohort retention table -->
+<div class="bg-white rounded-lg border border-gray-200 mb-8">
+  <div class="px-5 py-4 border-b border-gray-200">
+    <h3 class="text-base font-medium text-gray-900">Rétention par cohorte (retour à J+7/14/30)</h3>
+    <p class="mt-1 text-xs text-gray-500">Utilisateurs ayant créé au moins une optimisation après N jours</p>
+  </div>
+
+  <% if @retention_cohorts.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-5 py-3 text-left font-medium text-gray-500 whitespace-nowrap">Cohorte</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">Inscrits</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">J+7</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">J+14</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">J+30</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @retention_cohorts.each do |cohort| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-5 py-3 font-medium text-gray-900 whitespace-nowrap"><%= cohort[:month] %></td>
+              <td class="px-5 py-3 text-right text-gray-700"><%= cohort[:total] %></td>
+              <% [ cohort[:return_7], cohort[:return_14], cohort[:return_30] ].each do |ret| %>
+                <td class="px-5 py-3 text-right whitespace-nowrap">
+                  <% if ret.nil? %>
+                    <span class="text-gray-400">—</span>
+                  <% else %>
+                    <%
+                      pct_class = if ret[:pct] >= 20
+                                    "text-green-700 bg-green-50"
+                                  elsif ret[:pct] >= 10
+                                    "text-amber-700 bg-amber-50"
+                                  else
+                                    "text-red-700 bg-red-50"
+                                  end
+                    %>
+                    <span class="inline-flex items-center gap-1 rounded px-2 py-0.5 font-medium <%= pct_class %>">
+                      <%= ret[:pct] %>%
+                    </span>
+                    <span class="text-gray-500 ml-1">(<%= ret[:count] %>)</span>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-5 py-8 text-center text-sm text-gray-500">Aucune donnée de cohorte disponible.</div>
+  <% end %>
+</div>
+
+<!-- Paid users section -->
+<div class="flex flex-col md:flex-row gap-4 mb-8">
+  <div class="w-full md:w-1/4 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Abonnement vs One-shot</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="doughnut-chart"
+        data-doughnut-chart-labels-value='["Abonnement", "One-shot"]'
+        data-doughnut-chart-data-value="<%= [@paid_subscription_vs_oneshot[:subscription], @paid_subscription_vs_oneshot[:one_shot]].to_json %>"
+        data-doughnut-chart-colors-value='["rgba(59, 130, 246, 0.7)", "rgba(249, 115, 22, 0.7)"]'
+      ></canvas>
+    </div>
+  </div>
+
+  <div class="w-full md:w-3/4 bg-white rounded-lg border border-gray-200 p-5">
+    <h3 class="text-base font-medium text-gray-900 mb-4">Optimisations par utilisateur payant</h3>
+    <div style="height: 280px;">
+      <canvas
+        data-controller="bar-chart"
+        data-bar-chart-labels-value="<%= @paid_users_details.map { |u| "##{u[:id]}" }.to_json %>"
+        data-bar-chart-data-value="<%= @paid_users_details.map { |u| u[:total_optimizations] }.to_json %>"
+      ></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Paid users detail table -->
+<div class="bg-white rounded-lg border border-gray-200 mb-8">
+  <div class="px-5 py-4 border-b border-gray-200">
+    <h3 class="text-base font-medium text-gray-900">Détail des utilisateurs payants</h3>
+  </div>
+
+  <% if @paid_users_details.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-5 py-3 text-left font-medium text-gray-500 whitespace-nowrap">ID</th>
+            <th class="px-5 py-3 text-left font-medium text-gray-500 whitespace-nowrap">Plan</th>
+            <th class="px-5 py-3 text-left font-medium text-gray-500 whitespace-nowrap">Type</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">Projets</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">Optimisations</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">Semaines actives</th>
+            <th class="px-5 py-3 text-right font-medium text-gray-500 whitespace-nowrap">Dernière activité</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @paid_users_details.each do |user| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-5 py-3 font-medium text-gray-900 whitespace-nowrap">#<%= user[:id] %></td>
+              <td class="px-5 py-3 text-gray-700 capitalize whitespace-nowrap"><%= user[:plan] %></td>
+              <td class="px-5 py-3 whitespace-nowrap">
+                <% if user[:is_subscription] %>
+                  <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Abonnement</span>
+                <% else %>
+                  <span class="inline-flex items-center rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-medium text-orange-700">One-shot</span>
+                <% end %>
+              </td>
+              <td class="px-5 py-3 text-right text-gray-700"><%= user[:total_projects] %></td>
+              <td class="px-5 py-3 text-right text-gray-700"><%= user[:total_optimizations] %></td>
+              <td class="px-5 py-3 text-right text-gray-700"><%= user[:active_weeks] %></td>
+              <td class="px-5 py-3 text-right text-gray-500 whitespace-nowrap">
+                <% if user[:last_optimization] %>
+                  <%= user[:last_optimization].to_date.strftime("%d/%m/%Y") %>
+                <% else %>
+                  <span class="text-gray-400">—</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-5 py-8 text-center text-sm text-gray-500">Aucun utilisateur payant.</div>
+  <% end %>
 </div>
 
 <!-- Recent reports -->
