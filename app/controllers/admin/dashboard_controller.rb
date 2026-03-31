@@ -175,15 +175,15 @@ module Admin
       opt_buckets = { "0" => 0, "1" => 0, "2-5" => 0, "6-10" => 0, "11-25" => 0, "26-50" => 0, "51-100" => 0, "100+" => 0 }
       opt_counts_by_user.each_value do |n|
         bucket = case n
-                 when 0       then "0"
-                 when 1       then "1"
-                 when 2..5    then "2-5"
-                 when 6..10   then "6-10"
-                 when 11..25  then "11-25"
-                 when 26..50  then "26-50"
-                 when 51..100 then "51-100"
-                 else              "100+"
-                 end
+        when 0       then "0"
+        when 1       then "1"
+        when 2..5    then "2-5"
+        when 6..10   then "6-10"
+        when 11..25  then "11-25"
+        when 26..50  then "26-50"
+        when 51..100 then "51-100"
+        else              "100+"
+        end
         opt_buckets[bucket] += 1
       end
 
