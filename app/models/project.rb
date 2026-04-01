@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user, optional: true
   has_many :optimizations, dependent: :destroy
+  has_many :pdf_exports, dependent: :destroy
 
   before_create :generate_token
 

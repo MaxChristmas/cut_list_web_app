@@ -46,31 +46,31 @@ RSpec.describe "Guest user limits", type: :request do
       allow(RustCuttingService).to receive(:optimize).and_return(optimization_result)
     end
 
-    it "allows creating a project with 25 pieces or fewer" do
+    it "allows creating a project with 20 pieces or fewer" do
       post projects_path, params: {
         name: "Small Project", stock_l: 2440, stock_w: 1220,
-        pieces: [ { length: 500, width: 300, quantity: 25 } ]
+        pieces: [ { length: 500, width: 300, quantity: 20 } ]
       }
 
       expect(response).to redirect_to(project_path(Project.last.token))
     end
 
-    it "denies creating a project with more than 25 pieces and redirects to plans" do
+    it "denies creating a project with more than 20 pieces and redirects to plans" do
       post projects_path, params: {
         name: "Large Project", stock_l: 2440, stock_w: 1220,
-        pieces: [ { length: 500, width: 300, quantity: 26 } ]
+        pieces: [ { length: 500, width: 300, quantity: 21 } ]
       }
 
       expect(response).to redirect_to(plans_path)
     end
 
-    it "denies updating a project with more than 25 pieces" do
+    it "denies updating a project with more than 20 pieces" do
       project = user.projects.create!(name: "My Project")
       project.optimizations.create!(status: "completed", result: optimization_result)
 
       patch project_path(project.token), params: {
         name: project.name, stock_l: 2440, stock_w: 1220,
-        pieces: [ { length: 500, width: 300, quantity: 26 } ]
+        pieces: [ { length: 500, width: 300, quantity: 21 } ]
       }
 
       expect(response).to redirect_to(plans_path)

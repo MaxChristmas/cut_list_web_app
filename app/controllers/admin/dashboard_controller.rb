@@ -24,6 +24,7 @@ module Admin
           max_active_projects: config[:max_active_projects] == Float::INFINITY ? "unlimited" : config[:max_active_projects],
           max_pieces_per_project: config[:max_pieces_per_project] == Float::INFINITY ? "unlimited" : config[:max_pieces_per_project],
           max_daily_optimizations: config[:max_daily_optimizations] == Float::INFINITY ? "unlimited" : config[:max_daily_optimizations],
+          max_daily_pdf_exports: config[:max_daily_pdf_exports] == Float::INFINITY ? "unlimited" : config[:max_daily_pdf_exports],
           features: config[:features].map(&:to_s)
         }
         plan_data[:max_monthly_scans] = config[:max_monthly_scans] if config[:max_monthly_scans]

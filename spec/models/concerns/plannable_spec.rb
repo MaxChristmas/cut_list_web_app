@@ -25,14 +25,14 @@ RSpec.describe Plannable, type: :model do
     let(:user) { create_user(plan: "free") }
 
     describe "#max_active_projects" do
-      it "allows 5 active projects" do
-        expect(user.max_active_projects).to eq(5)
+      it "allows 2 active projects" do
+        expect(user.max_active_projects).to eq(2)
       end
     end
 
     describe "#max_pieces_per_project" do
-      it "allows 25 pieces per project" do
-        expect(user.max_pieces_per_project).to eq(25)
+      it "allows 20 pieces per project" do
+        expect(user.max_pieces_per_project).to eq(20)
       end
     end
 
@@ -47,13 +47,13 @@ RSpec.describe Plannable, type: :model do
         expect(user.can_create_project?).to be true
       end
 
-      it "allows creating a project when at 4 active projects" do
-        4.times { create_project(user: user) }
+      it "allows creating a project when at 1 active project" do
+        1.times { create_project(user: user) }
         expect(user.can_create_project?).to be true
       end
 
-      it "denies creating a project when at 5 active projects" do
-        5.times { create_project(user: user) }
+      it "denies creating a project when at 2 active projects" do
+        2.times { create_project(user: user) }
         expect(user.can_create_project?).to be false
       end
 
@@ -103,14 +103,41 @@ RSpec.describe Plannable, type: :model do
       end
     end
 
+    describe "#max_daily_pdf_exports" do
+      it "returns 3" do
+        expect(user.max_daily_pdf_exports).to eq(3)
+      end
+    end
+
+    describe "#can_export_pdf_today?" do
+      it "returns true when under the daily limit" do
+        2.times { user.pdf_exports.create! }
+        expect(user.can_export_pdf_today?).to be true
+      end
+
+      it "returns false when at the daily limit" do
+        3.times { user.pdf_exports.create! }
+        expect(user.can_export_pdf_today?).to be false
+      end
+    end
+
+    describe "#usage_daily_pdf_exports" do
+      it "returns used count and max" do
+        2.times { user.pdf_exports.create! }
+        usage = user.usage_daily_pdf_exports
+        expect(usage[:used]).to eq(2)
+        expect(usage[:max]).to eq(3)
+      end
+    end
+
     describe "#can_optimize_pieces?" do
-      it "allows optimizing with 25 pieces or fewer" do
-        pieces = [ { length: 100, width: 50, quantity: 25 } ]
+      it "allows optimizing with 20 pieces or fewer" do
+        pieces = [ { length: 100, width: 50, quantity: 20 } ]
         expect(user.can_optimize_pieces?(pieces)).to be true
       end
 
-      it "denies optimizing with more than 25 pieces" do
-        pieces = [ { length: 100, width: 50, quantity: 26 } ]
+      it "denies optimizing with more than 20 pieces" do
+        pieces = [ { length: 100, width: 50, quantity: 21 } ]
         expect(user.can_optimize_pieces?(pieces)).to be false
       end
 
@@ -175,6 +202,12 @@ RSpec.describe Plannable, type: :model do
         expect(user.can_optimize_today?).to be true
       end
     end
+
+    describe "#max_daily_pdf_exports" do
+      it "returns Float::INFINITY" do
+        expect(user.max_daily_pdf_exports).to eq(Float::INFINITY)
+      end
+    end
   end
 
   describe "plan expiration" do
@@ -183,9 +216,10 @@ RSpec.describe Plannable, type: :model do
       expect(user.max_active_projects).to eq(Float::INFINITY)
 
       user.update!(plan_expires_at: 1.day.ago)
-      expect(user.max_active_projects).to eq(5)
-      expect(user.max_pieces_per_project).to eq(25)
+      expect(user.max_active_projects).to eq(2)
+      expect(user.max_pieces_per_project).to eq(20)
       expect(user.max_daily_optimizations).to eq(10)
+      expect(user.max_daily_pdf_exports).to eq(3)
     end
   end
 end

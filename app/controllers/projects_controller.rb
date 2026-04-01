@@ -11,6 +11,12 @@ class ProjectsController < ApplicationController
 
   def export_pdf
     @project = Project.find_by!(token: params[:token])
+
+    if user_signed_in? && !can_export_pdf_today?
+      redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
+      return
+    end
+
     optimization = @project.optimizations.order(created_at: :desc).first
     result = optimization&.edited_result || optimization&.result
 
@@ -25,12 +31,18 @@ class ProjectsController < ApplicationController
     else
       "cut-list-#{@project.token}.pdf"
     end
+    current_user.pdf_exports.create!(project: @project) if user_signed_in?
     send_data pdf.render, filename: filename,
               type: "application/pdf", disposition: "attachment"
   end
 
   def export_labels
     @project = Project.find_by!(token: params[:token])
+
+    if user_signed_in? && !can_export_pdf_today?
+      redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
+      return
+    end
 
     # Collect all project tokens (current + extras)
     tokens = [ params[:token] ]
@@ -57,6 +69,7 @@ class ProjectsController < ApplicationController
     else
       "labels-#{@project.token}.pdf"
     end
+    current_user.pdf_exports.create!(project: @project) if user_signed_in?
     send_data pdf.render, filename: filename,
               type: "application/pdf", disposition: "attachment"
   end
