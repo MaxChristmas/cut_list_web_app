@@ -11,10 +11,16 @@ class FeedbacksController < ApplicationController
     end
   end
 
+  FEEDBACK_BONUS_OPTIMIZATIONS = 5
+
   def update
     @feedback = current_user.feedbacks.find(params[:id])
     if @feedback.update(feedback_params)
-      head :ok
+      grant_bonus = @feedback.complete? && current_user.bonus_optimizations.zero?
+      if grant_bonus
+        current_user.increment!(:bonus_optimizations, FEEDBACK_BONUS_OPTIMIZATIONS)
+      end
+      render json: { bonus_granted: grant_bonus }, status: :ok
     else
       head :unprocessable_entity
     end

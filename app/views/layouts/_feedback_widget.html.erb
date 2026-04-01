@@ -17,6 +17,18 @@
       </button>
     </div>
 
+    <%# Incentive banner %>
+    <% if current_user.free_plan? %>
+      <div class="px-4 pt-3 pb-1">
+        <div class="flex items-center gap-2 px-3 py-2 bg-blue-900/40 border border-blue-700/50 rounded-lg">
+          <svg class="w-4 h-4 text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          </svg>
+          <span class="text-xs text-blue-300"><%= t("feedback.bonus_incentive") %></span>
+        </div>
+      </div>
+    <% end %>
+
     <%# Progress dots %>
     <div class="flex justify-center gap-2 pt-3 pb-1">
       <div data-feedback-widget-target="dot" class="w-2 h-2 rounded-full bg-blue-500 transition-colors"></div>
@@ -96,6 +108,7 @@
       </svg>
       <p class="text-sm font-medium text-white"><%= t("feedback.thanks_title") %></p>
       <p class="text-xs text-gray-400 mt-1"><%= t("feedback.thanks_message") %></p>
+      <p data-feedback-widget-target="bonusMessage" class="hidden text-xs text-green-400 mt-2 font-medium"><%= t("feedback.bonus_granted") %></p>
     </div>
   </div>
 </div>

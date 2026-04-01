@@ -142,6 +142,8 @@ class ProjectsController < ApplicationController
       scan_token_id: params[:scan_token_id].presence
     )
 
+    current_user.consume_optimization! if user_signed_in?
+
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
     end
@@ -206,6 +208,8 @@ class ProjectsController < ApplicationController
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil,
       scan_token_id: params[:scan_token_id].presence
     )
+
+    current_user.consume_optimization! if user_signed_in?
 
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil

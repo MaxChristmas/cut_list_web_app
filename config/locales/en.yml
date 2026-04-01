@@ -549,6 +549,8 @@ en:
     submit: "Submit"
     thanks_title: "Thank you!"
     thanks_message: "Your feedback helps us improve."
+    bonus_incentive: "Answer all questions and get 5 bonus optimizations!"
+    bonus_granted: "+5 bonus optimizations unlocked!"
   tutorial_video:
     thumbnail_label: "Quick tutorial"
     title: "Getting Started"

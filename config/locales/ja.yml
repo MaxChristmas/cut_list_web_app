@@ -544,6 +544,8 @@ ja:
     submit: "送信"
     thanks_title: "ありがとうございます！"
     thanks_message: "いただいたご意見は改善に役立てます。"
+    bonus_incentive: "すべての質問に回答すると、5回分のボーナス最適化がもらえます！"
+    bonus_granted: "+5回分のボーナス最適化が解除されました！"
   tutorial_video:
     thumbnail_label: "クイックチュートリアル"
     title: "はじめに"

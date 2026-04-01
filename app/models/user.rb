@@ -53,6 +53,13 @@ class User < ApplicationRecord
       Optimization.joins(:project).where(projects: { user_id: id }).count >= FEEDBACK_MIN_OPTIMIZATIONS
   end
 
+  def should_prompt_feedback_on_new_project?
+    free_plan? &&
+      feedback_dismissed_at.nil? &&
+      feedbacks.none? &&
+      projects.exists?
+  end
+
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true
 
   attribute :terms_accepted, :boolean

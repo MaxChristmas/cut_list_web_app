@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
   helper_method :can_create_project?, :can_optimize_pieces?, :current_plan_name,
                 :usage_projects, :max_pieces_per_project, :has_feature?,
                 :can_optimize_today?, :usage_daily_optimizations,
-                :can_export_pdf_today?, :usage_daily_pdf_exports
+                :can_export_pdf_today?, :usage_daily_pdf_exports,
+                :show_feedback_widget?
 
   def set_locale
     locale = params[:locale].to_s.strip.to_sym
@@ -52,6 +53,13 @@ class ApplicationController < ActionController::Base
       template = Project.templates.first
       @recent_projects = template ? [ template ] + guest_projects.to_a : guest_projects.to_a
     end
+  end
+
+  def show_feedback_widget?
+    return false unless user_signed_in?
+    return true if current_user.should_show_feedback?
+
+    controller_name == "projects" && action_name == "index" && current_user.should_prompt_feedback_on_new_project?
   end
 
   def can_create_project?

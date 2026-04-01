@@ -91,7 +91,13 @@ module Plannable
   end
 
   def can_optimize_today?
-    daily_optimizations_count < max_daily_optimizations
+    daily_optimizations_count < max_daily_optimizations || bonus_optimizations > 0
+  end
+
+  def consume_optimization!
+    return unless daily_optimizations_count >= max_daily_optimizations && bonus_optimizations > 0
+
+    decrement!(:bonus_optimizations)
   end
 
   ONE_SHOT_MAX_SCANS = 5

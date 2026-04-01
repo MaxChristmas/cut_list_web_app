@@ -545,6 +545,8 @@ es:
     submit: "Enviar"
     thanks_title: "¡Gracias!"
     thanks_message: "Tus comentarios nos ayudan a mejorar."
+    bonus_incentive: "¡Responde a todas las preguntas y obtén 5 optimizaciones extra!"
+    bonus_granted: "¡+5 optimizaciones extra desbloqueadas!"
   tutorial_video:
     thumbnail_label: "Tutorial rápido"
     title: "Primeros pasos"

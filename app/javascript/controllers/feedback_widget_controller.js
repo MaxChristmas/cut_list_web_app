@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["container", "step1", "step2", "step3", "thanks", "dot", "otherBtn", "otherInput"]
+  static targets = ["container", "step1", "step2", "step3", "thanks", "bonusMessage", "dot", "otherBtn", "otherInput"]
   static values = {
     createUrl: String,
     dismissUrl: String
@@ -9,6 +9,7 @@ export default class extends Controller {
 
   feedbackId = null
   currentStep = 1
+  bonusGranted = false
 
   connect() {
     setTimeout(() => {
@@ -78,7 +79,8 @@ export default class extends Controller {
     const value = textarea.value.trim()
     if (!value) return
 
-    this.updateFeedback({ feature_request: value }).then(() => {
+    this.updateFeedback({ feature_request: value }).then((json) => {
+      this.bonusGranted = json?.bonus_granted || false
       this.goToStep(4)
     })
   }
@@ -113,7 +115,10 @@ export default class extends Controller {
     else if (step === 3) this.step3Target.classList.remove("hidden")
     else if (step === 4) {
       this.thanksTarget.classList.remove("hidden")
-      setTimeout(() => this.closeWidget(), 3000)
+      if (this.bonusGranted && this.hasBonusMessageTarget) {
+        this.bonusMessageTarget.classList.remove("hidden")
+      }
+      setTimeout(() => this.closeWidget(), 4000)
     }
   }
 
@@ -151,7 +156,7 @@ export default class extends Controller {
   async updateFeedback(data) {
     if (!this.feedbackId) return
 
-    await fetch(`${this.createUrlValue}/${this.feedbackId}`, {
+    const response = await fetch(`${this.createUrlValue}/${this.feedbackId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -159,6 +164,10 @@ export default class extends Controller {
       },
       body: JSON.stringify({ feedback: data })
     })
+
+    if (response.ok) {
+      return response.json()
+    }
   }
 
   get csrfToken() {

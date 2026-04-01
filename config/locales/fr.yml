@@ -549,6 +549,8 @@ fr:
     submit: "Envoyer"
     thanks_title: "Merci !"
     thanks_message: "Vos retours nous aident à nous améliorer."
+    bonus_incentive: "Répondez à toutes les questions et gagnez 5 optimisations bonus !"
+    bonus_granted: "+5 optimisations bonus débloquées !"
   tutorial_video:
     thumbnail_label: "Tutoriel rapide"
     title: "Prise en main"
