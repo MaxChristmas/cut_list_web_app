@@ -19,8 +19,23 @@ module Admin
         { range: range, users: users }
       end
 
+      plans = Plannable::PLANS.transform_values do |config|
+        plan_data = {
+          max_active_projects: config[:max_active_projects] == Float::INFINITY ? "unlimited" : config[:max_active_projects],
+          max_pieces_per_project: config[:max_pieces_per_project] == Float::INFINITY ? "unlimited" : config[:max_pieces_per_project],
+          max_daily_optimizations: config[:max_daily_optimizations] == Float::INFINITY ? "unlimited" : config[:max_daily_optimizations],
+          features: config[:features].map(&:to_s)
+        }
+        plan_data[:max_monthly_scans] = config[:max_monthly_scans] if config[:max_monthly_scans]
+        if config[:prices]
+          plan_data[:prices] = config[:prices].transform_values { |p| { amount_cents: p[:amount], amount_eur: p[:amount] / 100.0 } }
+        end
+        plan_data
+      end
+
       payload = {
         exported_at: Time.current.iso8601,
+        plans: plans,
         users: {
           total: @total_users,
           new_last_30_days: @new_users_30d,
