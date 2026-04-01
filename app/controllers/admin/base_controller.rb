@@ -1,11 +1,16 @@
 module Admin
   class BaseController < ActionController::Base
     before_action :authenticate_admin_user!
+    before_action :set_unread_feedbacks_count
     layout "admin"
 
     private
 
     PER_PAGE = 25
+
+    def set_unread_feedbacks_count
+      @unread_feedbacks_count = Feedback.unread.count
+    end
 
     def paginate(scope)
       page = [ params[:page].to_i, 1 ].max

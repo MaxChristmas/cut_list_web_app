@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_01_073614) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_01_100939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_073614) do
     t.text "feature_request"
     t.text "improvement"
     t.integer "rating"
+    t.datetime "read_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_feedbacks_on_user_id"

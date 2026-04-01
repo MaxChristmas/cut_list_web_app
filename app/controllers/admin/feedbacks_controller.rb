@@ -8,6 +8,10 @@ module Admin
 
     def show
       @feedback = Feedback.includes(:user).find(params[:id])
+      if @feedback.read_at.nil?
+        @feedback.update(read_at: Time.current)
+        @unread_feedbacks_count = Feedback.unread.count
+      end
     end
 
     def destroy
