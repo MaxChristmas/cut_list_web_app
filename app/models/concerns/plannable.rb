@@ -8,9 +8,10 @@ module Plannable
 
   PLANS = {
     "free" => {
-      max_active_projects: 5,
-      max_pieces_per_project: 25,
+      max_active_projects: 2,
+      max_pieces_per_project: 20,
       max_daily_optimizations: 10,
+      max_daily_pdf_exports: 3,
       features: %i[pdf_export label_pieces cut_direction blade_kerf],
       prices: nil
     },
@@ -18,6 +19,7 @@ module Plannable
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
       max_daily_optimizations: Float::INFINITY,
+      max_daily_pdf_exports: Float::INFINITY,
       max_monthly_scans: 20,
       features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces photo_import],
       prices: {
@@ -30,6 +32,7 @@ module Plannable
       max_active_projects: Float::INFINITY,
       max_pieces_per_project: Float::INFINITY,
       max_daily_optimizations: Float::INFINITY,
+      max_daily_pdf_exports: Float::INFINITY,
       max_monthly_scans: 40,
       features: FEATURES,
       prices: {
@@ -88,7 +91,13 @@ module Plannable
   end
 
   def can_optimize_today?
-    daily_optimizations_count < max_daily_optimizations
+    daily_optimizations_count < max_daily_optimizations || bonus_optimizations > 0
+  end
+
+  def consume_optimization!
+    return unless daily_optimizations_count >= max_daily_optimizations && bonus_optimizations > 0
+
+    decrement!(:bonus_optimizations)
   end
 
   ONE_SHOT_MAX_SCANS = 5
@@ -122,6 +131,24 @@ module Plannable
 
   def usage_daily_optimizations
     { used: daily_optimizations_count, max: max_daily_optimizations }
+  end
+
+  def max_daily_pdf_exports
+    plan_config[:max_daily_pdf_exports]
+  end
+
+  def daily_pdf_exports_count
+    pdf_exports
+      .where("created_at >= ?", Time.current.beginning_of_day)
+      .count
+  end
+
+  def can_export_pdf_today?
+    daily_pdf_exports_count < max_daily_pdf_exports
+  end
+
+  def usage_daily_pdf_exports
+    { used: daily_pdf_exports_count, max: max_daily_pdf_exports }
   end
 
   def active_projects_count

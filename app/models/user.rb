@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :coupon_redemptions, dependent: :destroy
   has_many :scan_tokens, dependent: :delete_all
   has_many :feedbacks, dependent: :destroy
+  has_many :pdf_exports, dependent: :destroy
 
   scope :kept, -> { where(discarded_at: nil) }
   scope :discarded, -> { where.not(discarded_at: nil) }
@@ -50,6 +51,13 @@ class User < ApplicationRecord
       feedbacks.none? &&
       projects.count >= FEEDBACK_MIN_PROJECTS &&
       Optimization.joins(:project).where(projects: { user_id: id }).count >= FEEDBACK_MIN_OPTIMIZATIONS
+  end
+
+  def should_prompt_feedback_on_new_project?
+    free_plan? &&
+      feedback_dismissed_at.nil? &&
+      feedbacks.none? &&
+      projects.exists?
   end
 
   validates :locale, inclusion: { in: I18n.available_locales.map(&:to_s) }, allow_nil: true

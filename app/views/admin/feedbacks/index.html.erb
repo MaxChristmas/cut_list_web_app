@@ -32,7 +32,7 @@
       </thead>
       <tbody class="divide-y divide-gray-100">
         <% @feedbacks.each do |feedback| %>
-          <tr class="hover:bg-gray-50">
+          <tr class="<%= feedback.read_at.nil? ? 'bg-gray-50 hover:bg-gray-100' : 'hover:bg-gray-50' %>">
             <td class="px-5 py-3 text-sm">
               <% if feedback.user %>
                 <%= link_to feedback.user.email, admin_user_path(feedback.user), class: "text-blue-600 hover:text-blue-800" %>

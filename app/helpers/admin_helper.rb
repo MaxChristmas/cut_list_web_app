@@ -1,15 +1,21 @@
 module AdminHelper
-  def admin_nav_link(label, path, controller_name)
+  def admin_nav_link(label, path, controller_name, badge_count: nil)
     current = params[:controller]
     active = current == "admin/#{controller_name}" ||
              (controller_name == "dashboard" && current == "admin/dashboard") ||
              (controller_name == "projects" && current == "admin/optimizations")
     classes = if active
-      "flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-900"
+      "flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-900"
     else
-      "flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+      "flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
     end
-    link_to label, path, class: classes
+
+    link_to path, class: classes do
+      badge = if badge_count && badge_count > 0
+        content_tag(:span, badge_count, class: "ml-auto inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700")
+      end
+      safe_join([ label, badge ].compact)
+    end
   end
 
   def admin_pagination

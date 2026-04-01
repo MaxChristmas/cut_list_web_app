@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_01_100939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
     t.text "feature_request"
     t.text "improvement"
     t.integer "rating"
+    t.datetime "read_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
@@ -96,6 +97,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_optimizations_on_project_id"
     t.index ["scan_token_id"], name: "index_optimizations_on_scan_token_id"
+  end
+
+  create_table "pdf_exports", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "project_id"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["project_id"], name: "index_pdf_exports_on_project_id"
+    t.index ["user_id"], name: "index_pdf_exports_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -151,6 +161,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.integer "bonus_optimizations", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "current_sign_in_at"
     t.string "current_sign_in_ip"
@@ -194,6 +205,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_071745) do
   add_foreign_key "feedbacks", "users"
   add_foreign_key "optimizations", "projects"
   add_foreign_key "optimizations", "scan_tokens"
+  add_foreign_key "pdf_exports", "projects"
+  add_foreign_key "pdf_exports", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "report_issues", "admin_users", column: "replied_by_id"
   add_foreign_key "report_issues", "users"

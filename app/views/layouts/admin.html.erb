@@ -42,7 +42,7 @@
           <%= admin_nav_link "Users", admin_users_path, "users" %>
           <%= admin_nav_link "Projects", admin_projects_path, "projects" %>
           <%= admin_nav_link "Reports", admin_report_issues_path, "report_issues" %>
-          <%= admin_nav_link "Feedbacks", admin_feedbacks_path, "feedbacks" %>
+          <%= admin_nav_link "Feedbacks", admin_feedbacks_path, "feedbacks", badge_count: @unread_feedbacks_count %>
           <%= admin_nav_link "Coupons", admin_coupons_path, "coupons" %>
           <%= admin_nav_link "Scan Tokens", admin_scan_tokens_path, "scan_tokens" %>
         </nav>

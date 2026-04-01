@@ -1,7 +1,7 @@
 module Admin
   class ProjectsController < BaseController
     def index
-      @projects = paginate(Project.includes(:user).order(created_at: :desc))
+      @projects = paginate(Project.includes(:user, :pdf_exports).order(created_at: :desc))
     end
 
     def show

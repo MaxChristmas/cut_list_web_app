@@ -11,6 +11,12 @@ class ProjectsController < ApplicationController
 
   def export_pdf
     @project = Project.find_by!(token: params[:token])
+
+    if user_signed_in? && !can_export_pdf_today?
+      redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
+      return
+    end
+
     optimization = @project.optimizations.order(created_at: :desc).first
     result = optimization&.edited_result || optimization&.result
 
@@ -25,6 +31,7 @@ class ProjectsController < ApplicationController
     else
       "cut-list-#{@project.token}.pdf"
     end
+    current_user.pdf_exports.create!(project: @project) if user_signed_in?
     send_data pdf.render, filename: filename,
               type: "application/pdf", disposition: "attachment"
   end
@@ -52,6 +59,11 @@ class ProjectsController < ApplicationController
   def export_labels
     @project = Project.find_by!(token: params[:token])
 
+    if user_signed_in? && !can_export_pdf_today?
+      redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
+      return
+    end
+
     # Collect all project tokens (current + extras)
     tokens = [ params[:token] ]
     tokens.concat(Array(params[:tokens])) if params[:tokens].present?
@@ -77,6 +89,7 @@ class ProjectsController < ApplicationController
     else
       "labels-#{@project.token}.pdf"
     end
+    current_user.pdf_exports.create!(project: @project) if user_signed_in?
     send_data pdf.render, filename: filename,
               type: "application/pdf", disposition: "attachment"
   end
@@ -149,6 +162,8 @@ class ProjectsController < ApplicationController
       scan_token_id: params[:scan_token_id].presence
     )
 
+    current_user.consume_optimization! if user_signed_in?
+
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
     end
@@ -213,6 +228,8 @@ class ProjectsController < ApplicationController
       efficiency: result["waste_percent"] ? (100 - result["waste_percent"]) : nil,
       scan_token_id: params[:scan_token_id].presence
     )
+
+    current_user.consume_optimization! if user_signed_in?
 
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
