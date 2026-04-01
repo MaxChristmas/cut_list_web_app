@@ -16,6 +16,9 @@ application.register("collapsible", CollapsibleController)
 import CookieConsentController from "./cookie_consent_controller"
 application.register("cookie-consent", CookieConsentController)
 
+import DropdownController from "./dropdown_controller"
+application.register("dropdown", DropdownController)
+
 import DesktopUploadController from "./desktop_upload_controller"
 application.register("desktop-upload", DesktopUploadController)
 

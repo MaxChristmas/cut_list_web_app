@@ -84,6 +84,7 @@ es:
       options: "Opciones"
       optimize: "Optimizar"
       raw_json: "JSON bruto"
+      export: "Exportar"
       export_pdf: "Exportar PDF"
       export_dxf: "Exportar DXF"
       colors: "Colores"
