@@ -42,10 +42,8 @@ Rails.application.configure do
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
-  # Use local IP so mobile devices on the same network can access scan URLs
-  local_ip = Socket.ip_address_list.detect { |addr| addr.ipv4_private? }&.ip_address || "localhost"
-  Rails.application.routes.default_url_options = { host: local_ip, port: 3000 }
-  config.action_controller.default_url_options = { host: local_ip, port: 3000 }
+  Rails.application.routes.default_url_options = { host: "localhost", port: 3000 }
+  config.action_controller.default_url_options = { host: "localhost", port: 3000 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
