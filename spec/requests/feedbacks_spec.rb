@@ -72,12 +72,12 @@ RSpec.describe "Feedbacks", type: :request do
       context "with invalid params" do
         it "returns 422 Unprocessable Entity when rating is missing" do
           post feedbacks_path, params: { feedback: { rating: nil } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "returns 422 Unprocessable Entity when rating is out of range" do
           post feedbacks_path, params: { feedback: { rating: 6 } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "does not create a feedback record when invalid" do
@@ -90,7 +90,7 @@ RSpec.describe "Feedbacks", type: :request do
           Feedback.create!(user: user, rating: 3)
 
           post feedbacks_path, params: { feedback: { rating: 5 } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -139,7 +139,7 @@ RSpec.describe "Feedbacks", type: :request do
 
       it "returns 422 Unprocessable Entity when rating is out of range" do
         patch feedback_path(feedback), params: { feedback: { rating: 0 } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not change the record on invalid update" do
