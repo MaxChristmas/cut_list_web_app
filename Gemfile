@@ -84,3 +84,6 @@ gem "aws-sdk-s3", require: false
 # Monitoring
 gem "sentry-ruby"
 gem "sentry-rails"
+
+# Email marketing (Brevo API)
+gem "brevo"

@@ -168,6 +168,8 @@ class ProjectsController < ApplicationController
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
     end
 
+    track_optimization_event(optimization)
+
     redirect_to project_path(@project.token)
   rescue => e
     @error = e.message
@@ -234,6 +236,8 @@ class ProjectsController < ApplicationController
     if Optimization.joins(:project).where(projects: { user_id: current_user.id }).count == 1
       NtfyOptimizationJob.perform_later(current_user, optimization) rescue nil
     end
+
+    track_optimization_event(optimization)
 
     redirect_to project_path(@project.token)
   rescue => e
@@ -337,6 +341,23 @@ class ProjectsController < ApplicationController
         raise t("optimizer_errors.piece_length_less_than_width", piece: piece[:label] || "#{piece[:length]}×#{piece[:width]}")
       end
     end
+  end
+
+  def track_optimization_event(optimization)
+    return unless user_signed_in?
+
+    BrevoTrackEventJob.perform_later(
+      email: current_user.email,
+      event_name: "optimization_completed",
+      properties: {
+        efficiency: optimization.efficiency&.round(1),
+        sheets_count: optimization.sheets_count,
+        project_name: @project.name || "Project #{@project.token}",
+        project_url: project_url(@project.token)
+      }
+    )
+  rescue StandardError => e
+    Rails.logger.error("[ProjectsController] Brevo tracking failed: #{e.message}")
   end
 
   def build_cuts(pieces, grain_direction:)

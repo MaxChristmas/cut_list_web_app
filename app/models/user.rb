@@ -66,6 +66,7 @@ class User < ApplicationRecord
   validates :terms_accepted, acceptance: true, on: :create
 
   before_create :set_terms_accepted_at, if: :terms_accepted
+  after_commit :sync_to_brevo, on: [ :create, :update ], if: :should_sync_to_brevo?
 
   def self.from_omniauth(auth)
     user = find_by(provider: auth.provider, uid: auth.uid)
@@ -94,5 +95,13 @@ class User < ApplicationRecord
 
   def set_terms_accepted_at
     self.terms_accepted_at = Time.current
+  end
+
+  def sync_to_brevo
+    BrevoSyncContactJob.perform_later(self)
+  end
+
+  def should_sync_to_brevo?
+    !discarded? && (previously_new_record? || saved_change_to_locale? || saved_change_to_plan?)
   end
 end
