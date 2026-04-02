@@ -350,8 +350,8 @@ class ProjectsController < ApplicationController
       email: current_user.email,
       event_name: "optimization_completed",
       properties: {
-        efficiency: optimization.efficiency&.round(1),
-        sheets_count: optimization.sheets_count,
+        efficiency: "#{optimization.efficiency&.round(1)}",
+        sheets_count: "#{optimization.sheets_count}",
         project_name: @project.name || "Project #{@project.token}",
         project_url: project_url(@project.token)
       }
