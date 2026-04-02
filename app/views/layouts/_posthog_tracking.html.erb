@@ -1,0 +1,56 @@
+<% if user_signed_in? %>
+<script>
+  if (window.posthog) {
+    posthog.identify('<%= current_user.id %>', {
+      email: '<%= j current_user.email %>',
+      plan: '<%= current_user.plan %>'
+    });
+  }
+</script>
+<% end %>
+
+<script>
+// CTA click tracking
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-cta]');
+  if (!el || !window.posthog) return;
+  posthog.capture('cta_click', {
+    cta_name: el.getAttribute('data-cta'),
+    cta_url: el.getAttribute('href'),
+    page_path: window.location.pathname
+  });
+});
+
+// Section visibility tracking
+if (window.posthog && window.IntersectionObserver) {
+  var seen = {};
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var name = entry.target.getAttribute('data-section');
+      if (!name || seen[name]) return;
+      seen[name] = true;
+      posthog.capture('section_viewed', { section: name, page_path: window.location.pathname });
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('[data-section]').forEach(function(el) { observer.observe(el); });
+}
+
+// Article scroll depth tracking
+if (window.posthog && document.querySelector('article')) {
+  var article = document.querySelector('article');
+  var milestones = [25, 50, 75, 100];
+  var reached = {};
+  window.addEventListener('scroll', function() {
+    var rect = article.getBoundingClientRect();
+    var scrolled = Math.min(Math.max(0, -rect.top + window.innerHeight), article.scrollHeight);
+    var pct = Math.round((scrolled / article.scrollHeight) * 100);
+    milestones.forEach(function(m) {
+      if (pct >= m && !reached[m]) {
+        reached[m] = true;
+        posthog.capture('blog_scroll_depth', { depth: m, page_path: window.location.pathname });
+      }
+    });
+  });
+}
+</script>

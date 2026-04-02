@@ -1,4 +1,4 @@
-<div class="h-full overflow-y-auto bg-gray-950 text-gray-300">
+<div class="h-full overflow-y-auto bg-gray-950 text-gray-300" data-section="pricing">
   <div class="max-w-4xl mx-auto px-6 py-12">
     <% if alert.present? %>
       <div class="p-3 mb-6 bg-red-900/50 text-red-300 rounded text-sm"><%= alert %></div>
@@ -55,11 +55,12 @@
             <%= f.hidden_field :plan, value: "worker" %>
             <%= f.hidden_field :billing_cycle, value: "one_shot" %>
             <%= f.submit t("plans.one_shot.access_now"),
-                  class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors" %>
+                  class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-white hover:bg-gray-200 text-gray-950 transition-colors",
+                  data: { cta: "pricing_one_shot_buy" } %>
           <% end %>
         <% else %>
           <div data-controller="modal" class="w-full mt-auto">
-            <button data-action="click->modal#open"
+            <button data-action="click->modal#open" data-cta="pricing_one_shot_buy"
                     class="w-full py-2 rounded text-center text-sm font-medium bg-white hover:bg-gray-200 text-gray-950 transition-colors">
               <%= t("plans.one_shot.access_now") %>
             </button>
@@ -151,7 +152,8 @@
           <%= button_to t("plans.manage_subscription"),
                 plan_portal_path,
                 method: :post,
-                class: "w-full py-2 rounded text-center text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white transition-colors" %>
+                class: "w-full py-2 rounded text-center text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white transition-colors",
+                data: { cta: "pricing_manage_subscription" } %>
         <% elsif is_current_worker %>
           <div class="w-full py-2 rounded text-center text-sm font-medium bg-gray-800 text-gray-400 cursor-default">
             <%= t("plans.current_plan") %>
@@ -161,11 +163,12 @@
             <%= f.hidden_field :plan, value: "worker" %>
             <%= f.hidden_field :billing_cycle, value: "monthly", data: { billing_toggle_target: "billingCycleInput" } %>
             <%= f.submit t("plans.subscribe"),
-                  class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-blue-600 hover:bg-blue-500 text-white transition-colors" %>
+                  class: "w-full py-2 rounded text-center text-sm font-medium cursor-pointer bg-blue-600 hover:bg-blue-500 text-white transition-colors",
+                  data: { cta: "pricing_pro_subscribe" } %>
           <% end %>
         <% else %>
           <div data-controller="modal">
-            <button data-action="click->modal#open"
+            <button data-action="click->modal#open" data-cta="pricing_pro_subscribe"
                     class="w-full py-2 rounded text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white transition-colors">
               <%= t("plans.subscribe") %>
             </button>

@@ -10,11 +10,13 @@ export default class extends Controller {
 
   selectMonthly() {
     this.cycle = "monthly"
+    if (window.posthog) posthog.capture('pricing_toggle', { plan: this.cycle })
     this.updateUI()
   }
 
   selectYearly() {
     this.cycle = "yearly"
+    if (window.posthog) posthog.capture('pricing_toggle', { plan: this.cycle })
     this.updateUI()
   }
 
