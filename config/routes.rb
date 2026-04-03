@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     root "dashboard#index"
     get "dashboard/export", to: "dashboard#export", as: :dashboard_export
     resources :users do
+      get :export, on: :collection
       patch :soft_delete, on: :member
     end
     resources :projects, only: [ :index, :show ] do

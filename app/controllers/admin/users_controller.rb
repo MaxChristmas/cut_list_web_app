@@ -1,3 +1,5 @@
+require "csv"
+
 module Admin
   class UsersController < BaseController
     before_action :set_user, only: [ :show, :edit, :update, :destroy, :soft_delete ]
@@ -66,6 +68,23 @@ module Admin
       else
         render :edit, status: :unprocessable_entity
       end
+    end
+
+    def export
+      excluded = %w[encrypted_password reset_password_token]
+      columns = User.column_names.reject { |c| excluded.include?(c) }
+
+      csv_data = CSV.generate(headers: true) do |csv|
+        csv << columns
+        User.all.find_each do |user|
+          csv << columns.map { |col| user.public_send(col) }
+        end
+      end
+
+      send_data csv_data,
+        filename: "users_#{Date.today}.csv",
+        type: "text/csv; charset=utf-8",
+        disposition: "attachment"
     end
 
     def soft_delete

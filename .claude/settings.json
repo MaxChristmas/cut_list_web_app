@@ -15,7 +15,9 @@
       "Bash(bin/rails generate:*)",
       "Bash(bin/rubocop --no-server)",
       "Bash(bundle update:*)",
-      "Bash(bin/bundler-audit)"
+      "Bash(bin/bundler-audit)",
+      "WebFetch(domain:developers.brevo.com)",
+      "WebFetch(domain:help.brevo.com)"
     ],
     "additionalDirectories": [
       "/Users/maxence/.claude"
