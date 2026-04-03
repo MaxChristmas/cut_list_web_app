@@ -30,6 +30,11 @@ class ApplicationController < ActionController::Base
     else
                locale_from_browser || I18n.default_locale
     end
+
+    if user_signed_in? && current_user.locale.blank?
+      current_user.update_column(:locale, locale.to_s)
+    end
+
     I18n.with_locale(locale, &action)
   end
 

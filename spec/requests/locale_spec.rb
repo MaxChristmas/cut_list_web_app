@@ -41,6 +41,7 @@ RSpec.describe "Locale switching", type: :request do
     before { sign_in user }
 
     it "uses the browser locale when user has no saved locale" do
+      user.update_column(:locale, nil)
       get root_path, headers: { "Accept-Language" => "fr" }
       expect(response.body).to include(I18n.t("sidebar.new_cut_list", locale: :fr))
     end
@@ -64,7 +65,8 @@ RSpec.describe "Locale switching", type: :request do
         patch locale_path, params: { locale: "xx" }, headers: { "Referer" => root_url }
 
         user.reload
-        expect(user.locale).to be_nil
+        # locale is auto-set from browser/default on next request when nil
+        expect(user.locale).not_to eq("xx")
       end
     end
 
