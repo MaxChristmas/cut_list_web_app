@@ -218,6 +218,18 @@ en:
     feature_not_available: "This feature is not available on your current plan. Upgrade to access it."
     max_daily_optimizations_reached: "You've reached your daily optimization limit (10 per day). Upgrade your plan for unlimited optimizations."
     max_daily_pdf_exports_reached: "You've reached your daily PDF export limit (3 per day). Upgrade your plan for unlimited exports."
+  mailers:
+    limit_reached:
+      subject: "Finish your project. Get full access for %{price}"
+      heading: "You're almost there!"
+      message:
+        project: "You've reached the limit of active projects on the free plan. Unlock unlimited projects to keep going."
+        optimization: "You've used all your daily optimizations. Get full access to finish your project today."
+        pdf_export: "You've reached the daily PDF export limit. Unlock unlimited exports to download your cut plans."
+      cta_text: "Get 3-day access for %{price}"
+      footer: "This one-time pass gives you full Pro access for %{duration} days. Unlimited projects, optimizations, and exports."
+      tagline: "CutOptima. Optimize your cut plans, reduce material waste."
+      copyright: "© %{year} CutOptima. All rights reserved."
   pdf:
     measurements_in_mm: "All measurements in millimeters (mm)"
     sheets_used: "Sheets used"

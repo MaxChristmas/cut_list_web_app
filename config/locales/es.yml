@@ -214,6 +214,18 @@ es:
     guest_signup_prompt: "¡Regístrese gratis para optimizar sus cortes!"
     feature_not_available: "Esta función no está disponible en su plan actual. Mejore su plan para acceder."
     max_daily_pdf_exports_reached: "Ha alcanzado su límite diario de exportaciones PDF (3 por día). Mejore su plan para exportaciones ilimitadas."
+  mailers:
+    limit_reached:
+      subject: "Termina tu proyecto. Acceso completo por %{price}"
+      heading: "¡Ya casi lo tienes!"
+      message:
+        project: "Has alcanzado el límite de proyectos activos del plan gratuito. Desbloquea proyectos ilimitados para continuar."
+        optimization: "Has usado todas las optimizaciones del día. Obtén acceso completo para terminar tu proyecto hoy."
+        pdf_export: "Has alcanzado el límite diario de exportaciones PDF. Desbloquea exportaciones ilimitadas para descargar tus planos de corte."
+      cta_text: "Acceso %{duration} días por %{price}"
+      footer: "Este pase único te da acceso Pro completo durante %{duration} días. Proyectos, optimizaciones y exportaciones ilimitados."
+      tagline: "CutOptima. Optimiza tus planos de corte, reduce el desperdicio."
+      copyright: "© %{year} CutOptima. Todos los derechos reservados."
   pdf:
     measurements_in_mm: "Todas las medidas en milímetros (mm)"
     sheets_used: "Paneles utilizados"

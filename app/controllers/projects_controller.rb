@@ -13,6 +13,7 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
 
     if user_signed_in? && !can_export_pdf_today?
+      track_limit_reached_event("pdf_export")
       redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
       return
     end
@@ -60,6 +61,7 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(token: params[:token])
 
     if user_signed_in? && !can_export_pdf_today?
+      track_limit_reached_event("pdf_export")
       redirect_to plans_path, alert: t("limits.max_daily_pdf_exports_reached")
       return
     end
@@ -117,6 +119,7 @@ class ProjectsController < ApplicationController
     end
 
     unless can_create_project?
+      track_limit_reached_event("project")
       redirect_to plans_path, alert: t("limits.max_projects_reached")
       return
     end
@@ -136,6 +139,7 @@ class ProjectsController < ApplicationController
     end
 
     unless can_optimize_today?
+      track_limit_reached_event("optimization")
       redirect_to plans_path, alert: t("limits.max_daily_optimizations_reached")
       return
     end
@@ -206,6 +210,7 @@ class ProjectsController < ApplicationController
     end
 
     unless can_optimize_today?
+      track_limit_reached_event("optimization")
       redirect_to plans_path, alert: t("limits.max_daily_optimizations_reached")
       return
     end
@@ -345,19 +350,60 @@ class ProjectsController < ApplicationController
 
   def track_optimization_event(optimization)
     return unless user_signed_in?
+    return unless current_user.free_plan?
 
-    BrevoTrackEventJob.perform_later(
-      email: current_user.email,
-      event_name: "optimization_completed",
-      properties: {
-        efficiency: "#{optimization.efficiency&.round(1)}",
-        sheets_count: "#{optimization.sheets_count}",
-        project_name: @project.name || "Project #{@project.token}",
-        project_url: project_url(@project.token)
-      }
-    )
+    if user_reached_limit?
+      track_limit_reached_event("optimization")
+    else
+      BrevoTrackEventJob.perform_later(
+        email: current_user.email,
+        event_name: "optimization_completed",
+        properties: {
+          efficiency: "#{optimization.efficiency&.round(1)}",
+          sheets_count: "#{optimization.sheets_count}",
+          project_name: @project.name || "Project #{@project.token}",
+          project_url: project_url(@project.token)
+        }
+      )
+    end
   rescue StandardError => e
     Rails.logger.error("[ProjectsController] Brevo tracking failed: #{e.message}")
+  end
+
+  def track_limit_reached_event(limit_type)
+    return unless user_signed_in? && current_user.free_plan?
+
+    locale = current_user.locale.presence || I18n.default_locale
+
+    one_shot_price = Plannable::PLANS.dig("worker", :prices, :one_shot, :amount).to_f / 100
+
+    price_label = "#{one_shot_price.to_i}€"
+
+    I18n.with_locale(locale) do
+      BrevoTrackEventJob.perform_later(
+        email: current_user.email,
+        event_name: "limit_reached",
+        properties: {
+          subject: I18n.t("mailers.limit_reached.subject", price: price_label),
+          heading: I18n.t("mailers.limit_reached.heading"),
+          message: I18n.t("mailers.limit_reached.message.#{limit_type}"),
+          cta_text: I18n.t("mailers.limit_reached.cta_text", price: price_label, duration: "3"),
+          cta_url: plans_url,
+          footer: I18n.t("mailers.limit_reached.footer", duration: "3"),
+          limit_type: limit_type,
+          one_shot_price: price_label,
+          one_shot_duration: "3",
+          tagline: I18n.t("mailers.limit_reached.tagline"),
+          copyright: I18n.t("mailers.limit_reached.copyright", year: Time.current.year.to_s)
+        }
+      )
+    end
+  rescue StandardError => e
+    Rails.logger.error("[ProjectsController] Brevo limit tracking failed: #{e.message}")
+  end
+
+  def user_reached_limit?
+    !current_user.can_optimize_today? || !current_user.can_create_project?
   end
 
   def build_cuts(pieces, grain_direction:)

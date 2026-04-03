@@ -218,6 +218,18 @@ fr:
     feature_not_available: "Cette fonctionnalité n'est pas disponible avec votre forfait actuel. Passez au plan supérieur pour y accéder."
     max_daily_optimizations_reached: "Vous avez atteint votre limite quotidienne d'optimisations (10 par jour). Passez au plan supérieur pour des optimisations illimitées."
     max_daily_pdf_exports_reached: "Vous avez atteint votre limite quotidienne d'exports PDF (3 par jour). Passez à un plan supérieur pour des exports illimités."
+  mailers:
+    limit_reached:
+      subject: "Finissez votre projet. Accès complet pour %{price}"
+      heading: "Vous y êtes presque !"
+      message:
+        project: "Vous avez atteint la limite de projets actifs du plan gratuit. Débloquez des projets illimités pour continuer."
+        optimization: "Vous avez utilisé toutes vos optimisations du jour. Obtenez un accès complet pour finir votre projet aujourd'hui."
+        pdf_export: "Vous avez atteint la limite d'exports PDF du jour. Débloquez les exports illimités pour télécharger vos plans de découpe."
+      cta_text: "Accès %{duration} jours pour %{price}"
+      footer: "Ce pass unique vous donne un accès Pro complet pendant %{duration} jours. Projets, optimisations et exports illimités."
+      tagline: "CutOptima. Optimisez vos plans de découpe, réduisez le gaspillage."
+      copyright: "© %{year} CutOptima. Tous droits réservés."
   pdf:
     measurements_in_mm: "Toutes les mesures sont en millimètres (mm)"
     sheets_used: "Panneaux utilisés"

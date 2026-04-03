@@ -213,6 +213,18 @@ ja:
     guest_signup_prompt: "無料登録してカットリストを最適化しましょう！"
     feature_not_available: "この機能は現在のプランではご利用いただけません。アップグレードしてご利用ください。"
     max_daily_pdf_exports_reached: "1日のPDFエクスポート上限（3回/日）に達しました。プランをアップグレードして無制限にエクスポートしましょう。"
+  mailers:
+    limit_reached:
+      subject: "プロジェクトを完成させましょう。%{price}でフルアクセス"
+      heading: "あと少しです！"
+      message:
+        project: "無料プランのアクティブプロジェクト上限に達しました。プロジェクト数無制限にアップグレードして続けましょう。"
+        optimization: "本日の最適化回数を使い切りました。フルアクセスでプロジェクトを完成させましょう。"
+        pdf_export: "本日のPDFエクスポート上限に達しました。無制限エクスポートでカットプランをダウンロードしましょう。"
+      cta_text: "%{duration}日間アクセス %{price}"
+      footer: "このワンタイムパスで%{duration}日間Proフルアクセス。プロジェクト、最適化、エクスポートすべて無制限。"
+      tagline: "CutOptima。カットプランを最適化し、材料の無駄を削減。"
+      copyright: "© %{year} CutOptima. All rights reserved."
   pdf:
     measurements_in_mm: "すべての寸法はミリメートル（mm）表記です"
     sheets_used: "使用シート数"
