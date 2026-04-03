@@ -354,18 +354,37 @@ class ProjectsController < ApplicationController
 
     if user_reached_limit?
       track_limit_reached_event("optimization")
-    else
+      return
+    end
+
+    locale = current_user.locale.presence || I18n.default_locale
+    project_name = @project.name || "Project #{@project.token}"
+    efficiency = "#{optimization.efficiency&.round(1)}"
+    sheets_count = "#{optimization.sheets_count}"
+
+    I18n.with_locale(locale) do
       BrevoTrackEventJob.perform_later(
         email: current_user.email,
         event_name: "optimization_completed",
         properties: {
-          efficiency: "#{optimization.efficiency&.round(1)}",
-          sheets_count: "#{optimization.sheets_count}",
-          project_name: @project.name || "Project #{@project.token}",
-          project_url: project_url(@project.token)
+          subject: I18n.t("mailers.optimization_completed.subject", efficiency: efficiency, project_name: project_name),
+          heading: I18n.t("mailers.optimization_completed.heading"),
+          message: I18n.t("mailers.optimization_completed.message", project_name: project_name),
+          stats: I18n.t("mailers.optimization_completed.stats", efficiency: efficiency, sheets_count: sheets_count),
+          cta_text: I18n.t("mailers.optimization_completed.cta_text"),
+          cta_url: project_url(@project.token),
+          next_project_heading: I18n.t("mailers.optimization_completed.next_project_heading"),
+          next_project_message: I18n.t("mailers.optimization_completed.next_project_message"),
+          next_project_cta: I18n.t("mailers.optimization_completed.next_project_cta"),
+          next_project_url: root_url,
+          share: I18n.t("mailers.optimization_completed.share"),
+          share_url: "https://cutoptima.com",
+          tagline: I18n.t("mailers.optimization_completed.tagline"),
+          copyright: I18n.t("mailers.optimization_completed.copyright", year: Time.current.year.to_s)
         }
       )
     end
+
   rescue StandardError => e
     Rails.logger.error("[ProjectsController] Brevo tracking failed: #{e.message}")
   end
@@ -374,9 +393,7 @@ class ProjectsController < ApplicationController
     return unless user_signed_in? && current_user.free_plan?
 
     locale = current_user.locale.presence || I18n.default_locale
-
     one_shot_price = Plannable::PLANS.dig("worker", :prices, :one_shot, :amount).to_f / 100
-
     price_label = "#{one_shot_price.to_i}€"
 
     I18n.with_locale(locale) do

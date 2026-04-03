@@ -230,6 +230,18 @@ fr:
       footer: "Ce pass unique vous donne un accès Pro complet pendant %{duration} jours. Projets, optimisations et exports illimités."
       tagline: "CutOptima. Optimisez vos plans de découpe, réduisez le gaspillage."
       copyright: "© %{year} CutOptima. Tous droits réservés."
+    optimization_completed:
+      subject: "Vous avez économisé %{efficiency}%% de matériau sur %{project_name}"
+      heading: "Merci d'avoir utilisé CutOptima !"
+      message: "Nous sommes heureux que vous ayez choisi CutOptima pour optimiser votre projet %{project_name}."
+      stats: "%{efficiency}%% d'efficacité sur %{sheets_count} panneau(x). Moins de chutes, plus d'économie."
+      cta_text: "Télécharger votre PDF"
+      next_project_heading: "Prochain projet ?"
+      next_project_message: "Étagères, placard, terrasse... CutOptima optimise tout type de découpe. Gardez ce mail sous la main, vous en aurez besoin."
+      next_project_cta: "Créer un nouveau projet"
+      share: "Un ami bricoleur ? Envoyez-lui ce lien, il vous remerciera sur son prochain projet."
+      tagline: "CutOptima. Optimisez vos plans de découpe, réduisez le gaspillage."
+      copyright: "© %{year} CutOptima. Tous droits réservés."
   pdf:
     measurements_in_mm: "Toutes les mesures sont en millimètres (mm)"
     sheets_used: "Panneaux utilisés"

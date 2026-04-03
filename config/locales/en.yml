@@ -230,6 +230,18 @@ en:
       footer: "This one-time pass gives you full Pro access for %{duration} days. Unlimited projects, optimizations, and exports."
       tagline: "CutOptima. Optimize your cut plans, reduce material waste."
       copyright: "© %{year} CutOptima. All rights reserved."
+    optimization_completed:
+      subject: "You saved %{efficiency}%% material on %{project_name}"
+      heading: "Thanks for using CutOptima!"
+      message: "We're happy you chose CutOptima to optimize your project %{project_name}."
+      stats: "%{efficiency}%% efficiency across %{sheets_count} sheet(s). Less waste, more savings."
+      cta_text: "Download your PDF"
+      next_project_heading: "Next project?"
+      next_project_message: "Shelves, cabinets, decking... CutOptima optimizes any type of cut. Keep this email handy, you'll need it."
+      next_project_cta: "Start a new project"
+      share: "Got a DIY friend? Send them this link, they'll thank you on their next build."
+      tagline: "CutOptima. Optimize your cut plans, reduce material waste."
+      copyright: "© %{year} CutOptima. All rights reserved."
   pdf:
     measurements_in_mm: "All measurements in millimeters (mm)"
     sheets_used: "Sheets used"

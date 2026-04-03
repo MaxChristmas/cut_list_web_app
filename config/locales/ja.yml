@@ -225,6 +225,18 @@ ja:
       footer: "このワンタイムパスで%{duration}日間Proフルアクセス。プロジェクト、最適化、エクスポートすべて無制限。"
       tagline: "CutOptima。カットプランを最適化し、材料の無駄を削減。"
       copyright: "© %{year} CutOptima. All rights reserved."
+    optimization_completed:
+      subject: "%{project_name} で %{efficiency}%% の材料を節約しました"
+      heading: "CutOptimaをご利用いただきありがとうございます！"
+      message: "%{project_name} の最適化にCutOptimaをお選びいただき、大変嬉しく思います。"
+      stats: "%{sheets_count} 枚のシートで %{efficiency}%% の効率を達成。無駄を減らして、コストを削減。"
+      cta_text: "PDFをダウンロード"
+      next_project_heading: "次のプロジェクトは？"
+      next_project_message: "棚、収納、ウッドデッキ... CutOptimaはあらゆるカットを最適化します。このメールを保存しておいてください、きっと必要になります。"
+      next_project_cta: "新しいプロジェクトを作成"
+      share: "DIY好きな友人はいますか？このリンクを送ってあげてください。次のプロジェクトで感謝されますよ。"
+      tagline: "CutOptima。カットプランを最適化し、材料の無駄を削減。"
+      copyright: "© %{year} CutOptima. All rights reserved."
   pdf:
     measurements_in_mm: "すべての寸法はミリメートル（mm）表記です"
     sheets_used: "使用シート数"

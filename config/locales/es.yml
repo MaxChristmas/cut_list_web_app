@@ -226,6 +226,18 @@ es:
       footer: "Este pase único te da acceso Pro completo durante %{duration} días. Proyectos, optimizaciones y exportaciones ilimitados."
       tagline: "CutOptima. Optimiza tus planos de corte, reduce el desperdicio."
       copyright: "© %{year} CutOptima. Todos los derechos reservados."
+    optimization_completed:
+      subject: "Ahorraste %{efficiency}%% de material en %{project_name}"
+      heading: "Gracias por usar CutOptima!"
+      message: "Nos alegra que hayas elegido CutOptima para optimizar tu proyecto %{project_name}."
+      stats: "%{efficiency}%% de eficiencia en %{sheets_count} panel(es). Menos desperdicio, más ahorro."
+      cta_text: "Descargar tu PDF"
+      next_project_heading: "Próximo proyecto?"
+      next_project_message: "Estantes, armarios, terrazas... CutOptima optimiza cualquier tipo de corte. Guarda este correo, lo necesitarás."
+      next_project_cta: "Crear un nuevo proyecto"
+      share: "Tienes un amigo manitas? Envíale este enlace, te lo agradecerá en su próximo proyecto."
+      tagline: "CutOptima. Optimiza tus planos de corte, reduce el desperdicio."
+      copyright: "© %{year} CutOptima. Todos los derechos reservados."
   pdf:
     measurements_in_mm: "Todas las medidas en milímetros (mm)"
     sheets_used: "Paneles utilizados"
