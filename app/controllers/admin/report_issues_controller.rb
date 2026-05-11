@@ -1,9 +1,12 @@
 module Admin
   class ReportIssuesController < BaseController
-    before_action :set_report_issue, only: [ :show, :edit, :update, :destroy, :reply ]
+    before_action :set_report_issue, only: [ :show, :edit, :update, :destroy, :reply, :toggle_treated ]
 
     def index
-      @report_issues = paginate(ReportIssue.includes(:user).order(created_at: :desc))
+      @status = %w[untreated treated all].include?(params[:status]) ? params[:status] : "untreated"
+      scope = ReportIssue.includes(:user).order(created_at: :desc)
+      scope = scope.public_send(@status) if @status != "all"
+      @report_issues = paginate(scope)
     end
 
     def show
@@ -28,10 +31,20 @@ module Admin
         return
       end
 
-      @report_issue.update!(reply_body: reply_body, replied_at: Time.current, replied_by: current_admin_user)
+      @report_issue.update!(
+        reply_body: reply_body,
+        replied_at: Time.current,
+        replied_by: current_admin_user,
+        treated_at: @report_issue.treated_at || Time.current
+      )
       ReportIssueMailer.reply(@report_issue).deliver_later
 
       redirect_to admin_report_issue_path(@report_issue), notice: "Reply sent successfully."
+    end
+
+    def toggle_treated
+      @report_issue.update!(treated_at: @report_issue.treated? ? nil : Time.current)
+      redirect_to admin_report_issue_path(@report_issue), notice: @report_issue.treated? ? "Report marked as treated." : "Report marked as untreated."
     end
 
     def destroy

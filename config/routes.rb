@@ -16,10 +16,15 @@ Rails.application.routes.draw do
       resources :optimizations, only: [ :index, :show ]
     end
     resources :report_issues, except: [ :new, :create ] do
-      post :reply, on: :member
+      member do
+        post :reply
+        patch :toggle_treated
+      end
     end
     resources :coupons
-    resources :feedbacks, only: [ :index, :show, :destroy ]
+    resources :feedbacks, only: [ :index, :show, :destroy ] do
+      patch :toggle_treated, on: :member
+    end
     resources :scan_tokens, only: [ :index, :show ]
   end
 

@@ -1,18 +1,26 @@
 <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-  <h2 class="text-2xl font-semibold text-gray-900">Feedbacks</h2>
-  <% if @average_rating %>
-    <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-2">
-      <div class="flex">
-        <% (1..5).each do |i| %>
-          <svg class="w-5 h-5 <%= i <= @average_rating.round ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-        <% end %>
+  <div class="flex items-center gap-4 flex-wrap">
+    <h2 class="text-2xl font-semibold text-gray-900">Feedbacks</h2>
+    <% if @average_rating %>
+      <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-2">
+        <div class="flex">
+          <% (1..5).each do |i| %>
+            <svg class="w-5 h-5 <%= i <= @average_rating.round ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          <% end %>
+        </div>
+        <span class="text-sm font-medium text-gray-700"><%= @average_rating %>/5</span>
+        <span class="text-sm text-gray-500">(<%= @total_count %> feedback<%= @total_count > 1 ? 's' : '' %>)</span>
       </div>
-      <span class="text-sm font-medium text-gray-700"><%= @average_rating %>/5</span>
-      <span class="text-sm text-gray-500">(<%= @total_count %> feedback<%= @total_count > 1 ? 's' : '' %>)</span>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+  <nav class="inline-flex rounded-lg border border-gray-200 bg-white overflow-hidden text-sm">
+    <% [ [ "untreated", "Untreated" ], [ "treated", "Treated" ], [ "all", "All" ] ].each_with_index do |(value, label), i| %>
+      <% active = @status == value %>
+      <%= link_to label, url_for(status: value, page: nil), class: "px-3 py-1.5 #{'bg-gray-100 text-gray-900 font-medium' if active} #{'text-gray-600 hover:bg-gray-50' unless active} #{'border-l border-gray-200' if i > 0}" %>
+    <% end %>
+  </nav>
 </div>
 
 <% if @feedbacks.any? %>
@@ -20,6 +28,7 @@
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rating</th>
           <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase">Improvement</th>
@@ -32,7 +41,14 @@
       </thead>
       <tbody class="divide-y divide-gray-100">
         <% @feedbacks.each do |feedback| %>
-          <tr class="<%= feedback.read_at.nil? ? 'bg-gray-50 hover:bg-gray-100' : 'hover:bg-gray-50' %>">
+          <tr class="hover:bg-gray-50">
+            <td class="px-5 py-3 text-sm">
+              <% if feedback.treated? %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Treated</span>
+              <% else %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Untreated</span>
+              <% end %>
+            </td>
             <td class="px-5 py-3 text-sm">
               <% if feedback.user %>
                 <%= link_to feedback.user.email, admin_user_path(feedback.user), class: "text-blue-600 hover:text-blue-800" %>

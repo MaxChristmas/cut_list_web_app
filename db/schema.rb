@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_01_100939) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_131226) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,9 +78,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_100939) do
     t.text "feature_request"
     t.text "improvement"
     t.integer "rating"
-    t.datetime "read_at"
+    t.datetime "treated_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["treated_at"], name: "index_feedbacks_on_treated_at"
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
@@ -133,9 +134,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_01_100939) do
     t.datetime "replied_at"
     t.bigint "replied_by_id"
     t.text "reply_body"
+    t.datetime "treated_at"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["replied_by_id"], name: "index_report_issues_on_replied_by_id"
+    t.index ["treated_at"], name: "index_report_issues_on_treated_at"
     t.index ["user_id"], name: "index_report_issues_on_user_id"
   end
 
