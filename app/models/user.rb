@@ -65,7 +65,10 @@ class User < ApplicationRecord
   attribute :terms_accepted, :boolean
   validates :terms_accepted, acceptance: true, on: :create
 
+  attribute :marketing_consent, :boolean
+
   before_create :set_terms_accepted_at, if: :terms_accepted
+  before_create :set_marketing_consent_at, if: :marketing_consent
   after_commit :sync_to_brevo, on: [ :create, :update ], if: :should_sync_to_brevo?
 
   def self.from_omniauth(auth)
@@ -91,10 +94,18 @@ class User < ApplicationRecord
     super && provider.blank?
   end
 
+  def marketing_consented?
+    marketing_consent_at.present?
+  end
+
   private
 
   def set_terms_accepted_at
     self.terms_accepted_at = Time.current
+  end
+
+  def set_marketing_consent_at
+    self.marketing_consent_at = Time.current
   end
 
   def sync_to_brevo
@@ -102,6 +113,6 @@ class User < ApplicationRecord
   end
 
   def should_sync_to_brevo?
-    !discarded? && (previously_new_record? || saved_change_to_locale? || saved_change_to_plan?)
+    !discarded? && (previously_new_record? || saved_change_to_locale? || saved_change_to_plan? || saved_change_to_marketing_consent_at?)
   end
 end

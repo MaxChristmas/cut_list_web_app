@@ -29,6 +29,10 @@
                 class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
           <%= t("settings.tabs.coupon") %>
         </button>
+        <button type="button" data-tabs-target="tab" data-action="click->tabs#switch"
+                class="px-4 py-2 text-sm font-medium border-b-2 transition-colors">
+          <%= t("settings.tabs.notifications") %>
+        </button>
       </div>
 
       <%# Language panel %>
@@ -180,6 +184,32 @@
             <button type="submit"
                     class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
               <%= t("coupons.submit") %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Notifications panel %>
+      <div data-tabs-target="panel" class="hidden">
+        <div class="space-y-6">
+          <p class="text-sm text-gray-400"><%= t("settings.notifications.description") %></p>
+
+          <%= form_with url: user_notifications_path, method: :patch, class: "space-y-4" do |f| %>
+            <div class="flex items-start gap-3 p-4 bg-gray-900 border border-gray-800 rounded-lg">
+              <input type="checkbox" name="marketing_consent" value="1" id="marketing_consent"
+                     <%= "checked" if resource.marketing_consented? %>
+                     class="mt-0.5 rounded border-gray-700 bg-gray-800 text-white focus:ring-gray-600">
+              <div>
+                <label for="marketing_consent" class="text-sm font-medium text-gray-200 cursor-pointer">
+                  <%= t("settings.notifications.marketing_consent_label") %>
+                </label>
+                <p class="text-xs text-gray-500 mt-0.5"><%= t("settings.notifications.marketing_consent_hint") %></p>
+              </div>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-white text-gray-950 font-semibold py-2 px-4 rounded hover:bg-gray-200 transition-colors text-sm">
+              <%= t("settings.save") %>
             </button>
           <% end %>
         </div>

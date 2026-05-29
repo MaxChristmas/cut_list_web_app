@@ -184,6 +184,11 @@
           </label>
         </div>
 
+        <div class="flex items-start gap-2">
+          <%= f.check_box :marketing_consent, class: "mt-0.5 rounded border-gray-700 bg-gray-900 text-white focus:ring-gray-600" %>
+          <label class="text-xs text-gray-400"><%= t("login.marketing_consent") %></label>
+        </div>
+
         <button type="submit" data-cta="signup_email"
                 class="w-full bg-white text-gray-950 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm">
           <%= t("login.sign_up") %>

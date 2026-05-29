@@ -41,6 +41,7 @@ es:
     change_password: "Cambiar contraseña"
     password_minimum: "6 caracteres mínimo"
     google_terms_html: "Al continuar, acepta la %{privacy_link} y el %{legal_link}."
+    marketing_consent: "Quiero recibir actualizaciones del producto, nuevos artículos y consejos de CutOptima (opcional)."
   projects:
     index:
       title: "Optimice sus cortes"
@@ -117,6 +118,7 @@ es:
       security: "Seguridad"
       subscription: "Suscripción"
       coupon: "Cupón"
+      notifications: "Notificaciones"
     subscription:
       current_plan: "Plan actual"
       active: "Activo"
@@ -126,6 +128,11 @@ es:
       ends_on: "Finaliza el"
     language: "Idioma"
     save: "Guardar cambios"
+    notifications:
+      description: "Gestiona los correos que recibes de CutOptima."
+      marketing_consent_label: "Actualizaciones del producto, artículos y consejos"
+      marketing_consent_hint: "Recibe correos sobre nuevas funcionalidades, artículos sobre técnicas de corte y consejos para tus proyectos."
+      saved: "Preferencias de notificaciones actualizadas."
     back: "Volver"
     sign_out: "Cerrar sesión"
     sign_out_confirmation: "¿Está seguro de que desea cerrar sesión?"

@@ -18,7 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
 
   def sign_up_params
-    params.require(:user).permit(:email, :password, :terms_accepted)
+    params.require(:user).permit(:email, :password, :terms_accepted, :marketing_consent)
   end
 
   def after_update_path_for(resource)

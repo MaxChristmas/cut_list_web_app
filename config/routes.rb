@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   resources :report_issues, only: [ :create ]
 
   patch "locale", to: "application#set_locale", as: :locale
+  patch "notifications", to: "users/notifications#update", as: :user_notifications
 
   get "faq", to: "pages#faq", as: :faq
   get "cookies-policy", to: "pages#cookies_policy", as: :cookies_policy

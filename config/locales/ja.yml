@@ -41,6 +41,7 @@ ja:
     change_password: "パスワードを変更"
     password_minimum: "6文字以上"
     google_terms_html: "続行すると、%{privacy_link}および%{legal_link}に同意したものとみなされます。"
+    marketing_consent: "CutOptimaの製品アップデート、新記事、ヒントを受け取りたい（任意）。"
   projects:
     index:
       title: "カットリストを最適化"
@@ -117,6 +118,7 @@ ja:
       security: "セキュリティ"
       subscription: "サブスクリプション"
       coupon: "クーポン"
+      notifications: "通知"
     subscription:
       current_plan: "現在のプラン"
       active: "有効"
@@ -126,6 +128,11 @@ ja:
       ends_on: "終了日"
     language: "言語"
     save: "保存"
+    notifications:
+      description: "CutOptimaから受け取るメールを管理します。"
+      marketing_consent_label: "製品アップデート、記事、ヒント"
+      marketing_consent_hint: "新機能、カット技術に関する記事、プロジェクトのヒントに関するメールを受け取ります。"
+      saved: "通知設定を更新しました。"
     back: "戻る"
     sign_out: "ログアウト"
     sign_out_confirmation: "ログアウトしてもよろしいですか？"

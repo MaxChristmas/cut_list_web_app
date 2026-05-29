@@ -9,7 +9,8 @@ class BrevoService
     attributes = {
       "LOCALE" => user.locale,
       "PLAN" => user.plan,
-      "SIGNUP_DATE" => user.created_at&.iso8601
+      "SIGNUP_DATE" => user.created_at&.iso8601,
+      "MARKETING_CONSENT" => user.marketing_consented?
     }
     create_contact = Brevo::CreateContact.new(
       email: user.email,
