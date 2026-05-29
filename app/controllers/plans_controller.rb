@@ -91,7 +91,7 @@ class PlansController < ApplicationController
       end
     end
 
-    redirect_to root_path, notice: t("plans.checkout_success")
+    redirect_to root_path(post_checkout: "1"), notice: t("plans.checkout_success")
   end
 
   def portal

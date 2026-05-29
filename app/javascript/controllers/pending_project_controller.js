@@ -11,12 +11,21 @@ export default class extends Controller {
     this._boundPendingCheckout = this._handlePendingCheckout.bind(this)
     window.addEventListener("pending-checkout", this._boundPendingCheckout)
 
+    this._boundSaveBeforeSubmit = this._saveFormData.bind(this)
+    this.element.addEventListener("submit", this._boundSaveBeforeSubmit)
+
+    const autoSubmit = this._detectPostCheckout()
     this._restoreFormData()
     this._autoCheckout()
+
+    if (autoSubmit) {
+      setTimeout(() => this.element.requestSubmit(), 100)
+    }
   }
 
   disconnect() {
     window.removeEventListener("pending-checkout", this._boundPendingCheckout)
+    this.element.removeEventListener("submit", this._boundSaveBeforeSubmit)
   }
 
   saveAndPrompt({ params: { message } }) {
@@ -120,5 +129,14 @@ export default class extends Controller {
     input.name = name
     input.value = value
     form.appendChild(input)
+  }
+
+  _detectPostCheckout() {
+    const url = new URL(window.location.href)
+    if (!url.searchParams.has("post_checkout")) return false
+
+    url.searchParams.delete("post_checkout")
+    window.history.replaceState({}, "", url.toString())
+    return !!localStorage.getItem(STORAGE_KEY)
   }
 }
