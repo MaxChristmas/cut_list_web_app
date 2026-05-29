@@ -140,6 +140,7 @@ jobs:
           STRIPE_ENTERPRISE_ONE_SHOT_PRICE_ID=${{ vars.STRIPE_ENTERPRISE_ONE_SHOT_PRICE_ID }}
           SMTP_USER_NAME=${{ vars.SMTP_USER_NAME }}
           SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}
           SENTRY_DSN=${{ vars.SENTRY_DSN }}
           GOOGLE_ANALYTICS_ID=${{ vars.GOOGLE_ANALYTICS_ID }}
           NTFY_TOPIC=${{ vars.NTFY_TOPIC }}
