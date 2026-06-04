@@ -18,13 +18,13 @@ RSpec.describe "Locale switching", type: :request do
     end
 
     it "falls back to English for unsupported languages" do
-      get root_path, headers: { "Accept-Language" => "de-DE,de;q=0.9" }
+      get root_path, headers: { "Accept-Language" => "zh-CN,zh;q=0.9" }
       expect(response.body).to include(I18n.t("sidebar.new_cut_list", locale: :en))
     end
 
     it "picks the first supported locale from a multi-language header" do
       get root_path, headers: { "Accept-Language" => "de-DE,ja;q=0.8,fr;q=0.7" }
-      expect(response.body).to include(I18n.t("sidebar.new_cut_list", locale: :ja))
+      expect(response.body).to include(I18n.t("sidebar.new_cut_list", locale: :de))
     end
   end
 
