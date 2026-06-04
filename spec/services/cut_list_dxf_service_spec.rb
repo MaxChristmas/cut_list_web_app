@@ -40,83 +40,73 @@ RSpec.describe CutListDxfService do
       expect(dxf).not_to be_empty
     end
 
-    it "includes HEADER section with AC1015 version and mm units" do
-      expect(dxf).to include("$ACADVER\n1\nAC1015")
-      expect(dxf).to include("$INSUNITS\n70\n4")
-    end
-
-    it "includes all required DXF sections" do
-      expect(dxf).to include("0\nSECTION\n2\nHEADER")
-      expect(dxf).to include("0\nSECTION\n2\nTABLES")
-      expect(dxf).to include("0\nSECTION\n2\nENTITIES")
-      expect(dxf).to include("0\nENDSEC")
-      expect(dxf).to include("0\nEOF")
-    end
-
-    it "includes LTYPE table with CONTINUOUS line type" do
-      expect(dxf).to include("TABLE\n2\nLTYPE")
-      expect(dxf).to include("CONTINUOUS")
+    it "has minimal structure: ENTITIES section + EOF only" do
+      expect(dxf).to start_with("0\nSECTION\n2\nENTITIES\n")
+      expect(dxf).to end_with("0\nENDSEC\n0\nEOF\n")
+      expect(dxf).not_to include("SECTION\n2\nHEADER")
+      expect(dxf).not_to include("LWPOLYLINE")
     end
 
     # ── Layers ─────────────────────────────────────────────────────
 
-    it "includes mandatory layer 0" do
-      expect(dxf).to include("LAYER\n2\n0\n70\n0\n62\n7")
+    it "references a layer for each sheet" do
+      expect(dxf).to include("8\nSHEET_1\n")
+      expect(dxf).to include("8\nSHEET_2\n")
     end
 
-    it "defines a layer for each sheet" do
-      expect(dxf).to include("SHEET_1")
-      expect(dxf).to include("SHEET_2")
-    end
-
-    it "does not define layers beyond sheet count" do
+    it "does not reference layers beyond sheet count" do
       expect(dxf).not_to include("SHEET_3")
     end
 
-    it "assigns distinct colors to each sheet layer" do
-      # SHEET_1 color 1, SHEET_2 color 2
-      expect(dxf).to include("LAYER\n2\nSHEET_1\n70\n0\n62\n1")
-      expect(dxf).to include("LAYER\n2\nSHEET_2\n70\n0\n62\n2")
+    it "assigns distinct colors to sheet piece entities" do
+      # SHEET_1 has placements → piece lines with color 1
+      expect(dxf).to include("8\nSHEET_1\n62\n1\n")
+      # SHEET_2 has no placements → no piece lines, only stock outline (color 8)
+      expect(dxf).not_to include("8\nSHEET_2\n62\n2\n")
     end
 
     # ── Stock outlines ─────────────────────────────────────────────
 
-    it "draws one stock outline per sheet as gray LWPOLYLINE" do
-      # color 8 = gray for stock outlines
-      stock_outlines = dxf.scan(/LWPOLYLINE\n8\nSHEET_\d+\n62\n8/).size
-      expect(stock_outlines).to eq(2)
+    it "draws 4 LINE entities per stock outline (one per side), gray color" do
+      # color 8 = gray; 4 sides × 2 sheets = 8 LINE entities
+      stock_lines = dxf.scan(/8\nSHEET_\d+\n62\n8\n/).size
+      expect(stock_lines).to eq(8)
     end
 
     it "draws stock rectangle with correct dimensions" do
-      # Stock 1200x600, bottom-left origin: corners at (0,0) and (1200,600)
+      # Stock 1200×600: right edge goes from (1200,0) to (1200,600)
       expect(dxf).to include("10\n1200.0\n20\n0.0")
       expect(dxf).to include("10\n1200.0\n20\n600.0")
     end
 
     # ── Piece placements ───────────────────────────────────────────
 
-    it "draws one LWPOLYLINE per piece placement" do
-      # 3 pieces + 2 stock outlines = 5 total
-      polyline_count = dxf.scan("LWPOLYLINE").size
-      expect(polyline_count).to eq(5)
+    it "draws 4 LINE entities per piece placement" do
+      # (3 placements + 2 stock outlines) × 4 sides = 20 LINE entities
+      expect(dxf.scan(/\n0\nLINE\n/).size).to eq(20)
     end
 
     it "places piece rectangles on the correct sheet layer" do
-      sheet1_pieces = dxf.scan(/LWPOLYLINE\n8\nSHEET_1\n62\n1/).size
-      expect(sheet1_pieces).to eq(3)
+      # 3 pieces × 4 sides = 12 LINE entities on SHEET_1 with color 1
+      sheet1_piece_lines = dxf.scan(/8\nSHEET_1\n62\n1\n/).size
+      expect(sheet1_piece_lines).to eq(12)
     end
 
     it "flips y-coordinates from top-left to DXF bottom-left origin" do
-      # Piece at (0,0) with size 400x200, stock height 600
-      # DXF y = 600 - 0 - 200 = 400, so bottom-left at (0, 400), top-left at (0, 600)
+      # Piece at (0,0) size 400×200, stock height 600 → DXF y = 600-0-200 = 400
       expect(dxf).to include("10\n0.0\n20\n400.0")
+    end
+
+    it "includes Z coordinate 0.0 on all LINE endpoints" do
+      expect(dxf).to include("30\n0.0")
+      expect(dxf).to include("31\n0.0")
     end
 
     # ── Labels ─────────────────────────────────────────────────────
 
     it "adds TEXT entities only for pieces with labels" do
       text_count = dxf.scan(/^TEXT$/).size
-      # Only the 2 placements matching "Shelf" (400x200) get labels
+      # Only the 2 placements matching "Shelf" (400×200) get labels
       expect(text_count).to eq(2)
     end
 
@@ -130,13 +120,11 @@ RSpec.describe CutListDxfService do
     end
 
     it "centers label text in the piece" do
-      # First Shelf piece: x=0, w=400 → cx=200; y=0, h=200 → cy=100
-      # DXF cy = 600 - 100 = 500
+      # First Shelf: x=0, w=400 → cx=200; y=0, h=200 → cy=100; DXF cy=600-100=500
       expect(dxf).to include("10\n200.0\n20\n500.0")
     end
 
     it "does not add labels for pieces without a label defined" do
-      # Extract the content line (group code 1) from each TEXT entity
       labels = dxf.scan(/\n0\nTEXT\n(?:.*\n)*?1\n(.+)\n/).flatten
       expect(labels).to eq([ "Shelf", "Shelf" ])
     end
@@ -148,19 +136,14 @@ RSpec.describe CutListDxfService do
 
       it "produces valid DXF with no entities" do
         expect(dxf).to include("0\nSECTION\n2\nENTITIES\n0\nENDSEC")
-        expect(dxf).to include("0\nEOF")
-      end
-
-      it "still includes mandatory layer 0" do
-        expect(dxf).to include("LAYER\n2\n0\n70")
+        expect(dxf).to end_with("0\nEOF\n")
       end
     end
 
     context "when a sheet has no placements" do
-      it "draws only the stock outline for that sheet" do
-        # Sheet 2 has no placements, so only 1 LWPOLYLINE on SHEET_2 (the stock)
-        sheet2_polylines = dxf.scan(/LWPOLYLINE\n8\nSHEET_2/).size
-        expect(sheet2_polylines).to eq(1)
+      it "draws only the stock outline for that sheet (4 LINE entities)" do
+        sheet2_lines = dxf.scan(/8\nSHEET_2\n/).size
+        expect(sheet2_lines).to eq(4)
       end
     end
 
@@ -168,15 +151,11 @@ RSpec.describe CutListDxfService do
       let(:result) do
         {
           "stock" => { "w" => 500, "h" => 300 },
-          "pieces" => [
-            { "length" => 200, "width" => 100, "quantity" => 1 }
-          ],
+          "pieces" => [ { "length" => 200, "width" => 100, "quantity" => 1 } ],
           "sheets" => [
             {
               "waste_area" => 0,
-              "placements" => [
-                { "rect" => { "w" => 200, "h" => 100 }, "x" => 0, "y" => 0 }
-              ]
+              "placements" => [ { "rect" => { "w" => 200, "h" => 100 }, "x" => 0, "y" => 0 } ]
             }
           ]
         }
@@ -191,15 +170,11 @@ RSpec.describe CutListDxfService do
       let(:result) do
         {
           "stock" => { "length" => 800, "width" => 400 },
-          "pieces" => [
-            { "l" => 200, "w" => 100, "quantity" => 1, "label" => "Side" }
-          ],
+          "pieces" => [ { "l" => 200, "w" => 100, "quantity" => 1, "label" => "Side" } ],
           "sheets" => [
             {
               "waste_area" => 0,
-              "placements" => [
-                { "rect" => { "length" => 200, "width" => 100 }, "x" => 0, "y" => 0 }
-              ]
+              "placements" => [ { "rect" => { "length" => 200, "width" => 100 }, "x" => 0, "y" => 0 } ]
             }
           ]
         }
@@ -210,7 +185,7 @@ RSpec.describe CutListDxfService do
       end
 
       it "handles alternative rect key names" do
-        expect(dxf).to include("LWPOLYLINE")
+        expect(dxf).to include("LINE")
         expect { dxf }.not_to raise_error
       end
 
@@ -227,9 +202,7 @@ RSpec.describe CutListDxfService do
           "sheets" => [
             {
               "waste_area" => 0,
-              "placements" => [
-                { "rect" => { "w" => 333.3, "h" => 166.7 }, "x" => 0, "y" => 0 }
-              ]
+              "placements" => [ { "rect" => { "w" => 333.3, "h" => 166.7 }, "x" => 0, "y" => 0 } ]
             }
           ]
         }
