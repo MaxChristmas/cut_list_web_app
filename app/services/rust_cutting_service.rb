@@ -5,9 +5,11 @@ class RustCuttingService
 
   PIECE_DOES_NOT_FIT = /\bpiece (\d+x\d+) does not fit in stock (\d+x\d+)\b/
 
-  def self.optimize(stock:, cuts:, kerf: 0, cut_direction: "auto", grain_direction: "none")
+  def self.optimize(stock:, cuts:, kerf: 0, cut_direction: "auto", grain_direction: "none", margin: 0)
+    effective_l = stock[:l].to_i - 2 * margin.to_i
+    effective_w = stock[:w].to_i - 2 * margin.to_i
     payload = {
-      stock: { length: stock[:l].to_i, width: stock[:w].to_i, grain: grain_direction },
+      stock: { length: effective_l, width: effective_w, grain: grain_direction },
       cuts: cuts.map { |c|
         {
           rect: { length: c[:l].to_i, width: c[:w].to_i },

@@ -9,6 +9,26 @@ RSpec.describe Project, type: :model do
     )
   end
 
+  describe "validations" do
+    it "allows nil margin" do
+      project = Project.new(name: "Test", margin: nil)
+      project.valid?
+      expect(project.errors[:margin]).to be_empty
+    end
+
+    it "allows zero margin" do
+      project = Project.new(name: "Test", margin: 0)
+      project.valid?
+      expect(project.errors[:margin]).to be_empty
+    end
+
+    it "rejects negative margin" do
+      project = Project.new(name: "Test", margin: -1)
+      project.valid?
+      expect(project.errors[:margin]).not_to be_empty
+    end
+  end
+
   describe "associations" do
     it "belongs to a user" do
       association = described_class.reflect_on_association(:user)

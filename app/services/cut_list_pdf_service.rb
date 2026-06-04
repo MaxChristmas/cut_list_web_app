@@ -77,8 +77,9 @@ class CutListPdfService
         [ t("total_area_used"), "#{used_pct}%" ],
         [ t("total_waste_area"), "#{waste_pct}%" ],
         [ t("total_pieces"), total_cuts.to_s ],
-        [ t("blade_kerf"), (@result["kerf"] || 0).to_s + " mm" ]
-      ]
+        [ t("blade_kerf"), (@result["kerf"] || 0).to_s + " mm" ],
+        (margin > 0 ? [ t("margin"), margin.to_i.to_s + " mm" ] : nil)
+      ].compact
       draw_info_table(pdf, info_rows)
     end
 
@@ -231,18 +232,28 @@ class CutListPdfService
     pdf.line_width 0.5
     pdf.fill_and_stroke_rectangle [ origin_x, origin_y ], layout_w, layout_h
 
+    # Margin zone overlay
+    if margin > 0
+      margin_px = portrait ? margin * scale : margin * scale
+      pdf.fill_color "e2e8f0"
+      pdf.fill_rectangle [ origin_x, origin_y ], layout_w, margin_px
+      pdf.fill_rectangle [ origin_x, origin_y - layout_h + margin_px ], layout_w, margin_px
+      pdf.fill_rectangle [ origin_x, origin_y ], margin_px, layout_h
+      pdf.fill_rectangle [ origin_x + layout_w - margin_px, origin_y ], margin_px, layout_h
+    end
+
     # Pieces
     (sheet["placements"] || []).each do |p|
       rw, rh = piece_dims(p["rect"])
 
       if portrait
-        px = p["y"].to_f * scale
-        py = p["x"].to_f * scale
+        px = (p["y"].to_f + margin) * scale
+        py = (p["x"].to_f + margin) * scale
         pw = rh * scale
         ph = rw * scale
       else
-        px = p["x"].to_f * scale
-        py = p["y"].to_f * scale
+        px = (p["x"].to_f + margin) * scale
+        py = (p["y"].to_f + margin) * scale
         pw = rw * scale
         ph = rh * scale
       end
@@ -395,8 +406,19 @@ class CutListPdfService
 
   # ── Helpers ────────────────────────────────────────────────────
 
+  def margin
+    @margin ||= (@result["margin"] || 0).to_f
+  end
+
   def stock
     @stock ||= {
+      l: (@result.dig("stock", "w") || @result.dig("stock", "length")).to_f + 2 * margin,
+      w: (@result.dig("stock", "h") || @result.dig("stock", "width")).to_f + 2 * margin
+    }
+  end
+
+  def effective_stock
+    @effective_stock ||= {
       l: (@result.dig("stock", "w") || @result.dig("stock", "length")).to_f,
       w: (@result.dig("stock", "h") || @result.dig("stock", "width")).to_f
     }

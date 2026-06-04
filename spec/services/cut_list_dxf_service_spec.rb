@@ -194,6 +194,36 @@ RSpec.describe CutListDxfService do
       end
     end
 
+    context "with margin" do
+      let(:result) do
+        {
+          "stock" => { "w" => 1180, "h" => 580 },
+          "margin" => 10,
+          "pieces" => [],
+          "sheets" => [
+            {
+              "waste_area" => 0,
+              "placements" => [
+                { "rect" => { "w" => 400, "h" => 200 }, "x" => 0, "y" => 0 }
+              ]
+            }
+          ]
+        }
+      end
+
+      it "uses full sheet dimensions (effective + 2×margin) for the stock outline" do
+        # effective 1180+2×10=1200 wide, 580+2×10=600 tall
+        expect(dxf).to include("10\n1200.0")
+        expect(dxf).to include("20\n600.0")
+      end
+
+      it "offsets piece placements by margin in X and Y" do
+        # Piece at x=0, y=0 in effective space → rendered at px=10, py=10
+        # DXF y-flip: sh(600) - py(10) - ph(200) = 390
+        expect(dxf).to include("10\n10.0\n20\n390.0")
+      end
+    end
+
     context "with decimal dimensions" do
       let(:result) do
         {

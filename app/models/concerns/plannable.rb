@@ -21,7 +21,7 @@ module Plannable
       max_daily_optimizations: Float::INFINITY,
       max_daily_pdf_exports: Float::INFINITY,
       max_monthly_scans: 20,
-      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces photo_import],
+      features: %i[pdf_export label_pieces cut_direction blade_kerf import_csv print_labels move_pieces photo_import margin],
       prices: {
         monthly:  { amount: 1000, env_key: "STRIPE_WORKER_MONTHLY_PRICE_ID" },
         yearly:   { amount: 10000, env_key: "STRIPE_WORKER_YEARLY_PRICE_ID" },

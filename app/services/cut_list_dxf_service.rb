@@ -19,10 +19,14 @@ class CutListDxfService
 
   # ── Data helpers ────────────────────────────────────────────────
 
+  def margin
+    @margin ||= (@result["margin"] || 0).to_f
+  end
+
   def stock
     @stock ||= {
-      w: (@result.dig("stock", "w") || @result.dig("stock", "length")).to_f,
-      h: (@result.dig("stock", "h") || @result.dig("stock", "width")).to_f
+      w: (@result.dig("stock", "w") || @result.dig("stock", "length")).to_f + 2 * margin,
+      h: (@result.dig("stock", "h") || @result.dig("stock", "width")).to_f + 2 * margin
     }
   end
 
@@ -63,16 +67,21 @@ class CutListDxfService
     out = ""
     sw = stock[:w]
     sh = stock[:h]
+    m = margin
 
     sheets.each_with_index do |sheet, i|
       layer = "SHEET_#{i + 1}"
 
       out << rect_lines(0, 0, sw, sh, layer, color: 8)
 
+      if m > 0
+        out << rect_lines_dashed(m, m, sw - 2 * m, sh - 2 * m, layer, color: 9)
+      end
+
       (sheet["placements"] || []).each do |p|
         pw, ph = piece_dims(p["rect"])
-        px = p["x"].to_f
-        py = p["y"].to_f
+        px = p["x"].to_f + m
+        py = p["y"].to_f + m
 
         out << rect_lines(px, py, pw, ph, layer, color: layer_color(i))
 
@@ -108,6 +117,27 @@ class CutListDxfService
       [ x0, y1, x0, y0 ]   # left
     ].map do |sx0, sy0, sx1, sy1|
       "0\nLINE\n8\n#{layer}\n62\n#{color}\n" \
+        "10\n#{sx0}\n20\n#{sy0}\n30\n0.0\n" \
+        "11\n#{sx1}\n21\n#{sy1}\n31\n0.0\n"
+    end.join
+  end
+
+  def rect_lines_dashed(x, y, w, h, layer, color: 256)
+    sh = stock[:h]
+    dxf_y = sh - y - h
+
+    x0 = x.to_f.round(4)
+    y0 = dxf_y.to_f.round(4)
+    x1 = (x.to_f + w).round(4)
+    y1 = (dxf_y + h).round(4)
+
+    [
+      [ x0, y0, x1, y0 ],
+      [ x1, y0, x1, y1 ],
+      [ x1, y1, x0, y1 ],
+      [ x0, y1, x0, y0 ]
+    ].map do |sx0, sy0, sx1, sy1|
+      "0\nLINE\n8\n#{layer}\n62\n#{color}\n6\nDASHED\n" \
         "10\n#{sx0}\n20\n#{sy0}\n30\n0.0\n" \
         "11\n#{sx1}\n21\n#{sy1}\n31\n0.0\n"
     end.join

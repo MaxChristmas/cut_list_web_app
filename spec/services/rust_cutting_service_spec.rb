@@ -85,5 +85,21 @@ RSpec.describe RustCuttingService do
       described_class.optimize(stock: stock, cuts: cuts)
       expect(@captured_request["Content-Type"]).to eq("application/json")
     end
+
+    it "subtracts margin from stock dimensions when margin > 0" do
+      stub_optimizer
+      described_class.optimize(stock: { l: 1000, w: 500 }, cuts: cuts, margin: 10)
+
+      payload = JSON.parse(@captured_request.body)
+      expect(payload["stock"]).to include("length" => 980, "width" => 480)
+    end
+
+    it "sends full stock dimensions when margin is 0 (default)" do
+      stub_optimizer
+      described_class.optimize(stock: stock, cuts: cuts)
+
+      payload = JSON.parse(@captured_request.body)
+      expect(payload["stock"]).to include("length" => 1000, "width" => 500)
+    end
   end
 end

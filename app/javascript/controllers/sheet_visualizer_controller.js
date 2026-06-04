@@ -101,7 +101,9 @@ export default class extends Controller {
     const data = this.getDisplayData()
     if (!data || !data.sheets) return
 
-    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const margin = data.margin || 0
+    const effectiveStock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const stock = { w: effectiveStock.w + 2 * margin, h: effectiveStock.h + 2 * margin }
     const maxWidth = 700
     const scale = maxWidth / stock.w
     const colorMap = this.buildColorMap(data.sheets)
@@ -116,7 +118,7 @@ export default class extends Controller {
     data.sheets.forEach((sheet, i) => {
       const heading = document.createElement("h3")
       heading.className = "text-md font-semibold mt-6 mb-2"
-      const wastePercent = ((sheet.waste_area / (stock.w * stock.h)) * 100).toFixed(1)
+      const wastePercent = ((sheet.waste_area / (effectiveStock.w * effectiveStock.h)) * 100).toFixed(1)
       const headingTpl = this.sheetHeadingTemplateValue || "Sheet %{number} — Waste: %{waste}%"
       heading.textContent = headingTpl.replace("%{number}", i + 1).replace("%{waste}", wastePercent)
       container.appendChild(heading)
@@ -138,11 +140,28 @@ export default class extends Controller {
         svg.style.cursor = "default"
       }
 
-      // Stock background
+      // Full sheet background (including margin area)
       const bg = this.svgRect(0, 0, stock.w, stock.h, "#dce6f0", this.editMode ? "#3b82f6" : "#cbd5e0", this.editMode ? 3 : 2)
       svg.appendChild(bg)
 
-      // Dimension lines
+      // Margin zone overlay
+      if (margin > 0) {
+        const marginOverlays = [
+          [0, 0, stock.w, margin],
+          [0, stock.h - margin, stock.w, margin],
+          [0, 0, margin, stock.h],
+          [stock.w - margin, 0, margin, stock.h],
+        ]
+        marginOverlays.forEach(([mx, my, mw, mh]) => {
+          const mRect = this.svgRect(mx, my, mw, mh, "rgba(148,163,184,0.4)", "none", 0)
+          svg.appendChild(mRect)
+        })
+        const innerRect = this.svgRect(margin, margin, effectiveStock.w, effectiveStock.h, "none", "#94a3b8", 1)
+        innerRect.setAttribute("stroke-dasharray", "6 3")
+        svg.appendChild(innerRect)
+      }
+
+      // Dimension lines (show full sheet dimensions)
       const dimOffset = labelMargin * 0.55
       const dimFontSize = stock.w * 0.025
 
@@ -162,7 +181,7 @@ export default class extends Controller {
 
         if (this.editMode) {
           const group = document.createElementNS("http://www.w3.org/2000/svg", "g")
-          group.setAttribute("transform", `translate(${p.x}, ${p.y})`)
+          group.setAttribute("transform", `translate(${p.x + margin}, ${p.y + margin})`)
           group.style.cursor = "grab"
           group.dataset.sheetIndex = i
           group.dataset.placementIndex = pi
@@ -200,28 +219,30 @@ export default class extends Controller {
 
           svg.appendChild(group)
         } else {
-          const rect = this.svgRect(p.x, p.y, pw, ph, color, "#0f1117", 0.5)
+          const ox = p.x + margin
+          const oy = p.y + margin
+          const rect = this.svgRect(ox, oy, pw, ph, color, "#0f1117", 0.5)
           rect.setAttribute("opacity", "0.8")
           svg.appendChild(rect)
 
           const pFontSize = Math.min(Math.min(pw, ph) * 0.12, 70)
           const inset = pFontSize * 0.8
 
-          const topW = this.svgText(p.x + pw / 2, p.y + inset, `${pw}`, pFontSize)
+          const topW = this.svgText(ox + pw / 2, oy + inset, `${pw}`, pFontSize)
           topW.setAttribute("class", "select-none pointer-events-none")
           topW.setAttribute("fill", "#1a202c")
           svg.appendChild(topW)
 
-          const leftH = this.svgText(p.x + inset, p.y + ph / 2, `${ph}`, pFontSize)
+          const leftH = this.svgText(ox + inset, oy + ph / 2, `${ph}`, pFontSize)
           leftH.setAttribute("class", "select-none pointer-events-none")
           leftH.setAttribute("fill", "#1a202c")
-          leftH.setAttribute("transform", `rotate(-90, ${p.x + inset}, ${p.y + ph / 2})`)
+          leftH.setAttribute("transform", `rotate(-90, ${ox + inset}, ${oy + ph / 2})`)
           svg.appendChild(leftH)
 
           const label = labelMap[key]
           if (label) {
             const labelFontSize = pFontSize
-            const labelEl = this.svgText(p.x + pw / 2, p.y + ph / 2, label, labelFontSize)
+            const labelEl = this.svgText(ox + pw / 2, oy + ph / 2, label, labelFontSize)
             labelEl.setAttribute("class", "select-none pointer-events-none")
             labelEl.setAttribute("fill", "#4a5568")
             labelEl.setAttribute("font-weight", "400")
@@ -230,9 +251,11 @@ export default class extends Controller {
         }
       })
 
-      // Waste zone overlays with dashed cut lines
-      const wasteRects = this.computeWasteRects(sheet.placements, stock)
+      // Waste zone overlays with dashed cut lines (computed in effective stock space, rendered offset by margin)
+      const wasteRects = this.computeWasteRects(sheet.placements, effectiveStock)
       wasteRects.forEach(wr => {
+        const wrx = wr.x + margin
+        const wry = wr.y + margin
         const wasteFontSize = Math.min(stock.w * 0.02, Math.min(wr.w, wr.h) * 0.25)
         // Group for cut line + dimensions (shown on hover)
         const dimGroup = document.createElementNS("http://www.w3.org/2000/svg", "g")
@@ -241,7 +264,7 @@ export default class extends Controller {
         dimGroup.setAttribute("pointer-events", "none")
 
         // Dashed red cut line
-        const cutRect = this.svgRect(wr.x, wr.y, wr.w, wr.h, "none", "#dc2626", 1.5)
+        const cutRect = this.svgRect(wrx, wry, wr.w, wr.h, "none", "#dc2626", 1.5)
         cutRect.setAttribute("stroke-dasharray", "8 4")
         dimGroup.appendChild(cutRect)
 
@@ -249,22 +272,22 @@ export default class extends Controller {
         const inset = wFontSize * 0.8
 
         // Width label (top)
-        const wLabel = this.svgText(wr.x + wr.w / 2, wr.y + inset, `${parseFloat(wr.w.toFixed(1))}`, wFontSize)
+        const wLabel = this.svgText(wrx + wr.w / 2, wry + inset, `${parseFloat(wr.w.toFixed(1))}`, wFontSize)
         wLabel.setAttribute("fill", "#991b1b")
         wLabel.setAttribute("class", "select-none pointer-events-none")
         dimGroup.appendChild(wLabel)
 
         // Height label (left, rotated)
-        const hLabel = this.svgText(wr.x + inset, wr.y + wr.h / 2, `${parseFloat(wr.h.toFixed(1))}`, wFontSize)
+        const hLabel = this.svgText(wrx + inset, wry + wr.h / 2, `${parseFloat(wr.h.toFixed(1))}`, wFontSize)
         hLabel.setAttribute("fill", "#991b1b")
         hLabel.setAttribute("class", "select-none pointer-events-none")
-        hLabel.setAttribute("transform", `rotate(-90, ${wr.x + inset}, ${wr.y + wr.h / 2})`)
+        hLabel.setAttribute("transform", `rotate(-90, ${wrx + inset}, ${wry + wr.h / 2})`)
         dimGroup.appendChild(hLabel)
 
         svg.appendChild(dimGroup)
 
         // Invisible hover zone
-        const hoverRect = this.svgRect(wr.x, wr.y, wr.w, wr.h, "transparent", "none", 0)
+        const hoverRect = this.svgRect(wrx, wry, wr.w, wr.h, "transparent", "none", 0)
         hoverRect.style.cursor = "crosshair"
         hoverRect.addEventListener("mouseenter", () => dimGroup.setAttribute("opacity", "1"))
         hoverRect.addEventListener("mouseleave", () => dimGroup.setAttribute("opacity", "0"))
@@ -532,18 +555,19 @@ export default class extends Controller {
     const pt = this.svgPoint(svg, e.clientX, e.clientY)
     const placement = this.workingData.sheets[sheetIndex].placements[placementIndex]
     const data = this.getDisplayData()
-    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const margin = data.margin || 0
+    const effectiveStock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
 
     this.dragging = {
       group,
       svg,
       sheetIndex,
       placementIndex,
-      offsetX: pt.x - placement.x,
-      offsetY: pt.y - placement.y,
+      offsetX: pt.x - (placement.x + margin),
+      offsetY: pt.y - (placement.y + margin),
       originX: placement.x,
       originY: placement.y,
-      stock,
+      stock: effectiveStock,
       currentX: placement.x,
       currentY: placement.y,
       targetSheetIndex: null,
@@ -592,13 +616,15 @@ export default class extends Controller {
     const targetIdx = parseInt(targetSvg.dataset.sheetIndex, 10)
     const pt = this.svgPoint(targetSvg, e.clientX, e.clientY)
 
+    const margin = parseFloat(this.getDisplayData()?.margin) || 0
+
     if (targetIdx === sheetIndex) {
       // Same sheet — normal drag with collision resolution
       this.clearDropGhost()
       this.dragging.targetSheetIndex = null
 
-      let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
-      let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
+      let newX = Math.max(0, Math.min(pt.x - margin - this.dragging.offsetX, stock.w - mw))
+      let newY = Math.max(0, Math.min(pt.y - margin - this.dragging.offsetY, stock.h - mh))
 
       const resolved = this.resolveCollisionsOnSheet(newX, newY, mw, mh, kerf, sheet.placements, stock, placementIndex)
       newX = resolved.x
@@ -609,13 +635,13 @@ export default class extends Controller {
         this.dragging.currentY = newY
       }
 
-      this.dragging.group.setAttribute("transform", `translate(${this.dragging.currentX}, ${this.dragging.currentY})`)
+      this.dragging.group.setAttribute("transform", `translate(${this.dragging.currentX + margin}, ${this.dragging.currentY + margin})`)
     } else {
       // Cross-sheet — show ghost on target, fade source piece
       this.dragging.targetSheetIndex = targetIdx
 
-      let newX = Math.max(0, Math.min(pt.x - this.dragging.offsetX, stock.w - mw))
-      let newY = Math.max(0, Math.min(pt.y - this.dragging.offsetY, stock.h - mh))
+      let newX = Math.max(0, Math.min(pt.x - margin - this.dragging.offsetX, stock.w - mw))
+      let newY = Math.max(0, Math.min(pt.y - margin - this.dragging.offsetY, stock.h - mh))
 
       const targetSheet = this.workingData.sheets[targetIdx]
       const resolved = this.resolveCollisionsOnSheet(newX, newY, mw, mh, kerf, targetSheet.placements, stock, -1)
@@ -624,7 +650,7 @@ export default class extends Controller {
 
       const valid = !this.hasCollision(newX, newY, mw, mh, targetSheet.placements, -1)
 
-      this.updateDropGhost(targetSvg, newX, newY, mw, mh, valid)
+      this.updateDropGhost(targetSvg, newX + margin, newY + margin, mw, mh, valid)
       this.dragging.crossX = newX
       this.dragging.crossY = newY
       this.dragging.crossValid = valid
@@ -771,8 +797,8 @@ export default class extends Controller {
 
   recalcWaste(sheet) {
     const data = this.getDisplayData()
-    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
-    const stockArea = stock.w * stock.h
+    const effectiveStock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const stockArea = effectiveStock.w * effectiveStock.h
     let usedArea = 0
     sheet.placements.forEach((p) => {
       const pw = p.rect.w ?? p.rect.length
@@ -784,8 +810,8 @@ export default class extends Controller {
 
   recalcGlobalWaste() {
     const data = this.workingData
-    const stock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
-    const stockArea = stock.w * stock.h
+    const effectiveStock = { w: data.stock.w ?? data.stock.length, h: data.stock.h ?? data.stock.width }
+    const stockArea = effectiveStock.w * effectiveStock.h
     const totalSheets = data.sheets.length
     data.sheet_count = totalSheets
 

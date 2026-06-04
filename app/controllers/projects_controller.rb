@@ -104,6 +104,7 @@ class ProjectsController < ApplicationController
     @stock_l = @project.sheet_length
     @stock_w = @project.sheet_width
     @kerf = @optimization&.result&.dig("kerf") || 0
+    @margin = @optimization&.result&.dig("margin") || 0
     @cut_direction = @optimization&.cut_direction || "auto"
     @grain_direction = @project.grain_direction || "none"
     @original_result = @optimization&.result
@@ -127,6 +128,7 @@ class ProjectsController < ApplicationController
     stock_l = params[:stock_l]
     stock_w = params[:stock_w]
     kerf = params[:kerf] || 0
+    margin = params[:margin].to_i
     cut_direction = params[:cut_direction] || "auto"
     grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
@@ -147,18 +149,19 @@ class ProjectsController < ApplicationController
     stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces, grain_direction: grain_direction)
 
-    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction)
+    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction, margin: margin)
 
     @project = Project.create!(
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
       grain_direction: grain_direction,
+      margin: margin,
       user: current_user
     )
 
     optimization = @project.optimizations.create!(
-      result: result.merge("pieces" => pieces, "kerf" => kerf),
+      result: result.merge("pieces" => pieces, "kerf" => kerf, "margin" => margin),
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],
@@ -198,6 +201,7 @@ class ProjectsController < ApplicationController
     stock_l = params[:stock_l]
     stock_w = params[:stock_w]
     kerf = params[:kerf] || 0
+    margin = params[:margin].to_i
     cut_direction = params[:cut_direction] || "auto"
     grain_direction = params[:grain_direction] || "none"
     pieces = parse_pieces
@@ -218,17 +222,18 @@ class ProjectsController < ApplicationController
     stock = { l: stock_l, w: stock_w }
     cuts = build_cuts(pieces, grain_direction: grain_direction)
 
-    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction)
+    result = RustCuttingService.optimize(stock: stock, cuts: cuts, kerf: kerf, cut_direction: cut_direction, grain_direction: grain_direction, margin: margin)
 
     @project.update!(
       name: params[:name].presence,
       sheet_length: stock_l.to_i,
       sheet_width: stock_w.to_i,
-      grain_direction: grain_direction
+      grain_direction: grain_direction,
+      margin: margin
     )
 
     optimization = @project.optimizations.create!(
-      result: result.merge("pieces" => pieces, "kerf" => kerf),
+      result: result.merge("pieces" => pieces, "kerf" => kerf, "margin" => margin),
       status: "completed",
       cut_direction: cut_direction,
       sheets_count: result["sheet_count"],

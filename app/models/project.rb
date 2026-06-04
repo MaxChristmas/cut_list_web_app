@@ -7,6 +7,7 @@ class Project < ApplicationRecord
 
   validates :token, uniqueness: true
   validates :grain_direction, inclusion: { in: %w[none along_length along_width] }
+  validates :margin, numericality: { greater_than_or_equal_to: 0, only_integer: true }, allow_nil: true
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :templates, -> { where(template: true) }
