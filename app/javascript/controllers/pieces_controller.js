@@ -39,6 +39,13 @@ export default class extends Controller {
     }
     this.bodyTarget.addEventListener("input", this._onDimensionChange)
 
+    this._onNumberKeydown = (e) => {
+      if (e.target.matches("input[type='number']") && [",", "."].includes(e.key)) {
+        e.preventDefault()
+      }
+    }
+    this.bodyTarget.addEventListener("keydown", this._onNumberKeydown)
+
     // Apply colors on next frame (visualizer may have rendered first)
     requestAnimationFrame(() => this.applyColors())
   }
@@ -47,6 +54,7 @@ export default class extends Controller {
     document.removeEventListener("piece-colors:updated", this._onColorsUpdated)
     document.removeEventListener("photo-pieces:add", this._onPhotoPieces)
     this.bodyTarget.removeEventListener("input", this._onDimensionChange)
+    this.bodyTarget.removeEventListener("keydown", this._onNumberKeydown)
   }
 
   add() {
