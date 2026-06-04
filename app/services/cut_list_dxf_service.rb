@@ -102,10 +102,10 @@ class CutListDxfService
     y1 = (dxf_y + h).round(4)
 
     [
-      [x0, y0, x1, y0],  # bottom
-      [x1, y0, x1, y1],  # right
-      [x1, y1, x0, y1],  # top
-      [x0, y1, x0, y0]   # left
+      [ x0, y0, x1, y0 ],  # bottom
+      [ x1, y0, x1, y1 ],  # right
+      [ x1, y1, x0, y1 ],  # top
+      [ x0, y1, x0, y0 ]   # left
     ].map do |sx0, sy0, sx1, sy1|
       "0\nLINE\n8\n#{layer}\n62\n#{color}\n" \
         "10\n#{sx0}\n20\n#{sy0}\n30\n0.0\n" \
