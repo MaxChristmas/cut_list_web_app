@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 #
 # Offcut reuse feasibility analysis — CutOptima
 # Read-only: writes only to tmp/offcut_analysis.csv
@@ -46,12 +47,12 @@ def offcut_strips(placements, stock_w, stock_l)
 
   end_l = stock_l - max_x
   if end_l >= MIN_OFFCUT_DIM_MM && stock_w >= MIN_OFFCUT_DIM_MM
-    strips << [stock_w, end_l].minmax.to_a
+    strips << [ stock_w, end_l ].minmax.to_a
   end
 
   side_w = stock_w - max_y
   if max_x >= MIN_OFFCUT_DIM_MM && side_w >= MIN_OFFCUT_DIM_MM
-    strips << [max_x, side_w].minmax.to_a
+    strips << [ max_x, side_w ].minmax.to_a
   end
 
   strips
@@ -59,8 +60,8 @@ end
 
 # Does piece (pw × pl) fit inside offcut (odim1 × odim2), rotation allowed?
 def fits?(pw, pl, odim1, odim2)
-  pw_s, pw_l = [pw, pl].minmax
-  ow_s, ow_l = [odim1, odim2].minmax
+  pw_s, pw_l = [ pw, pl ].minmax
+  ow_s, ow_l = [ odim1, odim2 ].minmax
   pw_s <= ow_s && pw_l <= ow_l
 end
 
@@ -191,7 +192,7 @@ projects_by_user.each_value do |ps|
       l   = p["length"].to_i
       qty = p["quantity"].to_i.clamp(1, 200)
       next if w.zero? || l.zero?
-      qty.times { small_dims << [w, l].min }
+      qty.times { small_dims << [ w, l ].min }
     end
   end
 end
